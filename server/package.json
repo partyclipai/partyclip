@@ -14,7 +14,8 @@
   },
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./services/projections": "./src/services/projections/index.ts"
   },
   "publishConfig": {
     "access": "public",
@@ -22,6 +23,10 @@
       ".": {
         "types": "./dist/index.d.ts",
         "import": "./dist/index.js"
+      },
+      "./services/projections": {
+        "types": "./dist/services/projections/index.d.ts",
+        "import": "./dist/services/projections/index.js"
       }
     },
     "main": "./dist/index.js",

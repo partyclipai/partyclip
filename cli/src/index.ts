@@ -8,6 +8,7 @@ import { heartbeatRun } from "./commands/heartbeat-run.js";
 import { runCommand } from "./commands/run.js";
 import { bootstrapCeoInvite } from "./commands/auth-bootstrap-ceo.js";
 import { dbBackupCommand } from "./commands/db-backup.js";
+import { eventsReplayCommand } from "./commands/events-replay.js";
 import { registerEnvLabCommands } from "./commands/env-lab.js";
 import { registerContextCommands } from "./commands/client/context.js";
 import { registerCompanyCommands } from "./commands/client/company.js";
@@ -94,6 +95,17 @@ program
   .option("--json", "Print backup metadata as JSON")
   .action(async (opts) => {
     await dbBackupCommand(opts);
+  });
+
+program
+  .command("events:replay")
+  .description("Replay partyclip events from activity_log to reconstruct projected state")
+  .option("-c, --config <path>", "Path to config file")
+  .option("--from <timestamp>", "ISO-8601 timestamp to replay from (default: genesis)")
+  .option("--company-id <uuid>", "Filter to a single company")
+  .option("--json", "Emit summary as JSON")
+  .action(async (opts) => {
+    await eventsReplayCommand(opts);
   });
 
 program
