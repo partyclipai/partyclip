@@ -1,6 +1,6 @@
 # Plugin API
 
-> ⚠️ **Stub.** This page lists the public plugin surfaces partyclip exposes. The full reference (host services, capability gating, scheduling, UI contributions, isolation primitives) will be filled in alongside the Phase 0 plugin SDK study — see `docs/plugin-sdk-notes.md` (in progress) and `docs/plugin-sdk-gaps.md` (in progress) for the working notes.
+> Reader's guide: this page is the high-level overview. **The deep reference is `docs/plugin-sdk-notes.md`** (manifest schema, worker context, host services, tool exposure, UI contributions, scheduled jobs, capability gating, out-of-process model). Known limitations and the partyclip-specific extensions still to be built are in `docs/plugin-sdk-gaps.md`.
 
 ## What a plugin is
 

@@ -8,18 +8,37 @@ const PLUGIN_VERSION = "0.1.0";
 const DASHBOARD_WIDGET_SLOT_ID = "hello-world-dashboard-widget";
 const DASHBOARD_WIDGET_EXPORT_NAME = "HelloWorldDashboardWidget";
 
+const JOB_KEYS = {
+  heartbeat: "hello-world-heartbeat",
+} as const;
+
+const TOOL_NAMES = {
+  greet: "greet",
+} as const;
+
 /**
- * Minimal manifest demonstrating a UI-only plugin with one dashboard widget slot.
+ * Minimal manifest demonstrating the four core plugin SDK surfaces:
+ * - UI slot (dashboard widget)
+ * - Scheduled job (cron heartbeat)
+ * - Host service call (companies.list inside the job)
+ * - Agent-callable tool (greet)
+ *
+ * Phase 0 reference plugin: copy this shape when scaffolding a new plugin.
  */
 const manifest: PartyclipPluginManifestV1 = {
   id: PLUGIN_ID,
   apiVersion: 1,
   version: PLUGIN_VERSION,
-  displayName: "Hello World Widget (Example)",
-  description: "Reference UI plugin that adds a simple Hello World widget to the Paperclip dashboard.",
-  author: "Paperclip",
+  displayName: "Hello World (Example)",
+  description: "Reference plugin: dashboard widget, scheduled job, host service call, agent-callable tool.",
+  author: "partyclip",
   categories: ["ui"],
-  capabilities: ["ui.dashboardWidget.register"],
+  capabilities: [
+    "ui.dashboardWidget.register",
+    "jobs.schedule",
+    "companies.read",
+    "agent.tools.register",
+  ],
   entrypoints: {
     worker: "./dist/worker.js",
     ui: "./dist/ui",
@@ -34,6 +53,27 @@ const manifest: PartyclipPluginManifestV1 = {
       },
     ],
   },
+  jobs: [
+    {
+      jobKey: JOB_KEYS.heartbeat,
+      displayName: "Hello World Heartbeat",
+      description: "Logs a heartbeat once an hour and counts visible companies via the host API.",
+      schedule: "0 * * * *",
+    },
+  ],
+  tools: [
+    {
+      name: TOOL_NAMES.greet,
+      displayName: "Hello World Greet",
+      description: "Returns a friendly greeting. Smoke test of agent-callable tool registration.",
+      parametersSchema: {
+        type: "object",
+        properties: {
+          name: { type: "string", description: "Optional name to greet." },
+        },
+      },
+    },
+  ],
 };
 
 export default manifest;
