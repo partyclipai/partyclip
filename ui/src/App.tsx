@@ -51,6 +51,9 @@ import { CliAuthPage } from "./pages/CliAuth";
 import { InviteLandingPage } from "./pages/InviteLanding";
 import { JoinRequestQueue } from "./pages/JoinRequestQueue";
 import { NotFoundPage } from "./pages/NotFound";
+import { OperatorShell } from "./components/operator/OperatorLayout";
+import { OperatorPatches } from "./pages/OperatorPatches";
+import { OperatorPatchDetail } from "./pages/OperatorPatchDetail";
 import { useCompany } from "./context/CompanyContext";
 import { useDialogActions } from "./context/DialogContext";
 import { loadLastInboxTab } from "./lib/inbox";
@@ -264,6 +267,14 @@ export function App() {
         <Route path="cli-auth/:id" element={<CliAuthPage />} />
         <Route path="invite/:token" element={<InviteLandingPage />} />
         <Route path="tests/perf/long-thread" element={<IssueChatLongThreadPerf />} />
+
+        {/* Phase 1 operator surface — bearer-token auth, deliberately
+            outside CloudAccessGate / CompanyContext / Layout. */}
+        <Route path="operator" element={<OperatorShell />}>
+          <Route index element={<Navigate to="/operator/patches" replace />} />
+          <Route path="patches" element={<OperatorPatches />} />
+          <Route path="patches/:patchId" element={<OperatorPatchDetail />} />
+        </Route>
 
         <Route element={<CloudAccessGate />}>
           <Route index element={<CompanyRootRedirect />} />
