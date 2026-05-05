@@ -19,8 +19,8 @@ describe("prepareClaudeConfigSeed", () => {
   function createEnv(root: string, sourceDir: string): NodeJS.ProcessEnv {
     return {
       HOME: root,
-      PAPERCLIP_HOME: path.join(root, "paperclip-home"),
-      PAPERCLIP_INSTANCE_ID: "test-instance",
+      PARTYCLIP_HOME: path.join(root, "paperclip-home"),
+      PARTYCLIP_INSTANCE_ID: "test-instance",
       CLAUDE_CONFIG_DIR: sourceDir,
     };
   }

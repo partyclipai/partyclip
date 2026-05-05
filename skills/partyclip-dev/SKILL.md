@@ -106,7 +106,7 @@ Before pushing or creating a PR, list remotes and check for one that points at a
 git remote -v
 ```
 
-Treat any remote whose URL points to `github.com:<user>/paperclip` (or `github.com/<user>/paperclip.git`) as the user's fork. Common names are `fork`, `<username>`, or `myfork`. The remote named `origin` or `upstream` that points at `partyclipai/partyclip` is the canonical upstream — do not push feature branches there if a fork exists.
+Treat any remote whose URL points to `github.com:<user>/partyclip` (or `github.com/<user>/partyclip.git`) as the user's fork. Common names are `fork`, `<username>`, or `myfork`. The remote named `origin` or `upstream` that points at `partyclipai/partyclip` is the canonical upstream — do not push feature branches there if a fork exists.
 
 ### Pushing to the fork
 
@@ -132,7 +132,7 @@ If `git remote -v` shows only `partyclipai/partyclip` remotes (no user fork), fa
 The canonical remote that points at `partyclipai/partyclip` may be named `origin` **or** `upstream` depending on how the user set up the repo. Detect it the same way as in the "Detect a fork remote" step, then fetch and push from/with that remote so the sync works under either convention:
 
 ```bash
-UPSTREAM_REMOTE=$(git remote -v | awk '/partyclipai\/paperclip.*\(fetch\)/{print $1; exit}')
+UPSTREAM_REMOTE=$(git remote -v | awk '/partyclipai\/partyclip.*\(fetch\)/{print $1; exit}')
 git fetch "$UPSTREAM_REMOTE"
 git push <fork-remote> "${UPSTREAM_REMOTE}/master:master"
 ```
@@ -260,7 +260,7 @@ lsof -nP -iTCP:<port> -sTCP:LISTEN
 | Schema out of date after pull | Run `pnpm db:generate && pnpm db:migrate` |
 | Reseeding while target DB is running | Stop the target server first, or use `--allow-live-target` |
 | Cleaning up with unmerged commits | Merge or push first, or use `--force` if intentionally discarding |
-| Running agents against wrong instance | Verify `PAPERCLIP_API_URL` points to the correct port |
+| Running agents against wrong instance | Verify `PARTYCLIP_API_URL` points to the correct port |
 | CLI command fails | Do NOT work around it — report the error and block (see Hard Rules above) |
 | Agent tries manual postgres operations | NEVER do this — all DB ops go through the CLI (see Hard Rules above) |
 | Dev server dies between heartbeats | Launch in a detached `tmux` session — see "Persistent Dev Servers" above |

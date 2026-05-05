@@ -166,7 +166,7 @@ describeEmbeddedPostgres("cleanup removal services", () => {
     await db.insert(companySkills).values({
       id: randomUUID(),
       companyId,
-      key: "partyclipai/partyclip/paperclip",
+      key: "partyclipai/partyclip/partyclip",
       slug: "paperclip",
       name: "Paperclip",
       markdown: "# Paperclip",

@@ -44,8 +44,8 @@ async function readSandboxCursorRuntimeInfo(input: {
   graceSec: number;
 }): Promise<SandboxCursorRuntimeInfo> {
   const shouldCheckPreferredCommand = isDefaultCursorCommand(input.command) && !hasPathSeparator(input.command);
-  const homeMarker = "__PAPERCLIP_CURSOR_HOME__:";
-  const preferredMarker = "__PAPERCLIP_CURSOR_AGENT__:";
+  const homeMarker = "__PARTYCLIP_CURSOR_HOME__:";
+  const preferredMarker = "__PARTYCLIP_CURSOR_AGENT__:";
   try {
     const result = await runAdapterExecutionTargetShellCommand(
       input.runId,

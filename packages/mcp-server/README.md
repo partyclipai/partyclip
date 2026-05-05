@@ -9,11 +9,11 @@ not talk to the database directly and it does not reimplement business logic.
 
 The server reads its configuration from environment variables:
 
-- `PAPERCLIP_API_URL` - Paperclip base URL, for example `http://localhost:3100`
-- `PAPERCLIP_API_KEY` - bearer token used for `/api` requests
-- `PAPERCLIP_COMPANY_ID` - optional default company for company-scoped tools
-- `PAPERCLIP_AGENT_ID` - optional default agent for checkout helpers
-- `PAPERCLIP_RUN_ID` - optional run id forwarded on mutating requests
+- `PARTYCLIP_API_URL` - Paperclip base URL, for example `http://localhost:3100`
+- `PARTYCLIP_API_KEY` - bearer token used for `/api` requests
+- `PARTYCLIP_COMPANY_ID` - optional default company for company-scoped tools
+- `PARTYCLIP_AGENT_ID` - optional default agent for checkout helpers
+- `PARTYCLIP_RUN_ID` - optional run id forwarded on mutating requests
 
 ## Usage
 

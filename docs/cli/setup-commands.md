@@ -89,7 +89,7 @@ Show resolved environment configuration:
 pnpm partyclipai env
 ```
 
-This now includes bind-oriented deployment settings such as `PAPERCLIP_BIND` and `PAPERCLIP_BIND_HOST` when configured.
+This now includes bind-oriented deployment settings such as `PARTYCLIP_BIND` and `PARTYCLIP_BIND_HOST` when configured.
 
 ## `partyclipai allowed-hostname`
 
@@ -112,12 +112,12 @@ pnpm partyclipai allowed-hostname my-tailscale-host
 Override with:
 
 ```sh
-PAPERCLIP_HOME=/custom/home PAPERCLIP_INSTANCE_ID=dev pnpm partyclipai run
+PARTYCLIP_HOME=/custom/home PARTYCLIP_INSTANCE_ID=dev pnpm partyclipai run
 ```
 
 Or pass `--data-dir` directly on any command:
 
 ```sh
-pnpm partyclipai run --data-dir ./tmp/paperclip-dev
-pnpm partyclipai doctor --data-dir ./tmp/paperclip-dev
+pnpm partyclipai run --data-dir ./tmp/partyclip-dev
+pnpm partyclipai doctor --data-dir ./tmp/partyclip-dev
 ```

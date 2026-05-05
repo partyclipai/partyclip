@@ -22,15 +22,15 @@ services:
     ports:
       - "3100:3100"
     environment:
-      DATABASE_URL: postgres://paperclip:paperclip@db:5432/paperclip
+      DATABASE_URL: postgres://partyclip:partyclip@db:5432/partyclip
       PORT: "3100"
       SERVE_UI: "true"
-      PAPERCLIP_DEPLOYMENT_MODE: "authenticated"
-      PAPERCLIP_DEPLOYMENT_EXPOSURE: "private"
-      PAPERCLIP_PUBLIC_URL: "${PAPERCLIP_PUBLIC_URL:-http://localhost:3100}"
+      PARTYCLIP_DEPLOYMENT_MODE: "authenticated"
+      PARTYCLIP_DEPLOYMENT_EXPOSURE: "private"
+      PARTYCLIP_PUBLIC_URL: "${PARTYCLIP_PUBLIC_URL:-http://localhost:3100}"
       BETTER_AUTH_SECRET: "${BETTER_AUTH_SECRET:?BETTER_AUTH_SECRET must be set}"
     volumes:
-      - paperclip-data:/paperclip
+      - paperclip-data:/partyclip
     depends_on:
       db:
         condition: service_healthy

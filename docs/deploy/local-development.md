@@ -101,5 +101,5 @@ pnpm dev
 Override with environment variables:
 
 ```sh
-PAPERCLIP_HOME=/custom/path PAPERCLIP_INSTANCE_ID=dev pnpm partyclipai run
+PARTYCLIP_HOME=/custom/path PARTYCLIP_INSTANCE_ID=dev pnpm partyclipai run
 ```

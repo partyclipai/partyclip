@@ -43,7 +43,7 @@ For a plugin that lives outside the Paperclip repo, pass `--sdk-path` and let th
 pnpm --filter @partyclipai/create-partyclip-plugin build
 node packages/plugins/create-partyclip-plugin/dist/index.js @acme/plugin-name \
   --output /absolute/path/to/plugin-repos \
-  --sdk-path /absolute/path/to/paperclip/packages/plugins/sdk
+  --sdk-path /absolute/path/to/partyclip/packages/plugins/sdk
 ```
 
 Recommended target inside this repo:

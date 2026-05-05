@@ -12,7 +12,7 @@ async function makeTempDir(prefix: string): Promise<string> {
 }
 
 describe("pi local skill sync", () => {
-  const paperclipKey = "partyclipai/partyclip/paperclip";
+  const paperclipKey = "partyclipai/partyclip/partyclip";
   const cleanupDirs = new Set<string>();
 
   afterEach(async () => {

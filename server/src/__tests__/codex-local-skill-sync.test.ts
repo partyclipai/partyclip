@@ -12,8 +12,8 @@ async function makeTempDir(prefix: string): Promise<string> {
 }
 
 describe("codex local skill sync", () => {
-  const paperclipKey = "partyclipai/partyclip/paperclip";
-  const createAgentKey = "partyclipai/partyclip/paperclip-create-agent";
+  const paperclipKey = "partyclipai/partyclip/partyclip";
+  const createAgentKey = "partyclipai/partyclip/partyclip-create-agent";
   const cleanupDirs = new Set<string>();
 
   afterEach(async () => {

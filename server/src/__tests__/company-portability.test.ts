@@ -121,7 +121,7 @@ function asTextFile(entry: CompanyPortabilityFileEntry | undefined) {
 }
 
 describe("company portability", () => {
-  const paperclipKey = "partyclipai/partyclip/paperclip";
+  const paperclipKey = "partyclipai/partyclip/partyclip";
   const companyPlaybookKey = "company/company-1/company-playbook";
 
   beforeEach(() => {
@@ -436,9 +436,9 @@ describe("company portability", () => {
     expect(asTextFile(exported.files["agents/claudecoder/AGENTS.md"])).toContain("skills:");
     expect(asTextFile(exported.files["agents/claudecoder/AGENTS.md"])).toContain(`- "${paperclipKey}"`);
     expect(asTextFile(exported.files["agents/cmo/AGENTS.md"])).not.toContain("skills:");
-    expect(asTextFile(exported.files["skills/partyclipai/partyclip/paperclip/SKILL.md"])).toContain("metadata:");
-    expect(asTextFile(exported.files["skills/partyclipai/partyclip/paperclip/SKILL.md"])).toContain('kind: "github-dir"');
-    expect(exported.files["skills/partyclipai/partyclip/paperclip/references/api.md"]).toBeUndefined();
+    expect(asTextFile(exported.files["skills/partyclipai/partyclip/partyclip/SKILL.md"])).toContain("metadata:");
+    expect(asTextFile(exported.files["skills/partyclipai/partyclip/partyclip/SKILL.md"])).toContain('kind: "github-dir"');
+    expect(exported.files["skills/partyclipai/partyclip/partyclip/references/api.md"]).toBeUndefined();
     expect(asTextFile(exported.files["skills/company/PAP/company-playbook/SKILL.md"])).toContain("# Company Playbook");
     expect(asTextFile(exported.files["skills/company/PAP/company-playbook/references/checklist.md"])).toContain("# Checklist");
 
@@ -558,9 +558,9 @@ describe("company portability", () => {
       expandReferencedSkills: true,
     });
 
-    expect(asTextFile(exported.files["skills/partyclipai/partyclip/paperclip/SKILL.md"])).toContain("# Paperclip");
-    expect(asTextFile(exported.files["skills/partyclipai/partyclip/paperclip/SKILL.md"])).toContain("metadata:");
-    expect(asTextFile(exported.files["skills/partyclipai/partyclip/paperclip/references/api.md"])).toContain("# API");
+    expect(asTextFile(exported.files["skills/partyclipai/partyclip/partyclip/SKILL.md"])).toContain("# Paperclip");
+    expect(asTextFile(exported.files["skills/partyclipai/partyclip/partyclip/SKILL.md"])).toContain("metadata:");
+    expect(asTextFile(exported.files["skills/partyclipai/partyclip/partyclip/references/api.md"])).toContain("# API");
   });
 
   it("exports only selected skills when skills filter is provided", async () => {
@@ -578,7 +578,7 @@ describe("company portability", () => {
 
     expect(exported.files["skills/company/PAP/company-playbook/SKILL.md"]).toBeDefined();
     expect(asTextFile(exported.files["skills/company/PAP/company-playbook/SKILL.md"])).toContain("# Company Playbook");
-    expect(exported.files["skills/partyclipai/partyclip/paperclip/SKILL.md"]).toBeUndefined();
+    expect(exported.files["skills/partyclipai/partyclip/partyclip/SKILL.md"]).toBeUndefined();
   });
 
   it("warns and exports all skills when skills filter matches nothing", async () => {
@@ -596,7 +596,7 @@ describe("company portability", () => {
 
     expect(exported.warnings).toContainEqual(expect.stringContaining("nonexistent-skill"));
     expect(exported.files["skills/company/PAP/company-playbook/SKILL.md"]).toBeDefined();
-    expect(exported.files["skills/partyclipai/partyclip/paperclip/SKILL.md"]).toBeDefined();
+    expect(exported.files["skills/partyclipai/partyclip/partyclip/SKILL.md"]).toBeDefined();
   });
 
   it("exports the company logo into images/ and references it from .paperclip.yaml", async () => {
@@ -802,7 +802,7 @@ describe("company portability", () => {
             projectId: "project-1",
             name: "Main Repo",
             sourceType: "git_repo",
-            cwd: "/Users/dotta/paperclip",
+            cwd: "/Users/dotta/partyclip",
             repoUrl: "https://github.com/partyclipai/partyclip.git",
             repoRef: "main",
             defaultRef: "main",
@@ -825,7 +825,7 @@ describe("company portability", () => {
             projectId: "project-1",
             name: "Local Scratch",
             sourceType: "local_path",
-            cwd: "/tmp/paperclip-local",
+            cwd: "/tmp/partyclip-local",
             repoUrl: null,
             repoRef: null,
             defaultRef: null,
@@ -879,7 +879,7 @@ describe("company portability", () => {
     expect(extension).toContain('repoUrl: "https://github.com/partyclipai/partyclip.git"');
     expect(extension).toContain('defaultProjectWorkspaceKey: "main-repo"');
     expect(extension).toContain('projectWorkspaceKey: "main-repo"');
-    expect(extension).not.toContain("/Users/dotta/paperclip");
+    expect(extension).not.toContain("/Users/dotta/partyclip");
     expect(extension).not.toContain("workspace-1");
     expect(exported.warnings).toContain("Project launch workspace Local Scratch was omitted from export because it does not have a portable repoUrl.");
 

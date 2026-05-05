@@ -89,13 +89,13 @@ describe("applyRunScopedMentionedSkillKeys", () => {
     const originalConfig = {
       command: "codex",
       paperclipSkillSync: {
-        desiredSkills: ["partyclipai/partyclip/paperclip"],
+        desiredSkills: ["partyclipai/partyclip/partyclip"],
       },
     };
 
     const updatedConfig = applyRunScopedMentionedSkillKeys(originalConfig, [
       "company/company-1/release-changelog",
-      "partyclipai/partyclip/paperclip",
+      "partyclipai/partyclip/partyclip",
       "company/company-1/release-changelog",
     ]);
 
@@ -103,7 +103,7 @@ describe("applyRunScopedMentionedSkillKeys", () => {
       command: "codex",
       paperclipSkillSync: {
         desiredSkills: [
-          "partyclipai/partyclip/paperclip",
+          "partyclipai/partyclip/partyclip",
           "company/company-1/release-changelog",
         ],
       },
@@ -111,7 +111,7 @@ describe("applyRunScopedMentionedSkillKeys", () => {
     expect(originalConfig).toEqual({
       command: "codex",
       paperclipSkillSync: {
-        desiredSkills: ["partyclipai/partyclip/paperclip"],
+        desiredSkills: ["partyclipai/partyclip/partyclip"],
       },
     });
   });

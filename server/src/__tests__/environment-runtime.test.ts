@@ -284,7 +284,7 @@ describeEmbeddedPostgres("environmentRuntimeService", () => {
         host: "ssh.example.test",
         port: 22,
         username: "ssh-user",
-        remoteWorkspacePath: "/srv/paperclip/workspace",
+        remoteWorkspacePath: "/srv/partyclip/workspace",
         privateKey: null,
         knownHosts: null,
         strictHostKeyChecking: true,
@@ -347,8 +347,8 @@ describeEmbeddedPostgres("environmentRuntimeService", () => {
       throw new Error("Expected the test health server to listen on a TCP port.");
     }
     const runtimeApiUrl = `http://127.0.0.1:${address.port}`;
-    const previousCandidates = process.env.PAPERCLIP_RUNTIME_API_CANDIDATES_JSON;
-    process.env.PAPERCLIP_RUNTIME_API_CANDIDATES_JSON = JSON.stringify([runtimeApiUrl]);
+    const previousCandidates = process.env.PARTYCLIP_RUNTIME_API_CANDIDATES_JSON;
+    process.env.PARTYCLIP_RUNTIME_API_CANDIDATES_JSON = JSON.stringify([runtimeApiUrl]);
     const { companyId, environment, runId } = await seedEnvironment({
       driver: "ssh",
       name: "Fixture SSH",
@@ -382,9 +382,9 @@ describeEmbeddedPostgres("environmentRuntimeService", () => {
       expect(released[0]?.lease.status).toBe("released");
     } finally {
       if (previousCandidates === undefined) {
-        delete process.env.PAPERCLIP_RUNTIME_API_CANDIDATES_JSON;
+        delete process.env.PARTYCLIP_RUNTIME_API_CANDIDATES_JSON;
       } else {
-        process.env.PAPERCLIP_RUNTIME_API_CANDIDATES_JSON = previousCandidates;
+        process.env.PARTYCLIP_RUNTIME_API_CANDIDATES_JSON = previousCandidates;
       }
       await new Promise<void>((resolve) => healthServer.close(() => resolve()));
     }
@@ -983,7 +983,7 @@ describeEmbeddedPostgres("environmentRuntimeService", () => {
     await db.insert(plugins).values({
       id: pluginId,
       pluginKey: "acme.environments",
-      packageName: "@acme/paperclip-environments",
+      packageName: "@acme/partyclip-environments",
       version: "1.0.0",
       apiVersion: 1,
       categories: ["automation"],
@@ -1132,7 +1132,7 @@ describeEmbeddedPostgres("environmentRuntimeService", () => {
     await db.insert(plugins).values({
       id: pluginId,
       pluginKey: "acme.environments",
-      packageName: "@acme/paperclip-environments",
+      packageName: "@acme/partyclip-environments",
       version: "1.0.0",
       apiVersion: 1,
       categories: ["automation"],

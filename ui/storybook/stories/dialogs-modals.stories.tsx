@@ -29,7 +29,7 @@ import {
   storybookIssueLabels,
   storybookIssues,
   storybookProjects,
-} from "../fixtures/paperclipData";
+} from "../fixtures/partyclipData";
 
 const COMPANY_ID = "company-storybook";
 const SELECTED_COMPANY_STORAGE_KEY = "paperclip.selectedCompanyId";
@@ -183,8 +183,8 @@ const closeReadinessReady: ExecutionWorkspaceCloseReadiness = {
   isSharedWorkspace: false,
   isProjectPrimaryWorkspace: false,
   git: {
-    repoRoot: "/Users/dotta/paperclip",
-    workspacePath: "/Users/dotta/paperclip/.paperclip/worktrees/PAP-1641-create-super-detailed-storybooks-for-our-project",
+    repoRoot: "/Users/dotta/partyclip",
+    workspacePath: "/Users/dotta/partyclip/.paperclip/worktrees/PAP-1641-create-super-detailed-storybooks-for-our-project",
     branchName: "PAP-1641-create-super-detailed-storybooks-for-our-project",
     baseRef: "master",
     hasDirtyTrackedFiles: true,
@@ -609,7 +609,7 @@ function ProjectDialogOpener({ populated }: { populated?: boolean }) {
     const timer = window.setTimeout(() => {
       fillFirstField("input[placeholder='Project name']", "Storybook review workspace");
       fillFirstField("input[placeholder='https://github.com/org/repo']", "https://github.com/partyclipai/partyclip");
-      fillFirstField("input[placeholder='/absolute/path/to/workspace']", "/Users/dotta/paperclip/ui");
+      fillFirstField("input[placeholder='/absolute/path/to/workspace']", "/Users/dotta/partyclip/ui");
       fillFirstField("input[type='date']", "2026-04-30");
     }, 250);
     return () => window.clearTimeout(timer);

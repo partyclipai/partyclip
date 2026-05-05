@@ -7,8 +7,8 @@ Use this reference when an issue has an isolated execution workspace and you nee
 Start from the issue, not from memory:
 
 ```sh
-curl -sS -H "Authorization: Bearer $PAPERCLIP_API_KEY" \
-  "$PAPERCLIP_API_URL/api/issues/$PAPERCLIP_TASK_ID/heartbeat-context"
+curl -sS -H "Authorization: Bearer $PARTYCLIP_API_KEY" \
+  "$PARTYCLIP_API_URL/api/issues/$PARTYCLIP_TASK_ID/heartbeat-context"
 ```
 
 Read `currentExecutionWorkspace`:
@@ -27,26 +27,26 @@ Prefer Paperclip-managed runtime service controls over manual `pnpm dev &` or ad
 ```sh
 # Start all configured services; waits for configured readiness checks.
 curl -sS -X POST \
-  -H "Authorization: Bearer $PAPERCLIP_API_KEY" \
-  -H "X-Paperclip-Run-Id: $PAPERCLIP_RUN_ID" \
+  -H "Authorization: Bearer $PARTYCLIP_API_KEY" \
+  -H "X-Paperclip-Run-Id: $PARTYCLIP_RUN_ID" \
   -H "Content-Type: application/json" \
-  "$PAPERCLIP_API_URL/api/execution-workspaces/<workspace-id>/runtime-services/start" \
+  "$PARTYCLIP_API_URL/api/execution-workspaces/<workspace-id>/runtime-services/start" \
   -d '{}'
 
 # Restart all configured services.
 curl -sS -X POST \
-  -H "Authorization: Bearer $PAPERCLIP_API_KEY" \
-  -H "X-Paperclip-Run-Id: $PAPERCLIP_RUN_ID" \
+  -H "Authorization: Bearer $PARTYCLIP_API_KEY" \
+  -H "X-Paperclip-Run-Id: $PARTYCLIP_RUN_ID" \
   -H "Content-Type: application/json" \
-  "$PAPERCLIP_API_URL/api/execution-workspaces/<workspace-id>/runtime-services/restart" \
+  "$PARTYCLIP_API_URL/api/execution-workspaces/<workspace-id>/runtime-services/restart" \
   -d '{}'
 
 # Stop all running services.
 curl -sS -X POST \
-  -H "Authorization: Bearer $PAPERCLIP_API_KEY" \
-  -H "X-Paperclip-Run-Id: $PAPERCLIP_RUN_ID" \
+  -H "Authorization: Bearer $PARTYCLIP_API_KEY" \
+  -H "X-Paperclip-Run-Id: $PARTYCLIP_RUN_ID" \
   -H "Content-Type: application/json" \
-  "$PAPERCLIP_API_URL/api/execution-workspaces/<workspace-id>/runtime-services/stop" \
+  "$PARTYCLIP_API_URL/api/execution-workspaces/<workspace-id>/runtime-services/stop" \
   -d '{}'
 ```
 

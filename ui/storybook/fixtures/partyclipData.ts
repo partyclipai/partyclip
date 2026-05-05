@@ -20,7 +20,7 @@ import type { LiveRunForIssue } from "@/api/heartbeats";
 
 const now = new Date("2026-04-20T12:00:00.000Z");
 const recent = (minutesAgo: number) => new Date(now.getTime() - minutesAgo * 60_000);
-const storybookRepoRoot = "~/paperclip";
+const storybookRepoRoot = "~/partyclip";
 const storybookWorkspaceRoot = `${storybookRepoRoot}/.paperclip/workspaces`;
 const storybookWorktreeRoot = `${storybookRepoRoot}/.paperclip/worktrees`;
 
@@ -434,7 +434,7 @@ export const storybookProjectWorkspaces: Project["workspaces"] = [
         command: "pnpm docs:dev",
         cwd: null,
         port: 4173,
-        url: "https://paperclip-docs-preview.vercel.app",
+        url: "https://partyclip-docs-preview.vercel.app",
         healthStatus: "unknown",
         lastUsedAt: recent(48),
         startedAt: recent(72),
@@ -957,7 +957,7 @@ export const storybookContinuationHandoff: IssueDocument = {
     "",
     "Next action: run the Storybook build, inspect the issue management story, then request QA visual review if the build passes.",
     "",
-    "Important files: `ui/storybook/stories/issue-management.stories.tsx` and `ui/storybook/fixtures/paperclipData.ts`.",
+    "Important files: `ui/storybook/stories/issue-management.stories.tsx` and `ui/storybook/fixtures/partyclipData.ts`.",
   ].join("\n"),
   latestRevisionId: "revision-continuation-1",
   latestRevisionNumber: 1,

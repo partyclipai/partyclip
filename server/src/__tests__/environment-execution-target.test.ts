@@ -16,8 +16,8 @@ import {
 describe("resolveEnvironmentExecutionTarget", () => {
   beforeEach(() => {
     mockResolveEnvironmentDriverConfigForRuntime.mockReset();
-    delete process.env.PAPERCLIP_API_URL;
-    delete process.env.PAPERCLIP_RUNTIME_API_URL;
+    delete process.env.PARTYCLIP_API_URL;
+    delete process.env.PARTYCLIP_RUNTIME_API_URL;
   });
 
   it("uses a bounded default cwd for sandbox targets when lease metadata omits remoteCwd", async () => {
@@ -60,8 +60,8 @@ describe("resolveEnvironmentExecutionTarget", () => {
   });
 
   it("prefers an explicit Paperclip API URL from lease metadata for sandbox targets", async () => {
-    process.env.PAPERCLIP_API_URL = "https://paperclip.example.test";
-    process.env.PAPERCLIP_RUNTIME_API_URL = "http://paperclip.example.test:3200";
+    process.env.PARTYCLIP_API_URL = "https://partyclip.example.test";
+    process.env.PARTYCLIP_RUNTIME_API_URL = "http://partyclip.example.test:3200";
     mockResolveEnvironmentDriverConfigForRuntime.mockResolvedValue({
       driver: "sandbox",
       config: {
@@ -84,7 +84,7 @@ describe("resolveEnvironmentExecutionTarget", () => {
       },
       leaseId: "lease-1",
       leaseMetadata: {
-        paperclipApiUrl: "https://paperclip.example.test",
+        paperclipApiUrl: "https://partyclip.example.test",
       },
       lease: null,
       environmentRuntime: null,
@@ -93,7 +93,7 @@ describe("resolveEnvironmentExecutionTarget", () => {
     expect(target).toMatchObject({
       kind: "remote",
       transport: "sandbox",
-      paperclipApiUrl: "https://paperclip.example.test",
+      paperclipApiUrl: "https://partyclip.example.test",
       paperclipTransport: "direct",
     });
   });

@@ -242,9 +242,9 @@ describe.sequential("agent skill routes", () => {
     mockSecretService.resolveAdapterConfigForRuntime.mockResolvedValue({ config: { env: {} } });
     mockCompanySkillService.listRuntimeSkillEntries.mockResolvedValue([
       {
-        key: "partyclipai/partyclip/paperclip",
+        key: "partyclipai/partyclip/partyclip",
         runtimeName: "paperclip",
-        source: "/tmp/paperclip",
+        source: "/tmp/partyclip",
         required: true,
         requiredReason: "required",
       },
@@ -253,7 +253,7 @@ describe.sequential("agent skill routes", () => {
       async (_companyId: string, requested: string[]) =>
         requested.map((value) =>
           value === "paperclip"
-            ? "partyclipai/partyclip/paperclip"
+            ? "partyclipai/partyclip/partyclip"
             : value,
         ),
     );
@@ -261,7 +261,7 @@ describe.sequential("agent skill routes", () => {
       adapterType: "claude_local",
       supported: true,
       mode: "ephemeral",
-      desiredSkills: ["partyclipai/partyclip/paperclip"],
+      desiredSkills: ["partyclipai/partyclip/partyclip"],
       entries: [],
       warnings: [],
     });
@@ -269,7 +269,7 @@ describe.sequential("agent skill routes", () => {
       adapterType: "claude_local",
       supported: true,
       mode: "ephemeral",
-      desiredSkills: ["partyclipai/partyclip/paperclip"],
+      desiredSkills: ["partyclipai/partyclip/partyclip"],
       entries: [],
       warnings: [],
     });
@@ -348,7 +348,7 @@ describe.sequential("agent skill routes", () => {
       adapterType: "codex_local",
       supported: true,
       mode: "ephemeral",
-      desiredSkills: ["partyclipai/partyclip/paperclip"],
+      desiredSkills: ["partyclipai/partyclip/partyclip"],
       entries: [],
       warnings: [],
     });
@@ -374,7 +374,7 @@ describe.sequential("agent skill routes", () => {
       adapterType: "acpx_local",
       supported: true,
       mode: "ephemeral",
-      desiredSkills: ["partyclipai/partyclip/paperclip"],
+      desiredSkills: ["partyclipai/partyclip/partyclip"],
       entries: [],
       warnings: [],
     });
@@ -413,7 +413,7 @@ describe.sequential("agent skill routes", () => {
       config: {
         agent: "codex",
         paperclipSkillSync: {
-          desiredSkills: ["partyclipai/partyclip/paperclip"],
+          desiredSkills: ["partyclipai/partyclip/partyclip"],
         },
       },
     });
@@ -421,7 +421,7 @@ describe.sequential("agent skill routes", () => {
       adapterType: "acpx_local",
       supported: true,
       mode: "ephemeral",
-      desiredSkills: ["partyclipai/partyclip/paperclip"],
+      desiredSkills: ["partyclipai/partyclip/partyclip"],
       entries: [],
       warnings: [],
     });
@@ -437,7 +437,7 @@ describe.sequential("agent skill routes", () => {
         adapterConfig: expect.objectContaining({
           agent: "codex",
           paperclipSkillSync: expect.objectContaining({
-            desiredSkills: ["partyclipai/partyclip/paperclip"],
+            desiredSkills: ["partyclipai/partyclip/partyclip"],
           }),
         }),
       }),
@@ -451,7 +451,7 @@ describe.sequential("agent skill routes", () => {
           paperclipRuntimeSkills: expect.any(Array),
         }),
       }),
-      ["partyclipai/partyclip/paperclip"],
+      ["partyclipai/partyclip/partyclip"],
     );
   });
 
@@ -461,7 +461,7 @@ describe.sequential("agent skill routes", () => {
       adapterType: "cursor",
       supported: true,
       mode: "persistent",
-      desiredSkills: ["partyclipai/partyclip/paperclip"],
+      desiredSkills: ["partyclipai/partyclip/partyclip"],
       entries: [],
       warnings: [],
     });
@@ -480,7 +480,7 @@ describe.sequential("agent skill routes", () => {
 
     const res = await requestApp(await createApp(), (baseUrl) => request(baseUrl)
       .post("/api/agents/11111111-1111-4111-8111-111111111111/skills/sync?companyId=company-1")
-      .send({ desiredSkills: ["partyclipai/partyclip/paperclip"] }));
+      .send({ desiredSkills: ["partyclipai/partyclip/partyclip"] }));
 
     expect(res.status, JSON.stringify(res.body)).toBe(200);
     expect(mockAdapter.syncSkills).toHaveBeenCalled();
@@ -499,7 +499,7 @@ describe.sequential("agent skill routes", () => {
       expect.objectContaining({
         adapterConfig: expect.objectContaining({
           paperclipSkillSync: expect.objectContaining({
-            desiredSkills: ["partyclipai/partyclip/paperclip"],
+            desiredSkills: ["partyclipai/partyclip/partyclip"],
           }),
         }),
       }),
@@ -524,7 +524,7 @@ describe.sequential("agent skill routes", () => {
       expect.objectContaining({
         adapterConfig: expect.objectContaining({
           paperclipSkillSync: expect.objectContaining({
-            desiredSkills: ["partyclipai/partyclip/paperclip"],
+            desiredSkills: ["partyclipai/partyclip/partyclip"],
           }),
         }),
       }),
@@ -705,9 +705,9 @@ describe.sequential("agent skill routes", () => {
       "company-1",
       expect.objectContaining({
         payload: expect.objectContaining({
-          desiredSkills: ["partyclipai/partyclip/paperclip"],
+          desiredSkills: ["partyclipai/partyclip/partyclip"],
           requestedConfigurationSnapshot: expect.objectContaining({
-            desiredSkills: ["partyclipai/partyclip/paperclip"],
+            desiredSkills: ["partyclipai/partyclip/partyclip"],
           }),
         }),
       }),
@@ -737,7 +737,7 @@ describe.sequential("agent skill routes", () => {
         icon: "crown",
         adapterConfig: expect.objectContaining({
           paperclipSkillSync: expect.objectContaining({
-            desiredSkills: ["partyclipai/partyclip/paperclip"],
+            desiredSkills: ["partyclipai/partyclip/partyclip"],
           }),
         }),
       }),
@@ -747,9 +747,9 @@ describe.sequential("agent skill routes", () => {
       expect.objectContaining({
         payload: expect.objectContaining({
           icon: "crown",
-          desiredSkills: ["partyclipai/partyclip/paperclip"],
+          desiredSkills: ["partyclipai/partyclip/partyclip"],
           requestedConfigurationSnapshot: expect.objectContaining({
-            desiredSkills: ["partyclipai/partyclip/paperclip"],
+            desiredSkills: ["partyclipai/partyclip/partyclip"],
           }),
         }),
       }),

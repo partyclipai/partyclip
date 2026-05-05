@@ -84,5 +84,5 @@ pnpm partyclipai configure --section server
 Runtime override via environment variable:
 
 ```sh
-PAPERCLIP_DEPLOYMENT_MODE=authenticated PAPERCLIP_BIND=lan pnpm partyclipai run
+PARTYCLIP_DEPLOYMENT_MODE=authenticated PARTYCLIP_BIND=lan pnpm partyclipai run
 ```

@@ -110,24 +110,24 @@ function resolveWorktreeRuntimeContext(
   env: NodeJS.ProcessEnv,
   overrideConfigPath?: string,
 ): WorktreeRuntimeContext | null {
-  if (env.PAPERCLIP_IN_WORKTREE !== "true") return null;
+  if (env.PARTYCLIP_IN_WORKTREE !== "true") return null;
 
   const configPath = resolvePaperclipConfigPath(overrideConfigPath);
   const envPath = resolvePaperclipEnvPath(configPath);
   const persistedEnv = readEnvEntries(envPath);
   const worktreeRoot = path.resolve(path.dirname(configPath), "..");
   const worktreeName =
-    nonEmpty(persistedEnv.PAPERCLIP_WORKTREE_NAME) ??
-    nonEmpty(env.PAPERCLIP_WORKTREE_NAME) ??
+    nonEmpty(persistedEnv.PARTYCLIP_WORKTREE_NAME) ??
+    nonEmpty(env.PARTYCLIP_WORKTREE_NAME) ??
     path.basename(worktreeRoot);
   const instanceId =
-    nonEmpty(persistedEnv.PAPERCLIP_INSTANCE_ID) ??
-    nonEmpty(env.PAPERCLIP_INSTANCE_ID) ??
+    nonEmpty(persistedEnv.PARTYCLIP_INSTANCE_ID) ??
+    nonEmpty(env.PARTYCLIP_INSTANCE_ID) ??
     sanitizeWorktreeInstanceId(worktreeName);
   const homeDir = resolveHomeAwarePath(
-    nonEmpty(persistedEnv.PAPERCLIP_HOME) ??
-      nonEmpty(env.PAPERCLIP_HOME) ??
-      nonEmpty(env.PAPERCLIP_WORKTREES_DIR) ??
+    nonEmpty(persistedEnv.PARTYCLIP_HOME) ??
+      nonEmpty(env.PARTYCLIP_HOME) ??
+      nonEmpty(env.PARTYCLIP_WORKTREES_DIR) ??
       "~/.paperclip-worktrees",
   );
   const instanceRoot = path.resolve(homeDir, "instances", instanceId);
@@ -376,11 +376,11 @@ export function maybeRepairLegacyWorktreeConfigAndEnvFiles(): {
     return { repairedConfig: false, repairedEnv: false };
   }
 
-  process.env.PAPERCLIP_HOME = context.homeDir;
-  process.env.PAPERCLIP_INSTANCE_ID = context.instanceId;
-  process.env.PAPERCLIP_CONFIG = context.configPath;
-  process.env.PAPERCLIP_CONTEXT = context.contextPath;
-  process.env.PAPERCLIP_WORKTREE_NAME = context.worktreeName;
+  process.env.PARTYCLIP_HOME = context.homeDir;
+  process.env.PARTYCLIP_INSTANCE_ID = context.instanceId;
+  process.env.PARTYCLIP_CONFIG = context.configPath;
+  process.env.PARTYCLIP_CONTEXT = context.contextPath;
+  process.env.PARTYCLIP_WORKTREE_NAME = context.worktreeName;
 
   let repairedConfig = false;
   if (fs.existsSync(context.configPath)) {
@@ -424,12 +424,12 @@ export function maybeRepairLegacyWorktreeConfigAndEnvFiles(): {
   const existingEnvEntries = readEnvEntries(context.envPath);
   const desiredEnvEntries: Record<string, string> = {
     ...existingEnvEntries,
-    PAPERCLIP_HOME: context.homeDir,
-    PAPERCLIP_INSTANCE_ID: context.instanceId,
-    PAPERCLIP_CONFIG: context.configPath,
-    PAPERCLIP_CONTEXT: context.contextPath,
-    PAPERCLIP_IN_WORKTREE: "true",
-    PAPERCLIP_WORKTREE_NAME: context.worktreeName,
+    PARTYCLIP_HOME: context.homeDir,
+    PARTYCLIP_INSTANCE_ID: context.instanceId,
+    PARTYCLIP_CONFIG: context.configPath,
+    PARTYCLIP_CONTEXT: context.contextPath,
+    PARTYCLIP_IN_WORKTREE: "true",
+    PARTYCLIP_WORKTREE_NAME: context.worktreeName,
   };
 
   const repairedEnv = Object.entries(desiredEnvEntries).some(

@@ -297,15 +297,15 @@ const hermesLocalAdapter: ServerAdapterModule = {
         ? (existingConfig.env as Record<string, string>)
         : {};
     const explicitApiKey =
-      typeof existingEnv.PAPERCLIP_API_KEY === "string" && existingEnv.PAPERCLIP_API_KEY.trim().length > 0;
+      typeof existingEnv.PARTYCLIP_API_KEY === "string" && existingEnv.PARTYCLIP_API_KEY.trim().length > 0;
     const promptTemplate =
       typeof existingConfig.promptTemplate === "string" && existingConfig.promptTemplate.trim().length > 0
         ? existingConfig.promptTemplate
         : "";
     const authGuardPrompt = [
       "Paperclip API safety rule:",
-      "Use Authorization: Bearer $PAPERCLIP_API_KEY on every Paperclip API request.",
-      "Use X-Paperclip-Run-Id: $PAPERCLIP_RUN_ID on every Paperclip API request that writes or mutates data, including comments and issue updates.",
+      "Use Authorization: Bearer $PARTYCLIP_API_KEY on every Paperclip API request.",
+      "Use X-Paperclip-Run-Id: $PARTYCLIP_RUN_ID on every Paperclip API request that writes or mutates data, including comments and issue updates.",
       "Never use a board, browser, or local-board session for Paperclip API writes.",
     ].join("\n");
 
@@ -313,8 +313,8 @@ const hermesLocalAdapter: ServerAdapterModule = {
       ...existingConfig,
       env: {
         ...existingEnv,
-        ...(!explicitApiKey ? { PAPERCLIP_API_KEY: normalizedCtx.authToken } : {}),
-        PAPERCLIP_RUN_ID: normalizedCtx.runId,
+        ...(!explicitApiKey ? { PARTYCLIP_API_KEY: normalizedCtx.authToken } : {}),
+        PARTYCLIP_RUN_ID: normalizedCtx.runId,
       },
     };
 

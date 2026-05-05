@@ -31,7 +31,7 @@ describe("agent skill contract", () => {
       mode: "ephemeral",
       desiredSkills: [],
       entries: [{
-        key: "partyclipai/partyclip/paperclip",
+        key: "partyclipai/partyclip/partyclip",
         runtimeName: "paperclip",
         desired: true,
         managed: true,
@@ -41,7 +41,7 @@ describe("agent skill contract", () => {
     })).toMatchObject({
       adapterType: "claude_local",
       entries: [{
-        key: "partyclipai/partyclip/paperclip",
+        key: "partyclipai/partyclip/partyclip",
         state: "configured",
       }],
     });

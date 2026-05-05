@@ -114,16 +114,16 @@ interface TestPaperclipEnv {
 function createBasePaperclipEnv(options: TestPaperclipEnv) {
   const env = { ...process.env };
   for (const key of Object.keys(env)) {
-    if (key.startsWith("PAPERCLIP_")) {
+    if (key.startsWith("PARTYCLIP_")) {
       delete env[key];
     }
   }
 
-  env.PAPERCLIP_CONFIG = options.configPath;
-  env.PAPERCLIP_HOME = options.paperclipHome;
-  env.PAPERCLIP_INSTANCE_ID = options.instanceId;
-  env.PAPERCLIP_CONTEXT = path.join(options.paperclipHome, "context.json");
-  env.PAPERCLIP_AUTH_STORE = path.join(options.paperclipHome, "auth.json");
+  env.PARTYCLIP_CONFIG = options.configPath;
+  env.PARTYCLIP_HOME = options.paperclipHome;
+  env.PARTYCLIP_INSTANCE_ID = options.instanceId;
+  env.PARTYCLIP_CONTEXT = path.join(options.paperclipHome, "context.json");
+  env.PARTYCLIP_AUTH_STORE = path.join(options.paperclipHome, "auth.json");
   if (options.shellHome) {
     env.HOME = options.shellHome;
   }
@@ -152,10 +152,10 @@ function createServerEnv(
   env.HOST = "127.0.0.1";
   env.PORT = String(port);
   env.SERVE_UI = "false";
-  env.PAPERCLIP_DB_BACKUP_ENABLED = "false";
+  env.PARTYCLIP_DB_BACKUP_ENABLED = "false";
   env.HEARTBEAT_SCHEDULER_ENABLED = "false";
-  env.PAPERCLIP_MIGRATION_AUTO_APPLY = "true";
-  env.PAPERCLIP_UI_DEV_MIDDLEWARE = "false";
+  env.PARTYCLIP_MIGRATION_AUTO_APPLY = "true";
+  env.PARTYCLIP_UI_DEV_MIDDLEWARE = "false";
 
   return env;
 }
@@ -166,10 +166,10 @@ function createCliEnv(options: TestPaperclipEnv) {
   delete env.PORT;
   delete env.HOST;
   delete env.SERVE_UI;
-  delete env.PAPERCLIP_DB_BACKUP_ENABLED;
+  delete env.PARTYCLIP_DB_BACKUP_ENABLED;
   delete env.HEARTBEAT_SCHEDULER_ENABLED;
-  delete env.PAPERCLIP_MIGRATION_AUTO_APPLY;
-  delete env.PAPERCLIP_UI_DEV_MIDDLEWARE;
+  delete env.PARTYCLIP_MIGRATION_AUTO_APPLY;
+  delete env.PARTYCLIP_UI_DEV_MIDDLEWARE;
   return env;
 }
 

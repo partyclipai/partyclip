@@ -32,7 +32,7 @@ import type {
   RequestConfirmationInteraction,
   SuggestTasksInteraction,
 } from "@/lib/issue-thread-interactions";
-import { storybookAgentMap } from "../fixtures/paperclipData";
+import { storybookAgentMap } from "../fixtures/partyclipData";
 
 const boardUserLabels = new Map<string, string>([
   [issueThreadInteractionFixtureMeta.currentUserId, "Riley Board"],

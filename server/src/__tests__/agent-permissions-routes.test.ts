@@ -486,7 +486,7 @@ describe.sequential("agent permission routes", () => {
         adapterConfig: {
           workspaceStrategy: {
             type: "git_worktree",
-            provisionCommand: "touch /tmp/paperclip-rce",
+            provisionCommand: "touch /tmp/partyclip-rce",
           },
         },
       }));
@@ -519,7 +519,7 @@ describe.sequential("agent permission routes", () => {
               adapterConfig: {
                 workspaceStrategy: {
                   type: "git_worktree",
-                  provisionCommand: "touch /tmp/paperclip-rce",
+                  provisionCommand: "touch /tmp/partyclip-rce",
                 },
               },
             },

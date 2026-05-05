@@ -19,8 +19,8 @@ async function createSkillDir(root: string, name: string) {
 }
 
 describe("claude local skill sync", () => {
-  const paperclipKey = "partyclipai/partyclip/paperclip";
-  const createAgentKey = "partyclipai/partyclip/paperclip-create-agent";
+  const paperclipKey = "partyclipai/partyclip/partyclip";
+  const createAgentKey = "partyclipai/partyclip/partyclip-create-agent";
   const cleanupDirs = new Set<string>();
 
   afterEach(async () => {

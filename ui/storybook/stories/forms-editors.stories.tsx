@@ -20,7 +20,7 @@ import { ScheduleEditor, describeSchedule } from "@/components/ScheduleEditor";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { buildExecutionPolicy } from "@/lib/issue-execution-policy";
-import { createIssue, storybookAgents } from "../fixtures/paperclipData";
+import { createIssue, storybookAgents } from "../fixtures/partyclipData";
 
 function Section({
   eyebrow,
@@ -290,9 +290,9 @@ const storybookProject: Project = {
     repoRef: "master",
     defaultRef: "master",
     repoName: "paperclip",
-    localFolder: "/Users/dotta/paperclip",
+    localFolder: "/Users/dotta/partyclip",
     managedFolder: "paperclip",
-    effectiveLocalFolder: "/Users/dotta/paperclip",
+    effectiveLocalFolder: "/Users/dotta/partyclip",
     origin: "local_folder",
   },
   workspaces: [],

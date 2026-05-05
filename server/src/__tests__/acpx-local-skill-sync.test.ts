@@ -5,8 +5,8 @@ import {
 } from "@partyclipai/adapter-acpx-local/server";
 
 describe("acpx local skill sync", () => {
-  const paperclipKey = "partyclipai/partyclip/paperclip";
-  const createAgentKey = "partyclipai/partyclip/paperclip-create-agent";
+  const paperclipKey = "partyclipai/partyclip/partyclip";
+  const createAgentKey = "partyclipai/partyclip/partyclip-create-agent";
 
   it("reports ACPX Claude skills as supported runtime-mounted state", async () => {
     const snapshot = await listAcpxSkills({

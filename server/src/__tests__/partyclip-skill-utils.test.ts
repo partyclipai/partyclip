@@ -32,8 +32,8 @@ describe("paperclip skill utils", () => {
     const entries = await listPaperclipSkillEntries(moduleDir);
 
     expect(entries.map((entry) => entry.key)).toEqual([
-      "partyclipai/partyclip/paperclip",
-      "partyclipai/partyclip/paperclip-create-agent",
+      "partyclipai/partyclip/partyclip",
+      "partyclipai/partyclip/partyclip-create-agent",
     ]);
     expect(entries.map((entry) => entry.runtimeName)).toEqual([
       "paperclip",

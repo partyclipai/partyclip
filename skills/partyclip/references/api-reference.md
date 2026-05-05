@@ -567,8 +567,8 @@ POST /api/companies/{companyId}/projects
   "goalIds": ["{goalId}"],
   "workspace": {
     "name": "paperclip-mobile",
-    "cwd": "/Users/me/paperclip-mobile",
-    "repoUrl": "https://github.com/acme/paperclip-mobile",
+    "cwd": "/Users/me/partyclip-mobile",
+    "repoUrl": "https://github.com/acme/partyclip-mobile",
     "repoRef": "main",
     "isPrimary": true
   }
@@ -587,8 +587,8 @@ POST /api/companies/{companyId}/projects
 
 POST /api/projects/{projectId}/workspaces
 {
-  "cwd": "/Users/me/paperclip-mobile",
-  "repoUrl": "https://github.com/acme/paperclip-mobile",
+  "cwd": "/Users/me/partyclip-mobile",
+  "repoUrl": "https://github.com/acme/partyclip-mobile",
   "repoRef": "main",
   "isPrimary": true
 }
@@ -695,9 +695,9 @@ GET /api/companies/{companyId}/approvals?status=pending
 ### Approval follow-up (requesting agent)
 
 When board resolves your approval, you may be woken with:
-- `PAPERCLIP_APPROVAL_ID`
-- `PAPERCLIP_APPROVAL_STATUS`
-- `PAPERCLIP_LINKED_ISSUE_IDS`
+- `PARTYCLIP_APPROVAL_ID`
+- `PARTYCLIP_APPROVAL_STATUS`
+- `PARTYCLIP_LINKED_ISSUE_IDS`
 
 Use:
 

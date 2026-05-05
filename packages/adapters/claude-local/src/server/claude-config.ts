@@ -4,7 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import type { AdapterExecutionContext } from "@partyclipai/adapter-utils";
 
-const DEFAULT_PAPERCLIP_INSTANCE_ID = "default";
+const DEFAULT_PARTYCLIP_INSTANCE_ID = "default";
 const SEEDED_SHARED_FILES = [
   ".credentials.json",
   "credentials.json",
@@ -92,8 +92,8 @@ export function resolveManagedClaudeConfigSeedDir(
   env: NodeJS.ProcessEnv,
   companyId?: string,
 ): string {
-  const paperclipHome = nonEmpty(env.PAPERCLIP_HOME) ?? path.resolve(os.homedir(), ".paperclip");
-  const instanceId = nonEmpty(env.PAPERCLIP_INSTANCE_ID) ?? DEFAULT_PAPERCLIP_INSTANCE_ID;
+  const paperclipHome = nonEmpty(env.PARTYCLIP_HOME) ?? path.resolve(os.homedir(), ".paperclip");
+  const instanceId = nonEmpty(env.PARTYCLIP_INSTANCE_ID) ?? DEFAULT_PARTYCLIP_INSTANCE_ID;
   return companyId
     ? path.resolve(paperclipHome, "instances", instanceId, "companies", companyId, "claude-config-seed")
     : path.resolve(paperclipHome, "instances", instanceId, "claude-config-seed");
