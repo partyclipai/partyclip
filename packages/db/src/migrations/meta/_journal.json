@@ -533,6 +533,13 @@
       "when": 1777800000000,
       "tag": "0075_partyclip_v0_v1_dormant",
       "breakpoints": true
+    },
+    {
+      "idx": 76,
+      "version": "7",
+      "when": 1777800001000,
+      "tag": "0076_activity_log_append_only",
+      "breakpoints": true
     }
   ]
 }
