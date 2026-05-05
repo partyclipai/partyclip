@@ -8,14 +8,14 @@ const repoRoot = process.cwd();
 const serverRoot = path.join(repoRoot, "server");
 const serverTestsDir = path.join(repoRoot, "server", "src", "__tests__");
 const nonServerProjects = [
-  "@paperclipai/shared",
-  "@paperclipai/db",
-  "@paperclipai/adapter-utils",
-  "@paperclipai/adapter-acpx-local",
-  "@paperclipai/adapter-codex-local",
-  "@paperclipai/adapter-opencode-local",
-  "@paperclipai/ui",
-  "paperclipai",
+  "@partyclipai/shared",
+  "@partyclipai/db",
+  "@partyclipai/adapter-utils",
+  "@partyclipai/adapter-acpx-local",
+  "@partyclipai/adapter-codex-local",
+  "@partyclipai/adapter-opencode-local",
+  "@partyclipai/ui",
+  "partyclipai",
 ];
 const routeTestPattern = /[^/]*(?:route|routes|authz)[^/]*\.test\.ts$/;
 const additionalSerializedServerTests = new Set([
@@ -117,7 +117,7 @@ for (const project of nonServerProjects) {
 }
 
 runVitest(
-  ["--project", "@paperclipai/server", ...excludeRouteArgs],
+  ["--project", "@partyclipai/server", ...excludeRouteArgs],
   `server suites excluding ${routeTests.length} serialized suites`,
 );
 
@@ -125,7 +125,7 @@ for (const routeTest of routeTests) {
   runVitest(
     [
       "--project",
-      "@paperclipai/server",
+      "@partyclipai/server",
       routeTest.repoPath,
       "--pool=forks",
       "--poolOptions.forks.isolate=true",

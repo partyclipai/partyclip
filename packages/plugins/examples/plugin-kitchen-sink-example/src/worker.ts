@@ -20,8 +20,8 @@ import {
   type ScopeKey,
   type ToolResult,
   type ToolRunContext,
-} from "@paperclipai/plugin-sdk";
-import type { Goal, Issue } from "@paperclipai/shared";
+} from "@partyclipai/plugin-sdk";
+import type { Goal, Issue } from "@partyclipai/shared";
 import {
   DEFAULT_CONFIG,
   JOB_KEYS,

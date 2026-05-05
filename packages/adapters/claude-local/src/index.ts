@@ -1,4 +1,4 @@
-import type { AdapterModelProfileDefinition } from "@paperclipai/adapter-utils";
+import type { AdapterModelProfileDefinition } from "@partyclipai/adapter-utils";
 
 export const type = "claude_local";
 export const label = "Claude Code (local)";

@@ -43,18 +43,18 @@ run_isolated_worktree_init() {
     return 0
   fi
 
-  if command -v pnpm >/dev/null 2>&1 && pnpm paperclipai --help >/dev/null 2>&1; then
+  if command -v pnpm >/dev/null 2>&1 && pnpm partyclipai --help >/dev/null 2>&1; then
     (
       cd "$worktree_cwd"
-      pnpm paperclipai worktree init --force --seed-mode minimal --name "$worktree_name" --from-config "$source_config_path"
+      pnpm partyclipai worktree init --force --seed-mode minimal --name "$worktree_name" --from-config "$source_config_path"
     )
     return 0
   fi
 
-  if command -v paperclipai >/dev/null 2>&1; then
+  if command -v partyclipai >/dev/null 2>&1; then
     (
       cd "$worktree_cwd"
-      paperclipai worktree init --force --seed-mode minimal --name "$worktree_name" --from-config "$source_config_path"
+      partyclipai worktree init --force --seed-mode minimal --name "$worktree_name" --from-config "$source_config_path"
     )
     return 0
   fi
@@ -62,8 +62,8 @@ run_isolated_worktree_init() {
   return 127
 }
 
-paperclipai_command_available() {
-  if command -v pnpm >/dev/null 2>&1 && pnpm paperclipai --help >/dev/null 2>&1; then
+partyclipai_command_available() {
+  if command -v pnpm >/dev/null 2>&1 && pnpm partyclipai --help >/dev/null 2>&1; then
     return 0
   fi
 
@@ -73,7 +73,7 @@ paperclipai_command_available() {
     return 0
   fi
 
-  if command -v paperclipai >/dev/null 2>&1; then
+  if command -v partyclipai >/dev/null 2>&1; then
     return 0
   fi
 
@@ -335,10 +335,10 @@ EOF
 if [[ -e "$worktree_config_path" && -e "$worktree_env_path" ]]; then
   echo "Reusing existing isolated Paperclip worktree config at $worktree_config_path" >&2
 else
-  if paperclipai_command_available; then
+  if partyclipai_command_available; then
     run_isolated_worktree_init
   else
-    echo "paperclipai CLI not available in this workspace; writing isolated fallback config without DB seeding." >&2
+    echo "partyclipai CLI not available in this workspace; writing isolated fallback config without DB seeding." >&2
     write_fallback_worktree_config
   fi
 fi

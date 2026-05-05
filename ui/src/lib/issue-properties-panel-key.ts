@@ -1,4 +1,4 @@
-import type { Issue } from "@paperclipai/shared";
+import type { Issue } from "@partyclipai/shared";
 
 type IssuePropertiesPanelKeyIssue = Pick<
   Issue,

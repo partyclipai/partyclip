@@ -1,6 +1,6 @@
 import { useMemo, useState, type ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import type { Agent, CompanySecret, EnvBinding, Project, RoutineVariable } from "@paperclipai/shared";
+import type { Agent, CompanySecret, EnvBinding, Project, RoutineVariable } from "@partyclipai/shared";
 import { Code2, FileText, ListPlus, RotateCcw, Table2 } from "lucide-react";
 import { EnvVarEditor } from "@/components/EnvVarEditor";
 import { ExecutionParticipantPicker } from "@/components/ExecutionParticipantPicker";
@@ -103,7 +103,7 @@ Tooling: lean on [/react-perf-optimizer](skill://skill-react-perf?s=react-perf-o
 const shouldRun = issue.status === "in_progress" && issue.companyId === company.id;
 \`\`\`
 
-See [the implementation notes](https://github.com/paperclipai/paperclip).`;
+See [the implementation notes](https://github.com/partyclipai/partyclip).`;
 
 const editorMentions: MentionOption[] = [
   { id: "agent-codex", name: "CodexCoder", kind: "agent", agentId: "agent-codex", agentIcon: "code" },
@@ -181,7 +181,7 @@ const validAdapterValues = {
   concurrency: 2,
   dryRun: true,
   notes: "Use the project worktree and post a concise task update before handoff.",
-  allowedCommands: ["pnpm --filter @paperclipai/ui typecheck", "pnpm build-storybook"],
+  allowedCommands: ["pnpm --filter @partyclipai/ui typecheck", "pnpm build-storybook"],
   advanced: { timeoutSeconds: 900, requireApproval: false },
 };
 
@@ -237,7 +237,7 @@ const routineVariables: RoutineVariable[] = [
     name: "repo",
     label: "Repository",
     type: "text",
-    defaultValue: "paperclipai/paperclip",
+    defaultValue: "partyclipai/partyclip",
     required: true,
     options: [],
   },
@@ -286,7 +286,7 @@ const storybookProject: Project = {
   executionWorkspacePolicy: null,
   codebase: {
     workspaceId: "workspace-board-ui",
-    repoUrl: "https://github.com/paperclipai/paperclip",
+    repoUrl: "https://github.com/partyclipai/partyclip",
     repoRef: "master",
     defaultRef: "master",
     repoName: "paperclip",

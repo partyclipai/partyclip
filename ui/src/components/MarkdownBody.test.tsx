@@ -10,7 +10,7 @@ import {
   buildProjectMentionHref,
   buildSkillMentionHref,
   buildUserMentionHref,
-} from "@paperclipai/shared";
+} from "@partyclipai/shared";
 import { ThemeProvider } from "../context/ThemeContext";
 import { MarkdownBody } from "./MarkdownBody";
 import { queryKeys } from "../lib/queryKeys";
@@ -303,7 +303,7 @@ describe("MarkdownBody", () => {
   });
 
   it("opens GitHub links in a new tab", () => {
-    const html = renderMarkdown("[pr](https://github.com/paperclipai/paperclip/pull/4099)");
+    const html = renderMarkdown("[pr](https://github.com/partyclipai/partyclip/pull/4099)");
 
     expect(html).toContain('target="_blank"');
     expect(html).toContain('rel="noopener noreferrer"');
@@ -318,21 +318,21 @@ describe("MarkdownBody", () => {
   });
 
   it("prefixes GitHub markdown links with the GitHub icon glued to the first character", () => {
-    const html = renderMarkdown("[https://github.com/paperclipai/paperclip/pull/4099](https://github.com/paperclipai/paperclip/pull/4099)");
+    const html = renderMarkdown("[https://github.com/partyclipai/partyclip/pull/4099](https://github.com/partyclipai/partyclip/pull/4099)");
 
-    expect(html).toContain('<a href="https://github.com/paperclipai/paperclip/pull/4099"');
+    expect(html).toContain('<a href="https://github.com/partyclipai/partyclip/pull/4099"');
     expect(html).toContain('class="lucide lucide-github mr-1 inline h-3.5 w-3.5 align-[-0.125em]"');
     // The icon and first character "h" must sit in a no-wrap span so the
     // icon can never be orphaned on the previous line from the URL text.
     expect(html).toMatch(/<span style="white-space:nowrap">.*lucide-github.*?<\/svg>h<\/span>/);
-    expect(html).toContain("ttps://github.com/paperclipai/paperclip/pull/4099");
+    expect(html).toContain("ttps://github.com/partyclipai/partyclip/pull/4099");
     expect(html).not.toContain("lucide-external-link");
   });
 
   it("prefixes GitHub autolinks with the GitHub icon", () => {
-    const html = renderMarkdown("See https://github.com/paperclipai/paperclip/issues/1778");
+    const html = renderMarkdown("See https://github.com/partyclipai/partyclip/issues/1778");
 
-    expect(html).toContain('<a href="https://github.com/paperclipai/paperclip/issues/1778"');
+    expect(html).toContain('<a href="https://github.com/partyclipai/partyclip/issues/1778"');
     expect(html).toContain('class="lucide lucide-github mr-1 inline h-3.5 w-3.5 align-[-0.125em]"');
   });
 

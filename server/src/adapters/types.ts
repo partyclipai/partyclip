@@ -31,4 +31,4 @@ export type {
   ConfigFieldSchema,
   AdapterConfigSchema,
   ServerAdapterModule,
-} from "@paperclipai/adapter-utils";
+} from "@partyclipai/adapter-utils";

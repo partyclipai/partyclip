@@ -53,7 +53,7 @@ export async function doctor(opts: {
       status: "fail",
       message: `Could not read config: ${err instanceof Error ? err.message : String(err)}`,
       canRepair: false,
-      repairHint: "Run `paperclipai configure --section database` or `paperclipai onboard`",
+      repairHint: "Run `partyclipai configure --section database` or `partyclipai onboard`",
     };
     results.push(readResult);
     printResult(readResult);

@@ -5,35 +5,35 @@ summary: Onboard, run, doctor, and configure
 
 Instance setup and diagnostics commands.
 
-## `paperclipai run`
+## `partyclipai run`
 
 One-command bootstrap and start:
 
 ```sh
-pnpm paperclipai run
+pnpm partyclipai run
 ```
 
 Does:
 
 1. Auto-onboards if config is missing
-2. Runs `paperclipai doctor` with repair enabled
+2. Runs `partyclipai doctor` with repair enabled
 3. Starts the server when checks pass
 
 Choose a specific instance:
 
 ```sh
-pnpm paperclipai run --instance dev
+pnpm partyclipai run --instance dev
 ```
 
-## `paperclipai onboard`
+## `partyclipai onboard`
 
 Interactive first-time setup:
 
 ```sh
-pnpm paperclipai onboard
+pnpm partyclipai onboard
 ```
 
-If Paperclip is already configured, rerunning `onboard` keeps the existing config in place. Use `paperclipai configure` to change settings on an existing install.
+If Paperclip is already configured, rerunning `onboard` keeps the existing config in place. Use `partyclipai configure` to change settings on an existing install.
 
 First prompt:
 
@@ -43,24 +43,24 @@ First prompt:
 Start immediately after onboarding:
 
 ```sh
-pnpm paperclipai onboard --run
+pnpm partyclipai onboard --run
 ```
 
 Non-interactive defaults + immediate start (opens browser on server listen):
 
 ```sh
-pnpm paperclipai onboard --yes
+pnpm partyclipai onboard --yes
 ```
 
 On an existing install, `--yes` now preserves the current config and just starts Paperclip with that setup.
 
-## `paperclipai doctor`
+## `partyclipai doctor`
 
 Health checks with optional auto-repair:
 
 ```sh
-pnpm paperclipai doctor
-pnpm paperclipai doctor --repair
+pnpm partyclipai doctor
+pnpm partyclipai doctor --repair
 ```
 
 Validates:
@@ -71,32 +71,32 @@ Validates:
 - Storage configuration
 - Missing key files
 
-## `paperclipai configure`
+## `partyclipai configure`
 
 Update configuration sections:
 
 ```sh
-pnpm paperclipai configure --section server
-pnpm paperclipai configure --section secrets
-pnpm paperclipai configure --section storage
+pnpm partyclipai configure --section server
+pnpm partyclipai configure --section secrets
+pnpm partyclipai configure --section storage
 ```
 
-## `paperclipai env`
+## `partyclipai env`
 
 Show resolved environment configuration:
 
 ```sh
-pnpm paperclipai env
+pnpm partyclipai env
 ```
 
 This now includes bind-oriented deployment settings such as `PAPERCLIP_BIND` and `PAPERCLIP_BIND_HOST` when configured.
 
-## `paperclipai allowed-hostname`
+## `partyclipai allowed-hostname`
 
 Allow a private hostname for authenticated/private mode:
 
 ```sh
-pnpm paperclipai allowed-hostname my-tailscale-host
+pnpm partyclipai allowed-hostname my-tailscale-host
 ```
 
 ## Local Storage Paths
@@ -112,12 +112,12 @@ pnpm paperclipai allowed-hostname my-tailscale-host
 Override with:
 
 ```sh
-PAPERCLIP_HOME=/custom/home PAPERCLIP_INSTANCE_ID=dev pnpm paperclipai run
+PAPERCLIP_HOME=/custom/home PAPERCLIP_INSTANCE_ID=dev pnpm partyclipai run
 ```
 
 Or pass `--data-dir` directly on any command:
 
 ```sh
-pnpm paperclipai run --data-dir ./tmp/paperclip-dev
-pnpm paperclipai doctor --data-dir ./tmp/paperclip-dev
+pnpm partyclipai run --data-dir ./tmp/paperclip-dev
+pnpm partyclipai doctor --data-dir ./tmp/paperclip-dev
 ```

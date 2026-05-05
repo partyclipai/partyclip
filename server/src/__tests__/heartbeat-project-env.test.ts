@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { buildSkillMentionHref } from "@paperclipai/shared";
+import { buildSkillMentionHref } from "@partyclipai/shared";
 import {
   applyRunScopedMentionedSkillKeys,
   extractMentionedSkillIdsFromSources,
@@ -89,13 +89,13 @@ describe("applyRunScopedMentionedSkillKeys", () => {
     const originalConfig = {
       command: "codex",
       paperclipSkillSync: {
-        desiredSkills: ["paperclipai/paperclip/paperclip"],
+        desiredSkills: ["partyclipai/partyclip/paperclip"],
       },
     };
 
     const updatedConfig = applyRunScopedMentionedSkillKeys(originalConfig, [
       "company/company-1/release-changelog",
-      "paperclipai/paperclip/paperclip",
+      "partyclipai/partyclip/paperclip",
       "company/company-1/release-changelog",
     ]);
 
@@ -103,7 +103,7 @@ describe("applyRunScopedMentionedSkillKeys", () => {
       command: "codex",
       paperclipSkillSync: {
         desiredSkills: [
-          "paperclipai/paperclip/paperclip",
+          "partyclipai/partyclip/paperclip",
           "company/company-1/release-changelog",
         ],
       },
@@ -111,7 +111,7 @@ describe("applyRunScopedMentionedSkillKeys", () => {
     expect(originalConfig).toEqual({
       command: "codex",
       paperclipSkillSync: {
-        desiredSkills: ["paperclipai/paperclip/paperclip"],
+        desiredSkills: ["partyclipai/partyclip/paperclip"],
       },
     });
   });
