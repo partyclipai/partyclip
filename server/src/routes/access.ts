@@ -163,7 +163,7 @@ function readSkillMarkdown(skillName: string): string | null {
 }
 
 /** Resolve the Paperclip repo skills directory (built-in / managed skills). */
-function resolvePaperclipSkillsDir(): string | null {
+function resolvePartyclipSkillsDir(): string | null {
   const moduleDir = path.dirname(fileURLToPath(import.meta.url));
   const candidates = [
     path.resolve(moduleDir, "../../skills"),         // published
@@ -209,7 +209,7 @@ interface AvailableSkill {
 function listAvailableSkills(): AvailableSkill[] {
   const homeDir = process.env.HOME || process.env.USERPROFILE || "";
   const claudeSkillsDir = path.join(homeDir, ".claude", "skills");
-  const partyclipSkillsDir = resolvePaperclipSkillsDir();
+  const partyclipSkillsDir = resolvePartyclipSkillsDir();
 
   // Build set of Paperclip-managed skill names
   const partyclipSkillNames = new Set<string>();

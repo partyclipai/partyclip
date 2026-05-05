@@ -4,13 +4,13 @@ import path from "node:path";
 const DEFAULT_INSTANCE_ID = "default";
 const INSTANCE_ID_RE = /^[a-zA-Z0-9_-]+$/;
 
-export function resolvePaperclipHomeDir(): string {
+export function resolvePartyclipHomeDir(): string {
   const envHome = process.env.PARTYCLIP_HOME?.trim();
   if (envHome) return path.resolve(expandHomePrefix(envHome));
   return path.resolve(os.homedir(), ".partyclip");
 }
 
-export function resolvePaperclipInstanceId(override?: string): string {
+export function resolvePartyclipInstanceId(override?: string): string {
   const raw = override?.trim() || process.env.PARTYCLIP_INSTANCE_ID?.trim() || DEFAULT_INSTANCE_ID;
   if (!INSTANCE_ID_RE.test(raw)) {
     throw new Error(
@@ -20,41 +20,41 @@ export function resolvePaperclipInstanceId(override?: string): string {
   return raw;
 }
 
-export function resolvePaperclipInstanceRoot(instanceId?: string): string {
-  const id = resolvePaperclipInstanceId(instanceId);
-  return path.resolve(resolvePaperclipHomeDir(), "instances", id);
+export function resolvePartyclipInstanceRoot(instanceId?: string): string {
+  const id = resolvePartyclipInstanceId(instanceId);
+  return path.resolve(resolvePartyclipHomeDir(), "instances", id);
 }
 
 export function resolveDefaultConfigPath(instanceId?: string): string {
-  return path.resolve(resolvePaperclipInstanceRoot(instanceId), "config.json");
+  return path.resolve(resolvePartyclipInstanceRoot(instanceId), "config.json");
 }
 
 export function resolveDefaultContextPath(): string {
-  return path.resolve(resolvePaperclipHomeDir(), "context.json");
+  return path.resolve(resolvePartyclipHomeDir(), "context.json");
 }
 
 export function resolveDefaultCliAuthPath(): string {
-  return path.resolve(resolvePaperclipHomeDir(), "auth.json");
+  return path.resolve(resolvePartyclipHomeDir(), "auth.json");
 }
 
 export function resolveDefaultEmbeddedPostgresDir(instanceId?: string): string {
-  return path.resolve(resolvePaperclipInstanceRoot(instanceId), "db");
+  return path.resolve(resolvePartyclipInstanceRoot(instanceId), "db");
 }
 
 export function resolveDefaultLogsDir(instanceId?: string): string {
-  return path.resolve(resolvePaperclipInstanceRoot(instanceId), "logs");
+  return path.resolve(resolvePartyclipInstanceRoot(instanceId), "logs");
 }
 
 export function resolveDefaultSecretsKeyFilePath(instanceId?: string): string {
-  return path.resolve(resolvePaperclipInstanceRoot(instanceId), "secrets", "master.key");
+  return path.resolve(resolvePartyclipInstanceRoot(instanceId), "secrets", "master.key");
 }
 
 export function resolveDefaultStorageDir(instanceId?: string): string {
-  return path.resolve(resolvePaperclipInstanceRoot(instanceId), "data", "storage");
+  return path.resolve(resolvePartyclipInstanceRoot(instanceId), "data", "storage");
 }
 
 export function resolveDefaultBackupDir(instanceId?: string): string {
-  return path.resolve(resolvePaperclipInstanceRoot(instanceId), "data", "backups");
+  return path.resolve(resolvePartyclipInstanceRoot(instanceId), "data", "backups");
 }
 
 export function expandHomePrefix(value: string): string {
@@ -64,10 +64,10 @@ export function expandHomePrefix(value: string): string {
 }
 
 export function describeLocalInstancePaths(instanceId?: string) {
-  const resolvedInstanceId = resolvePaperclipInstanceId(instanceId);
-  const instanceRoot = resolvePaperclipInstanceRoot(resolvedInstanceId);
+  const resolvedInstanceId = resolvePartyclipInstanceId(instanceId);
+  const instanceRoot = resolvePartyclipInstanceRoot(resolvedInstanceId);
   return {
-    homeDir: resolvePaperclipHomeDir(),
+    homeDir: resolvePartyclipHomeDir(),
     instanceId: resolvedInstanceId,
     instanceRoot,
     configPath: resolveDefaultConfigPath(resolvedInstanceId),

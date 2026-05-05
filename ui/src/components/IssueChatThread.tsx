@@ -39,7 +39,7 @@ import type {
 } from "@partyclipai/shared";
 import type { ActiveRunForIssue, LiveRunForIssue } from "../api/heartbeats";
 import { useLiveRunTranscripts } from "./transcript/useLiveRunTranscripts";
-import { usePaperclipIssueRuntime, type PartyclipIssueRuntimeReassignment } from "../hooks/usePaperclipIssueRuntime";
+import { usePartyclipIssueRuntime, type PartyclipIssueRuntimeReassignment } from "../hooks/usePartyclipIssueRuntime";
 import {
   buildIssueChatMessages,
   formatDurationWords,
@@ -1740,7 +1740,7 @@ function IssueChatFeedbackButtons({
           <DialogHeader>
             <DialogTitle>Save your feedback sharing preference</DialogTitle>
             <DialogDescription>
-              Choose whether voted AI outputs can be shared with Paperclip Labs. This
+              Choose whether voted AI outputs can be shared with Partyclip Labs. This
               answer becomes the default for future thumbs up and thumbs down votes.
             </DialogDescription>
           </DialogHeader>
@@ -3301,7 +3301,7 @@ export function IssueChatThread({
     return true;
   }
 
-  const runtime = usePaperclipIssueRuntime({
+  const runtime = usePartyclipIssueRuntime({
     messages,
     isRunning,
     onSend: ({ body, reopen, reassignment }) => {

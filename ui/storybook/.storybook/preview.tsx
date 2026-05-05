@@ -289,7 +289,7 @@ const preview: Preview = {
   ],
   globalTypes: {
     theme: {
-      description: "Paperclip color mode",
+      description: "Partyclip color mode",
       defaultValue: "dark",
       toolbar: {
         title: "Theme",

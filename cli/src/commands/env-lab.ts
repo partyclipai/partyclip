@@ -9,12 +9,12 @@ import {
   startSshEnvLabFixture,
   stopSshEnvLabFixture,
 } from "@partyclipai/adapter-utils/ssh";
-import { resolvePaperclipInstanceId, resolvePaperclipInstanceRoot } from "../config/home.js";
+import { resolvePartyclipInstanceId, resolvePartyclipInstanceRoot } from "../config/home.js";
 
 export function resolveEnvLabSshStatePath(instanceId?: string): string {
-  const resolvedInstanceId = resolvePaperclipInstanceId(instanceId);
+  const resolvedInstanceId = resolvePartyclipInstanceId(instanceId);
   return path.resolve(
-    resolvePaperclipInstanceRoot(resolvedInstanceId),
+    resolvePartyclipInstanceRoot(resolvedInstanceId),
     "env-lab",
     "ssh-fixture",
     "state.json",
@@ -147,28 +147,28 @@ export function registerEnvLabCommands(program: Command) {
   envLab
     .command("up")
     .description("Start the default SSH env-lab fixture")
-    .option("-i, --instance <id>", "Paperclip instance id (default: current/default)")
+    .option("-i, --instance <id>", "Partyclip instance id (default: current/default)")
     .option("--json", "Print machine-readable fixture details")
     .action(envLabUpCommand);
 
   envLab
     .command("status")
     .description("Show the current SSH env-lab fixture state")
-    .option("-i, --instance <id>", "Paperclip instance id (default: current/default)")
+    .option("-i, --instance <id>", "Partyclip instance id (default: current/default)")
     .option("--json", "Print machine-readable fixture details")
     .action(envLabStatusCommand);
 
   envLab
     .command("down")
     .description("Stop the default SSH env-lab fixture")
-    .option("-i, --instance <id>", "Paperclip instance id (default: current/default)")
+    .option("-i, --instance <id>", "Partyclip instance id (default: current/default)")
     .option("--json", "Print machine-readable stop details")
     .action(envLabDownCommand);
 
   envLab
     .command("doctor")
     .description("Check SSH fixture prerequisites and current status")
-    .option("-i, --instance <id>", "Paperclip instance id (default: current/default)")
+    .option("-i, --instance <id>", "Partyclip instance id (default: current/default)")
     .option("--json", "Print machine-readable diagnostic details")
     .action(envLabDoctorCommand);
 }

@@ -13,9 +13,9 @@ import {
   resolveDefaultBackupDir,
   resolveDefaultEmbeddedPostgresDir,
   resolveDefaultLogsDir,
-  resolvePaperclipInstanceId,
+  resolvePartyclipInstanceId,
 } from "../config/home.js";
-import { printPaperclipCliBanner } from "../utils/banner.js";
+import { printPartyclipCliBanner } from "../utils/banner.js";
 
 type Section = "llm" | "database" | "logging" | "server" | "storage" | "secrets";
 
@@ -29,7 +29,7 @@ const SECTION_LABELS: Record<Section, string> = {
 };
 
 function defaultConfig(): PartyclipConfig {
-  const instanceId = resolvePaperclipInstanceId();
+  const instanceId = resolvePartyclipInstanceId();
   return {
     $meta: {
       version: 1,
@@ -76,7 +76,7 @@ export async function configure(opts: {
   config?: string;
   section?: string;
 }): Promise<void> {
-  printPaperclipCliBanner();
+  printPartyclipCliBanner();
   p.intro(pc.bgCyan(pc.black(" partyclip configure ")));
   const configPath = resolveConfigPath(opts.config);
 

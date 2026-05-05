@@ -4,8 +4,8 @@ import { afterEach, describe, expect, it } from "vitest";
 import {
   describeLocalInstancePaths,
   expandHomePrefix,
-  resolvePaperclipHomeDir,
-  resolvePaperclipInstanceId,
+  resolvePartyclipHomeDir,
+  resolvePartyclipInstanceId,
 } from "../config/home.js";
 
 const ORIGINAL_ENV = { ...process.env };
@@ -28,13 +28,13 @@ describe("home path resolution", () => {
   it("supports PARTYCLIP_HOME and explicit instance ids", () => {
     process.env.PARTYCLIP_HOME = "~/partyclip-home";
 
-    const home = resolvePaperclipHomeDir();
+    const home = resolvePartyclipHomeDir();
     expect(home).toBe(path.resolve(os.homedir(), "partyclip-home"));
-    expect(resolvePaperclipInstanceId("dev_1")).toBe("dev_1");
+    expect(resolvePartyclipInstanceId("dev_1")).toBe("dev_1");
   });
 
   it("rejects invalid instance ids", () => {
-    expect(() => resolvePaperclipInstanceId("bad/id")).toThrow(/Invalid instance id/);
+    expect(() => resolvePartyclipInstanceId("bad/id")).toThrow(/Invalid instance id/);
   });
 
   it("expands ~ prefixes", () => {

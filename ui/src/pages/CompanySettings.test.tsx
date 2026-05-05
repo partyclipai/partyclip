@@ -81,10 +81,10 @@ vi.mock("../context/ToastContext", () => ({
 
 vi.mock("../context/CompanyContext", () => ({
   useCompany: () => ({
-    companies: [{ id: "company-1", name: "Paperclip", issuePrefix: "PAP" }],
+    companies: [{ id: "company-1", name: "Partyclip", issuePrefix: "PAP" }],
     selectedCompany: {
       id: "company-1",
-      name: "Paperclip",
+      name: "Partyclip",
       description: null,
       brandColor: null,
       logoUrl: null,
@@ -122,7 +122,7 @@ describe("CompanyEnvironments", () => {
     mockSecretsApi.list.mockResolvedValue([]);
     mockCompaniesApi.update.mockResolvedValue({
       id: "company-1",
-      name: "Paperclip",
+      name: "Partyclip",
       description: null,
       brandColor: null,
       logoUrl: null,

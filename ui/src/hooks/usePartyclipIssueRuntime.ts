@@ -17,7 +17,7 @@ export interface PartyclipIssueRuntimeSendOptions {
   reassignment?: PartyclipIssueRuntimeReassignment;
 }
 
-interface UsePaperclipIssueRuntimeOptions {
+interface UsePartyclipIssueRuntimeOptions {
   messages: readonly ThreadMessage[];
   isRunning: boolean;
   onSend: (options: PartyclipIssueRuntimeSendOptions) => Promise<void>;
@@ -37,12 +37,12 @@ function readTextContent(message: AppendMessage) {
     .trim();
 }
 
-export function usePaperclipIssueRuntime({
+export function usePartyclipIssueRuntime({
   messages,
   isRunning,
   onSend,
   onCancel,
-}: UsePaperclipIssueRuntimeOptions) {
+}: UsePartyclipIssueRuntimeOptions) {
   const onSendRef = useRef(onSend);
   const onCancelRef = useRef(onCancel);
 

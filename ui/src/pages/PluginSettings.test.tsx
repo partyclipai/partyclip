@@ -28,7 +28,7 @@ vi.mock("@/context/BreadcrumbContext", () => ({
 
 vi.mock("@/context/CompanyContext", () => ({
   useCompany: () => ({
-    selectedCompany: { id: "company-1", name: "Paperclip", issuePrefix: "PAP" },
+    selectedCompany: { id: "company-1", name: "Partyclip", issuePrefix: "PAP" },
     selectedCompanyId: "company-1",
   }),
 }));
@@ -75,8 +75,8 @@ describe("PluginSettings", () => {
       manifestJson: {
         displayName: "E2B Sandbox Provider",
         version: "0.1.0",
-        description: "E2B environments for Paperclip.",
-        author: "Paperclip",
+        description: "E2B environments for Partyclip.",
+        author: "Partyclip",
         capabilities: ["environment.drivers.register"],
         environmentDrivers: [
           {

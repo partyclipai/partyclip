@@ -11,7 +11,7 @@ const PARTYCLIP_ART = [
 
 const TAGLINE = "Open-source orchestration for zero-human companies";
 
-export function printPaperclipCliBanner(): void {
+export function printPartyclipCliBanner(): void {
   const lines = [
     "",
     ...PARTYCLIP_ART.map((line) => pc.cyan(line)),

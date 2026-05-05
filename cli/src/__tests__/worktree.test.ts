@@ -301,7 +301,7 @@ describe("worktree helpers", () => {
     try {
       await db.insert(companies).values({
         id: companyId,
-        name: "Paperclip",
+        name: "Partyclip",
         issuePrefix: "WTQ",
         requireBoardApprovalForNewAgents: false,
       });
@@ -684,12 +684,12 @@ describe("worktree helpers", () => {
     }
   });
 
-  it("defaults the seed source config to the current repo-local Paperclip config", () => {
+  it("defaults the seed source config to the current repo-local Partyclip config", () => {
     const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "partyclip-worktree-source-config-"));
     const repoRoot = path.join(tempRoot, "repo");
     const localConfigPath = path.join(repoRoot, ".partyclip", "config.json");
     const originalCwd = process.cwd();
-    const originalPaperclipConfig = process.env.PARTYCLIP_CONFIG;
+    const originalPartyclipConfig = process.env.PARTYCLIP_CONFIG;
 
     try {
       fs.mkdirSync(path.dirname(localConfigPath), { recursive: true });
@@ -700,10 +700,10 @@ describe("worktree helpers", () => {
       expect(fs.realpathSync(resolveSourceConfigPath({}))).toBe(fs.realpathSync(localConfigPath));
     } finally {
       process.chdir(originalCwd);
-      if (originalPaperclipConfig === undefined) {
+      if (originalPartyclipConfig === undefined) {
         delete process.env.PARTYCLIP_CONFIG;
       } else {
-        process.env.PARTYCLIP_CONFIG = originalPaperclipConfig;
+        process.env.PARTYCLIP_CONFIG = originalPartyclipConfig;
       }
       fs.rmSync(tempRoot, { recursive: true, force: true });
     }
@@ -714,7 +714,7 @@ describe("worktree helpers", () => {
     const sourceConfigPath = path.join(tempRoot, "source", "config.json");
     const targetRoot = path.join(tempRoot, "target");
     const originalCwd = process.cwd();
-    const originalPaperclipConfig = process.env.PARTYCLIP_CONFIG;
+    const originalPartyclipConfig = process.env.PARTYCLIP_CONFIG;
 
     try {
       fs.mkdirSync(path.dirname(sourceConfigPath), { recursive: true });
@@ -728,10 +728,10 @@ describe("worktree helpers", () => {
       );
     } finally {
       process.chdir(originalCwd);
-      if (originalPaperclipConfig === undefined) {
+      if (originalPartyclipConfig === undefined) {
         delete process.env.PARTYCLIP_CONFIG;
       } else {
-        process.env.PARTYCLIP_CONFIG = originalPaperclipConfig;
+        process.env.PARTYCLIP_CONFIG = originalPartyclipConfig;
       }
       fs.rmSync(tempRoot, { recursive: true, force: true });
     }
@@ -798,7 +798,7 @@ describe("worktree helpers", () => {
         resolveWorktreeReseedTargetPaths({
           configPath,
           rootPath: worktreeRoot,
-        })).toThrow("does not look like a worktree-local Paperclip instance");
+        })).toThrow("does not look like a worktree-local Partyclip instance");
     } finally {
       fs.rmSync(tempRoot, { recursive: true, force: true });
     }
@@ -821,7 +821,7 @@ describe("worktree helpers", () => {
       instanceId: "default",
     });
     const originalCwd = process.cwd();
-    const originalPaperclipConfig = process.env.PARTYCLIP_CONFIG;
+    const originalPartyclipConfig = process.env.PARTYCLIP_CONFIG;
 
     try {
       fs.mkdirSync(path.dirname(currentPaths.configPath), { recursive: true });
@@ -875,10 +875,10 @@ describe("worktree helpers", () => {
       expect(rewrittenEnv).toContain("PARTYCLIP_WORKTREE_COLOR=\"#112233\"");
     } finally {
       process.chdir(originalCwd);
-      if (originalPaperclipConfig === undefined) {
+      if (originalPartyclipConfig === undefined) {
         delete process.env.PARTYCLIP_CONFIG;
       } else {
-        process.env.PARTYCLIP_CONFIG = originalPaperclipConfig;
+        process.env.PARTYCLIP_CONFIG = originalPartyclipConfig;
       }
       fs.rmSync(tempRoot, { recursive: true, force: true });
     }
@@ -901,7 +901,7 @@ describe("worktree helpers", () => {
       instanceId: "default",
     });
     const originalCwd = process.cwd();
-    const originalPaperclipConfig = process.env.PARTYCLIP_CONFIG;
+    const originalPartyclipConfig = process.env.PARTYCLIP_CONFIG;
 
     try {
       fs.mkdirSync(path.dirname(currentPaths.configPath), { recursive: true });
@@ -956,10 +956,10 @@ describe("worktree helpers", () => {
       expect(restoredMarker).toBe("keep me");
     } finally {
       process.chdir(originalCwd);
-      if (originalPaperclipConfig === undefined) {
+      if (originalPartyclipConfig === undefined) {
         delete process.env.PARTYCLIP_CONFIG;
       } else {
-        process.env.PARTYCLIP_CONFIG = originalPaperclipConfig;
+        process.env.PARTYCLIP_CONFIG = originalPartyclipConfig;
       }
       fs.rmSync(tempRoot, { recursive: true, force: true });
     }
@@ -1101,7 +1101,7 @@ describe("worktree helpers", () => {
     }
   });
 
-  it("repairs the current linked worktree when Paperclip metadata is missing", async () => {
+  it("repairs the current linked worktree when Partyclip metadata is missing", async () => {
     const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "partyclip-worktree-repair-current-"));
     const repoRoot = path.join(tempRoot, "repo");
     const worktreePath = path.join(repoRoot, ".partyclip", "worktrees", "repair-me");
@@ -1200,7 +1200,7 @@ describeEmbeddedPostgres("pauseSeededScheduledRoutines", () => {
     try {
       await db.insert(companies).values({
         id: companyId,
-        name: "Paperclip",
+        name: "Partyclip",
         issuePrefix: `T${companyId.replace(/-/g, "").slice(0, 6).toUpperCase()}`,
         requireBoardApprovalForNewAgents: false,
       });

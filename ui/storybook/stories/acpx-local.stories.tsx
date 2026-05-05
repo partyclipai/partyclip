@@ -78,13 +78,13 @@ const acpxLocalConfigSchema: AdapterConfigSchema = {
       key: "cwd",
       label: "Working directory",
       type: "text",
-      hint: "Absolute fallback directory. Paperclip execution workspaces can override this at runtime.",
+      hint: "Absolute fallback directory. Partyclip execution workspaces can override this at runtime.",
     },
     {
       key: "stateDir",
       label: "State directory",
       type: "text",
-      hint: "Optional ACPX session state directory. Defaults to Paperclip-managed company/agent scoped storage.",
+      hint: "Optional ACPX session state directory. Defaults to Partyclip-managed company/agent scoped storage.",
     },
     {
       key: "instructionsFilePath",
@@ -443,9 +443,9 @@ const acpxSkillsCompanyLibrary: CompanySkillListItem[] = [
     companyId: SKILLS_COMPANY_ID,
     key: "partyclip",
     slug: "partyclip",
-    name: "Paperclip",
+    name: "Partyclip",
     description:
-      "Coordination skill: heartbeats, checkout, comments, and routine API patterns for Paperclip agents.",
+      "Coordination skill: heartbeats, checkout, comments, and routine API patterns for Partyclip agents.",
     sourceType: "local_path",
     sourceLocator: "skills/partyclip",
     sourceRef: null,
@@ -456,8 +456,8 @@ const acpxSkillsCompanyLibrary: CompanySkillListItem[] = [
     updatedAt: new Date("2026-04-22T15:30:00.000Z"),
     attachedAgentCount: 4,
     editable: false,
-    editableReason: "Required by Paperclip",
-    sourceLabel: "Paperclip",
+    editableReason: "Required by Partyclip",
+    sourceLabel: "Partyclip",
     sourceBadge: "partyclip",
     sourcePath: "skills/partyclip",
   },
@@ -468,7 +468,7 @@ const acpxSkillsCompanyLibrary: CompanySkillListItem[] = [
     slug: "design-guide",
     name: "Design guide",
     description:
-      "Paperclip UI design system reference: tokens, typography, status colors, and reusable component patterns.",
+      "Partyclip UI design system reference: tokens, typography, status colors, and reusable component patterns.",
     sourceType: "local_path",
     sourceLocator: "skills/design-guide",
     sourceRef: null,
@@ -565,10 +565,10 @@ function buildAcpxClaudeSnapshot(): AgentSkillSnapshot {
         desired: true,
         managed: true,
         required: true,
-        requiredReason: "Paperclip coordination skill is mandatory for control-plane agents.",
+        requiredReason: "Partyclip coordination skill is mandatory for control-plane agents.",
         state: "configured",
         origin: "paperclip_required",
-        originLabel: "Required by Paperclip",
+        originLabel: "Required by Partyclip",
         readOnly: false,
         sourcePath: "skills/partyclip",
         targetPath: null,
@@ -582,7 +582,7 @@ function buildAcpxClaudeSnapshot(): AgentSkillSnapshot {
         required: false,
         state: "configured",
         origin: "company_managed",
-        originLabel: "Managed by Paperclip",
+        originLabel: "Managed by Partyclip",
         readOnly: false,
         sourcePath: "skills/design-guide",
         targetPath: null,
@@ -596,7 +596,7 @@ function buildAcpxClaudeSnapshot(): AgentSkillSnapshot {
         required: false,
         state: "available",
         origin: "company_managed",
-        originLabel: "Managed by Paperclip",
+        originLabel: "Managed by Partyclip",
         readOnly: false,
         sourcePath: "skills/mobile-app-qa",
         targetPath: null,
@@ -620,10 +620,10 @@ function buildAcpxCodexSnapshot(): AgentSkillSnapshot {
         desired: true,
         managed: true,
         required: true,
-        requiredReason: "Paperclip coordination skill is mandatory for control-plane agents.",
+        requiredReason: "Partyclip coordination skill is mandatory for control-plane agents.",
         state: "configured",
         origin: "paperclip_required",
-        originLabel: "Required by Paperclip",
+        originLabel: "Required by Partyclip",
         readOnly: false,
         sourcePath: "skills/partyclip",
         targetPath: null,
@@ -637,7 +637,7 @@ function buildAcpxCodexSnapshot(): AgentSkillSnapshot {
         required: false,
         state: "available",
         origin: "company_managed",
-        originLabel: "Managed by Paperclip",
+        originLabel: "Managed by Partyclip",
         readOnly: false,
         sourcePath: "skills/design-guide",
         targetPath: null,
@@ -651,7 +651,7 @@ function buildAcpxCodexSnapshot(): AgentSkillSnapshot {
         required: false,
         state: "available",
         origin: "company_managed",
-        originLabel: "Managed by Paperclip",
+        originLabel: "Managed by Partyclip",
         readOnly: false,
         sourcePath: "skills/mobile-app-qa",
         targetPath: null,
@@ -668,7 +668,7 @@ function buildAcpxCustomSnapshot(): AgentSkillSnapshot {
     mode: "unsupported",
     desiredSkills: ["design-guide"],
     warnings: [
-      "Custom ACP commands do not expose a Paperclip skill integration contract yet; selected skills are tracked only.",
+      "Custom ACP commands do not expose a Partyclip skill integration contract yet; selected skills are tracked only.",
     ],
     entries: [
       {
@@ -677,10 +677,10 @@ function buildAcpxCustomSnapshot(): AgentSkillSnapshot {
         desired: false,
         managed: true,
         required: true,
-        requiredReason: "Paperclip coordination skill is mandatory for control-plane agents.",
+        requiredReason: "Partyclip coordination skill is mandatory for control-plane agents.",
         state: "available",
         origin: "paperclip_required",
-        originLabel: "Required by Paperclip",
+        originLabel: "Required by Partyclip",
         readOnly: false,
         sourcePath: "skills/partyclip",
         targetPath: null,
@@ -694,12 +694,12 @@ function buildAcpxCustomSnapshot(): AgentSkillSnapshot {
         required: false,
         state: "configured",
         origin: "company_managed",
-        originLabel: "Managed by Paperclip",
+        originLabel: "Managed by Partyclip",
         readOnly: false,
         sourcePath: "skills/design-guide",
         targetPath: null,
         detail:
-          "Desired state is stored in Paperclip only; custom ACP commands need an explicit skill integration contract before runtime sync is available.",
+          "Desired state is stored in Partyclip only; custom ACP commands need an explicit skill integration contract before runtime sync is available.",
       },
       {
         key: "mobile-app-qa",
@@ -709,7 +709,7 @@ function buildAcpxCustomSnapshot(): AgentSkillSnapshot {
         required: false,
         state: "available",
         origin: "company_managed",
-        originLabel: "Managed by Paperclip",
+        originLabel: "Managed by Partyclip",
         readOnly: false,
         sourcePath: "skills/mobile-app-qa",
         targetPath: null,
@@ -772,7 +772,7 @@ function AcpxClaudeSkillsStory() {
   return (
     <StoryFrame
       title="ACPX Claude — Skills tab"
-      subtitle="Runtime-synced state. Selected skills are mounted into the next ACPX Claude session via the Paperclip skills directory."
+      subtitle="Runtime-synced state. Selected skills are mounted into the next ACPX Claude session via the Partyclip skills directory."
     >
       <AcpxSkillsState agent={agent} snapshot={buildAcpxClaudeSnapshot()} library={acpxSkillsCompanyLibrary} />
     </StoryFrame>
@@ -804,7 +804,7 @@ function AcpxCustomSkillsStory() {
   return (
     <StoryFrame
       title="ACPX custom — Skills tab"
-      subtitle="Unsupported runtime sync. Desired skills are tracked in Paperclip only until a custom ACP command declares a skill integration contract."
+      subtitle="Unsupported runtime sync. Desired skills are tracked in Partyclip only until a custom ACP command declares a skill integration contract."
     >
       <AcpxSkillsState agent={agent} snapshot={buildAcpxCustomSnapshot()} library={acpxSkillsCompanyLibrary} />
     </StoryFrame>
