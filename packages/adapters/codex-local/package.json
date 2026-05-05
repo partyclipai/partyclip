@@ -1,6 +1,7 @@
 {
   "name": "@paperclipai/adapter-codex-local",
   "version": "0.3.1",
+  "private": true,
   "license": "MIT",
   "homepage": "https://github.com/paperclipai/paperclip",
   "bugs": {
