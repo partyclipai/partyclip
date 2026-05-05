@@ -71,3 +71,22 @@ export { pluginDatabaseNamespaces, pluginMigrations } from "./plugin_database.js
 export { pluginJobs, pluginJobRuns } from "./plugin_jobs.js";
 export { pluginWebhookDeliveries } from "./plugin_webhooks.js";
 export { pluginLogs } from "./plugin_logs.js";
+
+// partyclip Phase 1 — governance pipeline (v0)
+export { constitutionArticles } from "./constitution_articles.js";
+export { patches, type PatchCitation } from "./patches.js";
+export { artifacts } from "./artifacts.js";
+export { patchStageRuns } from "./patch_stage_runs.js";
+export { rejections } from "./rejections.js";
+export { votes } from "./votes.js";
+export { dissents } from "./dissents.js";
+export { operatorActions } from "./operator_actions.js";
+export { biasReports } from "./bias_reports.js";
+export { biasFindings } from "./bias_findings.js";
+export { pressReleases } from "./press_releases.js";
+
+// partyclip v1 schema (dormant — fields exist, code paths inactive in Phase 1)
+export { citizens } from "./citizens.js";
+export { publicReactions } from "./public_reactions.js";
+export { revenueStreams } from "./revenue_streams.js";
+export { dataAccessGrants } from "./data_access_grants.js";
