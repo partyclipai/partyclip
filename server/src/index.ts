@@ -26,6 +26,7 @@ import {
 import detectPort from "detect-port";
 import { createApp } from "./app.js";
 import { loadConfig } from "./config.js";
+import { loadOperatorTokenConfig } from "./auth/operator-token.js";
 import { logger } from "./middleware/logger.js";
 import { setupLiveEventsWebSocketServer } from "./realtime/live-events-ws.js";
 import {
@@ -593,6 +594,25 @@ export async function startServer(): Promise<StartedServer> {
     }
   };
   const pluginWorkerManager = createPluginWorkerManager();
+  const operatorAuth = loadOperatorTokenConfig(process.env);
+  let operatorDefaultCompanyId: string | null = null;
+  if (operatorAuth) {
+    const explicit = process.env.PARTYCLIP_DEFAULT_COMPANY_ID?.trim();
+    if (explicit) {
+      operatorDefaultCompanyId = explicit;
+    } else {
+      const [firstCompany] = await (db as any)
+        .select({ id: companies.id })
+        .from(companies)
+        .limit(1);
+      operatorDefaultCompanyId = firstCompany?.id ?? null;
+      if (!operatorDefaultCompanyId) {
+        logger.warn(
+          "[partyclip] PARTYCLIP_OPERATOR_TOKEN set but no companies row exists yet; operator API will return 503 until a company is created or PARTYCLIP_DEFAULT_COMPANY_ID is set",
+        );
+      }
+    }
+  }
   const app = await createApp(db as any, {
     uiMode,
     serverPort: listenPort,
@@ -617,6 +637,8 @@ export async function startServer(): Promise<StartedServer> {
     betterAuthHandler,
     resolveSession,
     pluginWorkerManager,
+    operatorAuth,
+    operatorDefaultCompanyId,
   });
   const server = createServer(app as unknown as Parameters<typeof createServer>[0]);
 

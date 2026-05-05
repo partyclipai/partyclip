@@ -40,7 +40,9 @@ import { assetRoutes } from "./routes/assets.js";
 import { accessRoutes } from "./routes/access.js";
 import { pluginRoutes } from "./routes/plugins.js";
 import { adapterRoutes } from "./routes/adapters.js";
+import { patchRoutes } from "./routes/patches.js";
 import { pluginUiStaticRoutes } from "./routes/plugin-ui-static.js";
+import type { OperatorTokenConfig } from "./auth/operator-token.js";
 import { applyUiBranding } from "./ui-branding.js";
 import { logger } from "./middleware/logger.js";
 import { DEFAULT_LOCAL_PLUGIN_DIR, pluginLoader } from "./services/plugin-loader.js";
@@ -133,6 +135,9 @@ export async function createApp(
     pluginWorkerManager?: PluginWorkerManager;
     betterAuthHandler?: express.RequestHandler;
     resolveSession?: (req: ExpressRequest) => Promise<BetterAuthSessionResult | null>;
+    /** Phase 1 operator API: bearer-token config + the single deployment company. */
+    operatorAuth?: OperatorTokenConfig | null;
+    operatorDefaultCompanyId?: string | null;
   },
 ) {
   const app = express();
@@ -282,6 +287,17 @@ export async function createApp(
     ),
   );
   api.use(adapterRoutes());
+  // Phase 1 operator API. Single-tenant: defaultCompanyId is resolved at startup
+  // (PARTYCLIP_DEFAULT_COMPANY_ID env var, else first companies row); see index.ts.
+  // We require BOTH operatorAuth and a resolved company id; missing either degrades
+  // to the 503 path inside patchRoutes (operator_endpoints_disabled).
+  const operatorReady = opts.operatorAuth && opts.operatorDefaultCompanyId;
+  api.use(
+    patchRoutes(db, {
+      operatorAuth: operatorReady ? opts.operatorAuth! : null,
+      defaultCompanyId: opts.operatorDefaultCompanyId ?? "",
+    }),
+  );
   api.use(
     accessRoutes(db, {
       deploymentMode: opts.deploymentMode,
