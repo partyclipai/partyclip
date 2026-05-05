@@ -42,6 +42,22 @@ A manifest can request:
 - `scheduledJobs` — cron-shaped triggers that wake the plugin's worker
 - `eventSubscriptions` — *(planned, see `docs/plugin-sdk-gaps.md`)* push-style notifications on partyclip events
 
+## First-party plugin contract: domain events vs. plugin events
+
+Plugins emit events through `ctx.events.emit(name, companyId, payload)`. The SDK auto-namespaces these as `plugin.<pluginId>.<name>`. This is correct and intentional — it prevents plugin A from spoofing core domain events.
+
+However, partyclip ships first-party plugins (e.g. `news-ingest`) that produce events the framework wants to expose under canonical core names (e.g. `news.ingested` from `packages/shared/src/types/events.ts`). Phase 1 keeps the plugin SDK contract honest: even first-party plugins emit through the namespaced form, and a small host-side rewriter re-emits onto the in-process bus (`server/src/services/events/bus.ts`) under the canonical name.
+
+Subscribers in Phase 1 should subscribe to the namespaced form (`plugin.partyclip.news-ingest.*`); the canonical re-emission lands in a follow-up. Same code path; same audit trail.
+
+Contract for any producer plugin:
+
+1. **No raw text in payloads.** Strip body content at parse time. Only structured fields reach the bus (id, url, title, summary, publishedAt, authors, tags for news; the analog for whatever your domain is). See `packages/plugins/news-ingest/src/feed-parser.ts` for the worked example.
+2. **Own your watermark.** Use `ctx.state` (per-source, per-company scope) for dedupe state. The host does not provide deduplication.
+3. **Isolate per-source failures.** One broken feed must not stop the tick. Return a per-source report; write it to `ctx.activity.log`; continue.
+
+`packages/plugins/news-ingest/` is the worked Phase 1 reference: scheduled fetch, JSON Feed parsing, dedupe-by-watermark, structured emission. Copy its shape for similar producer plugins.
+
 ## See also
 
 - `packages/plugins/sdk/README.md` — current SDK README (auto-rebranded but may need a refresh)
