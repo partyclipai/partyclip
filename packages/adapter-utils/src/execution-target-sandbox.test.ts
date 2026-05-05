@@ -153,7 +153,7 @@ describe("sandbox adapter execution targets", () => {
         method: req.method ?? "GET",
         url: req.url ?? "/",
         auth: req.headers.authorization ?? null,
-        runId: typeof req.headers["x-paperclip-run-id"] === "string" ? req.headers["x-paperclip-run-id"] : null,
+        runId: typeof req.headers["x-partyclip-run-id"] === "string" ? req.headers["x-partyclip-run-id"] : null,
       });
       res.writeHead(200, { "content-type": "application/json" });
       res.end(JSON.stringify({ ok: true }));
@@ -228,7 +228,7 @@ describe("sandbox adapter execution targets", () => {
         method: req.method ?? "GET",
         url: req.url ?? "/",
         auth: req.headers.authorization ?? null,
-        runId: typeof req.headers["x-paperclip-run-id"] === "string" ? req.headers["x-paperclip-run-id"] : null,
+        runId: typeof req.headers["x-partyclip-run-id"] === "string" ? req.headers["x-partyclip-run-id"] : null,
       });
       res.writeHead(200, {
         "content-type": "application/json",

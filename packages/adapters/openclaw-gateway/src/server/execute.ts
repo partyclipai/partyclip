@@ -409,7 +409,7 @@ function buildWakeText(
     "",
     "HTTP rules:",
     "- Use Authorization: Bearer $PARTYCLIP_API_KEY on every API call.",
-    "- Use X-Paperclip-Run-Id: $PARTYCLIP_RUN_ID on every mutating API call.",
+    "- Use X-Partyclip-Run-Id: $PARTYCLIP_RUN_ID on every mutating API call.",
     "- Use only /api endpoints listed below.",
     "- Do NOT call guessed endpoints like /api/cloud-adapter/*, /api/cloud-adapters/*, /api/adapters/cloud/*, or /api/heartbeat.",
     "",

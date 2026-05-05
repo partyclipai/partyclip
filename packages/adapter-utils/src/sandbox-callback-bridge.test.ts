@@ -196,7 +196,7 @@ describe("sandbox callback bridge", () => {
         authorization: `Bearer ${bridgeToken}`,
         accept: "application/json",
         "if-none-match": '"client-cache-key"',
-        "x-paperclip-run-id": "run-bridge-1",
+        "x-partyclip-run-id": "run-bridge-1",
         "x-bridge-debug": "drop-me",
       },
     });
@@ -245,7 +245,7 @@ describe("sandbox callback bridge", () => {
       },
     });
     expect(seenRequests[0]?.headers.authorization).toBeUndefined();
-    expect(seenRequests[0]?.headers["x-paperclip-run-id"]).toBeUndefined();
+    expect(seenRequests[0]?.headers["x-partyclip-run-id"]).toBeUndefined();
 
   });
 

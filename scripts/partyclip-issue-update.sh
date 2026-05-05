@@ -105,6 +105,6 @@ fi
 curl -sS -X PATCH \
   "$PARTYCLIP_API_URL/api/issues/$issue_id" \
   -H "Authorization: Bearer $PARTYCLIP_API_KEY" \
-  -H "X-Paperclip-Run-Id: $PARTYCLIP_RUN_ID" \
+  -H "X-Partyclip-Run-Id: $PARTYCLIP_RUN_ID" \
   -H 'Content-Type: application/json' \
   --data-binary "$payload"

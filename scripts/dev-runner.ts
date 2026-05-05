@@ -37,7 +37,7 @@ const gracefulShutdownTimeoutMs = 10_000;
 const changedPathSampleLimit = 5;
 const devServerStatusFilePath = path.join(repoRoot, ".paperclip", "dev-server-status.json");
 const devServerStatusToken = mode === "dev" ? randomUUID() : null;
-const devServerStatusTokenHeader = "x-paperclip-dev-server-status-token";
+const devServerStatusTokenHeader = "x-partyclip-dev-server-status-token";
 
 const watchedDirectories = [
   "cli",

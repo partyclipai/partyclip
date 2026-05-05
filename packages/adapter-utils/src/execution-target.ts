@@ -757,7 +757,7 @@ export async function startAdapterExecutionTargetPaperclipBridge(input: {
           headers.set(key, value);
         }
         headers.set("authorization", `Bearer ${hostApiToken}`);
-        headers.set("x-paperclip-run-id", input.runId);
+        headers.set("x-partyclip-run-id", input.runId);
         const method = request.method.trim().toUpperCase() || "GET";
         const response = await fetch(buildBridgeForwardUrl(hostApiUrl, request), {
           method,

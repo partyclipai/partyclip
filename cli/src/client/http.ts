@@ -112,7 +112,7 @@ export class PaperclipApiClient {
     }
 
     if (this.runId) {
-      headers["x-paperclip-run-id"] = this.runId;
+      headers["x-partyclip-run-id"] = this.runId;
     }
 
     let response: Response;

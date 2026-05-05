@@ -26,7 +26,7 @@ describe("PaperclipApiClient", () => {
 
     const headers = call[1].headers as Record<string, string>;
     expect(headers.authorization).toBe("Bearer token-123");
-    expect(headers["x-paperclip-run-id"]).toBe("run-abc");
+    expect(headers["x-partyclip-run-id"]).toBe("run-abc");
     expect(headers["content-type"]).toBe("application/json");
   });
 

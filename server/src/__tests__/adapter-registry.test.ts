@@ -318,7 +318,7 @@ describe("server adapter registry", () => {
       "Authorization: Bearer $PARTYCLIP_API_KEY",
     );
     expect(patchedCtx.agent.adapterConfig.promptTemplate).toContain(
-      "X-Paperclip-Run-Id: $PARTYCLIP_RUN_ID",
+      "X-Partyclip-Run-Id: $PARTYCLIP_RUN_ID",
     );
     expect(patchedCtx.agent.adapterConfig.promptTemplate).toContain("Existing prompt");
   });
