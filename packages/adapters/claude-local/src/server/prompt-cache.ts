@@ -4,11 +4,11 @@ import os from "node:os";
 import path from "node:path";
 import { createHash, type Hash } from "node:crypto";
 import type { AdapterExecutionContext } from "@partyclipai/adapter-utils";
-import { ensurePaperclipSkillSymlink, type PaperclipSkillEntry } from "@partyclipai/adapter-utils/server-utils";
+import { ensurePaperclipSkillSymlink, type PartyclipSkillEntry } from "@partyclipai/adapter-utils/server-utils";
 
 const DEFAULT_PARTYCLIP_INSTANCE_ID = "default";
 
-type SkillEntry = PaperclipSkillEntry;
+type SkillEntry = PartyclipSkillEntry;
 
 export interface ClaudePromptBundle {
   bundleKey: string;

@@ -43,7 +43,7 @@ import {
   rewriteLocalUrlPort,
   sanitizeWorktreeInstanceId,
 } from "../commands/worktree-lib.js";
-import type { PaperclipConfig } from "../config/schema.js";
+import type { PartyclipConfig } from "../config/schema.js";
 import {
   getEmbeddedPostgresTestSupport,
   startEmbeddedPostgresTestDatabase,
@@ -72,7 +72,7 @@ afterEach(() => {
   }
 });
 
-function buildSourceConfig(): PaperclipConfig {
+function buildSourceConfig(): PartyclipConfig {
   return {
     $meta: {
       version: 1,
@@ -571,7 +571,7 @@ describe("worktree helpers", () => {
 
         const targetConfig = JSON.parse(
           fs.readFileSync(path.join(worktreeRoot, ".partyclip", "config.json"), "utf8"),
-        ) as PaperclipConfig;
+        ) as PartyclipConfig;
         const { default: EmbeddedPostgres } = await import("embedded-postgres");
         const targetPg = new EmbeddedPostgres({
           databaseDir: targetConfig.database.embeddedPostgresDataDir,
@@ -930,7 +930,7 @@ describe("worktree helpers", () => {
             keyFilePath: sourcePaths.secretsKeyFilePath,
           },
         },
-      } as PaperclipConfig;
+      } as PartyclipConfig;
 
       fs.writeFileSync(currentPaths.configPath, JSON.stringify(currentConfig, null, 2), "utf8");
       fs.writeFileSync(currentPaths.envPath, `PARTYCLIP_HOME=${homeDir}\nPARTYCLIP_INSTANCE_ID=${currentInstanceId}\n`, "utf8");

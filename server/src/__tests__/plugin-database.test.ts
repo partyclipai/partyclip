@@ -13,7 +13,7 @@ import {
   pluginMigrations,
   plugins,
 } from "@partyclipai/db";
-import type { PaperclipPluginManifestV1 } from "@partyclipai/shared";
+import type { PartyclipPluginManifestV1 } from "@partyclipai/shared";
 import {
   getEmbeddedPostgresTestSupport,
   startEmbeddedPostgresTestDatabase,
@@ -111,7 +111,7 @@ describeEmbeddedPostgres("plugin database namespaces", () => {
     await tempDb?.cleanup();
   });
 
-  async function createPluginPackage(manifest: PaperclipPluginManifestV1, migrationSql: string) {
+  async function createPluginPackage(manifest: PartyclipPluginManifestV1, migrationSql: string) {
     const packageRoot = await mkdtemp(path.join(os.tmpdir(), "partyclip-plugin-package-"));
     packageRoots.push(packageRoot);
     const migrationsDir = path.join(packageRoot, manifest.database!.migrationsDir);
@@ -120,7 +120,7 @@ describeEmbeddedPostgres("plugin database namespaces", () => {
     return packageRoot;
   }
 
-  async function installPluginRecord(manifest: PaperclipPluginManifestV1) {
+  async function installPluginRecord(manifest: PartyclipPluginManifestV1) {
     const pluginId = randomUUID();
     await db.insert(plugins).values({
       id: pluginId,
@@ -136,7 +136,7 @@ describeEmbeddedPostgres("plugin database namespaces", () => {
     return pluginId;
   }
 
-  function manifest(pluginKey = "partyclip.dbtest"): PaperclipPluginManifestV1 {
+  function manifest(pluginKey = "partyclip.dbtest"): PartyclipPluginManifestV1 {
     return {
       id: pluginKey,
       apiVersion: 1,

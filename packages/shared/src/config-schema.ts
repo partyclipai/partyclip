@@ -183,7 +183,7 @@ export const partyclipConfigSchema = z
     }
   });
 
-export type PaperclipConfig = z.infer<typeof partyclipConfigSchema>;
+export type PartyclipConfig = z.infer<typeof partyclipConfigSchema>;
 export type LlmConfig = z.infer<typeof llmConfigSchema>;
 export type DatabaseConfig = z.infer<typeof databaseConfigSchema>;
 export type LoggingConfig = z.infer<typeof loggingConfigSchema>;

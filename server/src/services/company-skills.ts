@@ -6,7 +6,7 @@ import { and, asc, eq } from "drizzle-orm";
 import type { Db } from "@partyclipai/db";
 import { companies, companySkills } from "@partyclipai/db";
 import { readPaperclipSkillSyncPreference } from "@partyclipai/adapter-utils/server-utils";
-import type { PaperclipSkillEntry } from "@partyclipai/adapter-utils/server-utils";
+import type { PartyclipSkillEntry } from "@partyclipai/adapter-utils/server-utils";
 import type {
   CompanySkill,
   CompanySkillCreateRequest,
@@ -2166,10 +2166,10 @@ export function companySkillService(db: Db) {
   async function listRuntimeSkillEntries(
     companyId: string,
     options: RuntimeSkillEntryOptions = {},
-  ): Promise<PaperclipSkillEntry[]> {
+  ): Promise<PartyclipSkillEntry[]> {
     const skills = await listFull(companyId);
 
-    const out: PaperclipSkillEntry[] = [];
+    const out: PartyclipSkillEntry[] = [];
     for (const skill of skills) {
       const sourceKind = asString(getSkillMeta(skill).sourceKind);
       let source = normalizeSkillDirectory(skill);

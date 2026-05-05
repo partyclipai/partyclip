@@ -239,11 +239,11 @@ function createSshEnvironmentDriver(db: Db): EnvironmentRuntimeDriver {
           return [];
         }
       })();
-      const paperclipApiUrl = await findReachablePaperclipApiUrlOverSsh({
+      const partyclipApiUrl = await findReachablePaperclipApiUrlOverSsh({
         config: parsed.config,
         candidates: candidateUrls,
       });
-      if (!paperclipApiUrl) {
+      if (!partyclipApiUrl) {
         throw new Error(
           `SSH environment ${parsed.config.username}@${parsed.config.host} could not reach any Paperclip API candidates.`,
         );
@@ -265,7 +265,7 @@ function createSshEnvironmentDriver(db: Db): EnvironmentRuntimeDriver {
           username: parsed.config.username,
           remoteWorkspacePath: parsed.config.remoteWorkspacePath,
           remoteCwd,
-          paperclipApiUrl,
+          partyclipApiUrl,
         },
       });
     },

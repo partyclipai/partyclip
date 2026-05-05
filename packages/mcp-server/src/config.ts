@@ -1,4 +1,4 @@
-export interface PaperclipMcpConfig {
+export interface PartyclipMcpConfig {
   apiUrl: string;
   apiKey: string;
   companyId: string | null;
@@ -19,7 +19,7 @@ export function normalizeApiUrl(apiUrl: string): string {
   return trimmed.endsWith("/api") ? trimmed : `${trimmed}/api`;
 }
 
-export function readConfigFromEnv(env: NodeJS.ProcessEnv = process.env): PaperclipMcpConfig {
+export function readConfigFromEnv(env: NodeJS.ProcessEnv = process.env): PartyclipMcpConfig {
   const apiUrl = nonEmpty(env.PARTYCLIP_API_URL);
   if (!apiUrl) {
     throw new Error("Missing PARTYCLIP_API_URL");

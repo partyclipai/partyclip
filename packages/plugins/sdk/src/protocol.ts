@@ -16,7 +16,7 @@
  */
 
 import type {
-  PaperclipPluginManifestV1,
+  PartyclipPluginManifestV1,
   PluginLauncherBounds,
   PluginLauncherRenderContextSnapshot,
   PluginLauncherRenderEnvironment,
@@ -217,7 +217,7 @@ export type PluginRpcErrorCode =
  */
 export interface InitializeParams {
   /** Full plugin manifest snapshot. */
-  manifest: PaperclipPluginManifestV1;
+  manifest: PartyclipPluginManifestV1;
   /** Resolved operator configuration (validated against `instanceConfigSchema`). */
   config: Record<string, unknown>;
   /** Instance-level metadata. */

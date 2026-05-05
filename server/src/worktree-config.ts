@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { PaperclipConfig } from "@partyclipai/shared";
+import type { PartyclipConfig } from "@partyclipai/shared";
 import { resolvePaperclipConfigPath, resolvePaperclipEnvPath } from "./paths.js";
 
 function nonEmpty(value: string | null | undefined): string | null {
@@ -148,7 +148,7 @@ function resolveWorktreeRuntimeContext(
   };
 }
 
-function writeConfigFile(configPath: string, config: PaperclipConfig): void {
+function writeConfigFile(configPath: string, config: PartyclipConfig): void {
   fs.mkdirSync(path.dirname(configPath), { recursive: true });
   fs.writeFileSync(configPath, JSON.stringify(config, null, 2) + "\n", { mode: 0o600 });
 }
@@ -196,7 +196,7 @@ function collectSiblingWorktreePorts(context: WorktreeRuntimeContext): {
 
   for (const siblingConfigPath of siblingConfigPaths) {
     try {
-      const siblingConfig = JSON.parse(fs.readFileSync(siblingConfigPath, "utf8")) as PaperclipConfig;
+      const siblingConfig = JSON.parse(fs.readFileSync(siblingConfigPath, "utf8")) as PartyclipConfig;
       if (Number.isInteger(siblingConfig.server.port) && siblingConfig.server.port > 0) {
         serverPorts.add(siblingConfig.server.port);
       }
@@ -224,19 +224,19 @@ function findNextUnclaimedPort(preferredPort: number, claimedPorts: Set<number>)
 }
 
 function buildIsolatedWorktreeConfig(
-  config: PaperclipConfig,
+  config: PartyclipConfig,
   context: WorktreeRuntimeContext,
   portOverrides?: {
     serverPort?: number;
     databasePort?: number;
   },
-): PaperclipConfig {
+): PartyclipConfig {
   const serverPort = portOverrides?.serverPort ?? config.server.port;
   const databasePort =
     config.database.mode === "embedded-postgres"
       ? portOverrides?.databasePort ?? config.database.embeddedPostgresPort
       : undefined;
-  const nextConfig: PaperclipConfig = {
+  const nextConfig: PartyclipConfig = {
     ...config,
     database: {
       ...config.database,
@@ -286,7 +286,7 @@ function buildIsolatedWorktreeConfig(
 }
 
 function needsWorktreeConfigRepair(
-  config: PaperclipConfig,
+  config: PartyclipConfig,
   context: WorktreeRuntimeContext,
 ): boolean {
   if (config.database.mode === "embedded-postgres") {
@@ -312,14 +312,14 @@ function needsWorktreeConfigRepair(
 }
 
 export function applyRuntimePortSelectionToConfig(
-  config: PaperclipConfig,
+  config: PartyclipConfig,
   input: {
     serverPort: number;
     databasePort?: number | null;
     allowServerPortWrite?: boolean;
     allowDatabasePortWrite?: boolean;
   },
-): { config: PaperclipConfig; changed: boolean } {
+): { config: PartyclipConfig; changed: boolean } {
   let changed = false;
   let nextConfig = config;
 
@@ -385,7 +385,7 @@ export function maybeRepairLegacyWorktreeConfigAndEnvFiles(): {
   let repairedConfig = false;
   if (fs.existsSync(context.configPath)) {
     try {
-      const parsed = JSON.parse(fs.readFileSync(context.configPath, "utf8")) as PaperclipConfig;
+      const parsed = JSON.parse(fs.readFileSync(context.configPath, "utf8")) as PartyclipConfig;
       const siblingPorts = collectSiblingWorktreePorts(context);
       const hasSiblingPortCollision =
         siblingPorts.serverPorts.has(parsed.server.port) ||
@@ -451,9 +451,9 @@ export function maybePersistWorktreeRuntimePorts(input: {
   const context = resolveWorktreeRuntimeContext(process.env);
   if (!context || !fs.existsSync(context.configPath)) return;
 
-  let fileConfig: PaperclipConfig;
+  let fileConfig: PartyclipConfig;
   try {
-    fileConfig = JSON.parse(fs.readFileSync(context.configPath, "utf8")) as PaperclipConfig;
+    fileConfig = JSON.parse(fs.readFileSync(context.configPath, "utf8")) as PartyclipConfig;
   } catch {
     return;
   }

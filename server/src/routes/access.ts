@@ -864,21 +864,21 @@ export function normalizeAgentDefaultsForJoin(input: {
         parsedPaperclipApiUrl.protocol !== "https:"
       ) {
         diagnostics.push({
-          code: "openclaw_gateway_paperclip_api_url_protocol",
+          code: "openclaw_gateway_partyclip_api_url_protocol",
           level: "warn",
           message: `partyclipApiUrl must use http:// or https:// (got ${parsedPaperclipApiUrl.protocol}).`
         });
       } else {
         normalized.partyclipApiUrl = parsedPaperclipApiUrl.toString();
         diagnostics.push({
-          code: "openclaw_gateway_paperclip_api_url_configured",
+          code: "openclaw_gateway_partyclip_api_url_configured",
           level: "info",
           message: `partyclipApiUrl set to ${parsedPaperclipApiUrl.toString()}`
         });
       }
     } catch {
       diagnostics.push({
-        code: "openclaw_gateway_paperclip_api_url_invalid",
+        code: "openclaw_gateway_partyclip_api_url_invalid",
         level: "warn",
         message: `Invalid partyclipApiUrl: ${rawPaperclipApiUrl}`
       });

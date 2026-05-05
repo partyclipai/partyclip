@@ -104,7 +104,7 @@ export const DEFAULT_PARTYCLIP_AGENT_PROMPT_TEMPLATE = [
   "- Respect budget, pause/cancel, approval gates, and company boundaries.",
 ].join("\n");
 
-export interface PaperclipSkillEntry {
+export interface PartyclipSkillEntry {
   key: string;
   runtimeName: string;
   source: string;
@@ -124,7 +124,7 @@ export interface MaterializedPaperclipSkillCopyResult {
 
 interface PersistentSkillSnapshotOptions {
   adapterType: string;
-  availableEntries: PaperclipSkillEntry[];
+  availableEntries: PartyclipSkillEntry[];
   desiredSkills: string[];
   installed: Map<string, InstalledSkillTarget>;
   skillsHome: string;
@@ -156,7 +156,7 @@ function buildManagedSkillOrigin(entry: { required?: boolean }): Pick<
 > {
   if (entry.required) {
     return {
-      origin: "partyclip_required",
+      origin: "paperclip_required",
       originLabel: "Required by Paperclip",
       readOnly: false,
     };
@@ -275,7 +275,7 @@ export function joinPromptSections(
     .join(separator);
 }
 
-type PaperclipWakeIssue = {
+type PartyclipWakeIssue = {
   id: string | null;
   identifier: string | null;
   title: string | null;
@@ -283,18 +283,18 @@ type PaperclipWakeIssue = {
   priority: string | null;
 };
 
-type PaperclipWakeExecutionPrincipal = {
+type PartyclipWakeExecutionPrincipal = {
   type: "agent" | "user" | null;
   agentId: string | null;
   userId: string | null;
 };
 
-type PaperclipWakeExecutionStage = {
+type PartyclipWakeExecutionStage = {
   wakeRole: "reviewer" | "approver" | "executor" | null;
   stageId: string | null;
   stageType: string | null;
-  currentParticipant: PaperclipWakeExecutionPrincipal | null;
-  returnAssignee: PaperclipWakeExecutionPrincipal | null;
+  currentParticipant: PartyclipWakeExecutionPrincipal | null;
+  returnAssignee: PartyclipWakeExecutionPrincipal | null;
   reviewRequest: {
     instructions: string;
   } | null;
@@ -302,7 +302,7 @@ type PaperclipWakeExecutionStage = {
   allowedActions: string[];
 };
 
-type PaperclipWakeComment = {
+type PartyclipWakeComment = {
   id: string | null;
   issueId: string | null;
   body: string;
@@ -312,7 +312,7 @@ type PaperclipWakeComment = {
   authorId: string | null;
 };
 
-type PaperclipWakeContinuationSummary = {
+type PartyclipWakeContinuationSummary = {
   key: string | null;
   title: string | null;
   body: string;
@@ -320,7 +320,7 @@ type PaperclipWakeContinuationSummary = {
   updatedAt: string | null;
 };
 
-type PaperclipWakeLivenessContinuation = {
+type PartyclipWakeLivenessContinuation = {
   attempt: number | null;
   maxAttempts: number | null;
   sourceRunId: string | null;
@@ -329,7 +329,7 @@ type PaperclipWakeLivenessContinuation = {
   instruction: string | null;
 };
 
-type PaperclipWakeChildIssueSummary = {
+type PartyclipWakeChildIssueSummary = {
   id: string | null;
   identifier: string | null;
   title: string | null;
@@ -338,7 +338,7 @@ type PaperclipWakeChildIssueSummary = {
   summary: string | null;
 };
 
-type PaperclipWakeBlockerSummary = {
+type PartyclipWakeBlockerSummary = {
   id: string | null;
   identifier: string | null;
   title: string | null;
@@ -346,30 +346,30 @@ type PaperclipWakeBlockerSummary = {
   priority: string | null;
 };
 
-type PaperclipWakeTreeHoldSummary = {
+type PartyclipWakeTreeHoldSummary = {
   holdId: string | null;
   rootIssueId: string | null;
   mode: string | null;
   reason: string | null;
 };
 
-type PaperclipWakePayload = {
+type PartyclipWakePayload = {
   reason: string | null;
-  issue: PaperclipWakeIssue | null;
+  issue: PartyclipWakeIssue | null;
   checkedOutByHarness: boolean;
   dependencyBlockedInteraction: boolean;
   treeHoldInteraction: boolean;
-  activeTreeHold: PaperclipWakeTreeHoldSummary | null;
+  activeTreeHold: PartyclipWakeTreeHoldSummary | null;
   unresolvedBlockerIssueIds: string[];
-  unresolvedBlockerSummaries: PaperclipWakeBlockerSummary[];
-  executionStage: PaperclipWakeExecutionStage | null;
-  continuationSummary: PaperclipWakeContinuationSummary | null;
-  livenessContinuation: PaperclipWakeLivenessContinuation | null;
-  childIssueSummaries: PaperclipWakeChildIssueSummary[];
+  unresolvedBlockerSummaries: PartyclipWakeBlockerSummary[];
+  executionStage: PartyclipWakeExecutionStage | null;
+  continuationSummary: PartyclipWakeContinuationSummary | null;
+  livenessContinuation: PartyclipWakeLivenessContinuation | null;
+  childIssueSummaries: PartyclipWakeChildIssueSummary[];
   childIssueSummaryTruncated: boolean;
   commentIds: string[];
   latestCommentId: string | null;
-  comments: PaperclipWakeComment[];
+  comments: PartyclipWakeComment[];
   requestedCount: number;
   includedCount: number;
   missingCount: number;
@@ -377,7 +377,7 @@ type PaperclipWakePayload = {
   fallbackFetchNeeded: boolean;
 };
 
-function normalizePaperclipWakeIssue(value: unknown): PaperclipWakeIssue | null {
+function normalizePaperclipWakeIssue(value: unknown): PartyclipWakeIssue | null {
   const issue = parseObject(value);
   const id = asString(issue.id, "").trim() || null;
   const identifier = asString(issue.identifier, "").trim() || null;
@@ -394,7 +394,7 @@ function normalizePaperclipWakeIssue(value: unknown): PaperclipWakeIssue | null 
   };
 }
 
-function normalizePaperclipWakeComment(value: unknown): PaperclipWakeComment | null {
+function normalizePaperclipWakeComment(value: unknown): PartyclipWakeComment | null {
   const comment = parseObject(value);
   const author = parseObject(comment.author);
   const body = asString(comment.body, "");
@@ -410,7 +410,7 @@ function normalizePaperclipWakeComment(value: unknown): PaperclipWakeComment | n
   };
 }
 
-function normalizePaperclipWakeContinuationSummary(value: unknown): PaperclipWakeContinuationSummary | null {
+function normalizePaperclipWakeContinuationSummary(value: unknown): PartyclipWakeContinuationSummary | null {
   const summary = parseObject(value);
   const body = asString(summary.body, "").trim();
   if (!body) return null;
@@ -423,7 +423,7 @@ function normalizePaperclipWakeContinuationSummary(value: unknown): PaperclipWak
   };
 }
 
-function normalizePaperclipWakeLivenessContinuation(value: unknown): PaperclipWakeLivenessContinuation | null {
+function normalizePaperclipWakeLivenessContinuation(value: unknown): PartyclipWakeLivenessContinuation | null {
   const continuation = parseObject(value);
   const attempt = asNumber(continuation.attempt, 0);
   const maxAttempts = asNumber(continuation.maxAttempts, 0);
@@ -442,7 +442,7 @@ function normalizePaperclipWakeLivenessContinuation(value: unknown): PaperclipWa
   };
 }
 
-function normalizePaperclipWakeChildIssueSummary(value: unknown): PaperclipWakeChildIssueSummary | null {
+function normalizePaperclipWakeChildIssueSummary(value: unknown): PartyclipWakeChildIssueSummary | null {
   const child = parseObject(value);
   const id = asString(child.id, "").trim() || null;
   const identifier = asString(child.identifier, "").trim() || null;
@@ -454,7 +454,7 @@ function normalizePaperclipWakeChildIssueSummary(value: unknown): PaperclipWakeC
   return { id, identifier, title, status, priority, summary };
 }
 
-function normalizePaperclipWakeBlockerSummary(value: unknown): PaperclipWakeBlockerSummary | null {
+function normalizePaperclipWakeBlockerSummary(value: unknown): PartyclipWakeBlockerSummary | null {
   const blocker = parseObject(value);
   const id = asString(blocker.id, "").trim() || null;
   const identifier = asString(blocker.identifier, "").trim() || null;
@@ -465,7 +465,7 @@ function normalizePaperclipWakeBlockerSummary(value: unknown): PaperclipWakeBloc
   return { id, identifier, title, status, priority };
 }
 
-function normalizePaperclipWakeTreeHoldSummary(value: unknown): PaperclipWakeTreeHoldSummary | null {
+function normalizePaperclipWakeTreeHoldSummary(value: unknown): PartyclipWakeTreeHoldSummary | null {
   const hold = parseObject(value);
   const holdId = asString(hold.holdId, "").trim() || null;
   const rootIssueId = asString(hold.rootIssueId, "").trim() || null;
@@ -475,7 +475,7 @@ function normalizePaperclipWakeTreeHoldSummary(value: unknown): PaperclipWakeTre
   return { holdId, rootIssueId, mode, reason };
 }
 
-function normalizePaperclipWakeExecutionPrincipal(value: unknown): PaperclipWakeExecutionPrincipal | null {
+function normalizePaperclipWakeExecutionPrincipal(value: unknown): PartyclipWakeExecutionPrincipal | null {
   const principal = parseObject(value);
   const typeRaw = asString(principal.type, "").trim().toLowerCase();
   if (typeRaw !== "agent" && typeRaw !== "user") return null;
@@ -486,7 +486,7 @@ function normalizePaperclipWakeExecutionPrincipal(value: unknown): PaperclipWake
   };
 }
 
-function normalizePaperclipWakeExecutionStage(value: unknown): PaperclipWakeExecutionStage | null {
+function normalizePaperclipWakeExecutionStage(value: unknown): PartyclipWakeExecutionStage | null {
   const stage = parseObject(value);
   const wakeRoleRaw = asString(stage.wakeRole, "").trim().toLowerCase();
   const wakeRole =
@@ -523,12 +523,12 @@ function normalizePaperclipWakeExecutionStage(value: unknown): PaperclipWakeExec
   };
 }
 
-export function normalizePaperclipWakePayload(value: unknown): PaperclipWakePayload | null {
+export function normalizePaperclipWakePayload(value: unknown): PartyclipWakePayload | null {
   const payload = parseObject(value);
   const comments = Array.isArray(payload.comments)
     ? payload.comments
         .map((entry) => normalizePaperclipWakeComment(entry))
-        .filter((entry): entry is PaperclipWakeComment => Boolean(entry))
+        .filter((entry): entry is PartyclipWakeComment => Boolean(entry))
     : [];
   const commentWindow = parseObject(payload.commentWindow);
   const commentIds = Array.isArray(payload.commentIds)
@@ -542,7 +542,7 @@ export function normalizePaperclipWakePayload(value: unknown): PaperclipWakePayl
   const childIssueSummaries = Array.isArray(payload.childIssueSummaries)
     ? payload.childIssueSummaries
         .map((entry) => normalizePaperclipWakeChildIssueSummary(entry))
-        .filter((entry): entry is PaperclipWakeChildIssueSummary => Boolean(entry))
+        .filter((entry): entry is PartyclipWakeChildIssueSummary => Boolean(entry))
     : [];
   const unresolvedBlockerIssueIds = Array.isArray(payload.unresolvedBlockerIssueIds)
     ? payload.unresolvedBlockerIssueIds
@@ -552,7 +552,7 @@ export function normalizePaperclipWakePayload(value: unknown): PaperclipWakePayl
   const unresolvedBlockerSummaries = Array.isArray(payload.unresolvedBlockerSummaries)
     ? payload.unresolvedBlockerSummaries
         .map((entry) => normalizePaperclipWakeBlockerSummary(entry))
-        .filter((entry): entry is PaperclipWakeBlockerSummary => Boolean(entry))
+        .filter((entry): entry is PartyclipWakeBlockerSummary => Boolean(entry))
     : [];
 
   const activeTreeHold = normalizePaperclipWakeTreeHoldSummary(payload.activeTreeHold);
@@ -599,7 +599,7 @@ export function renderPaperclipWakePrompt(
   if (!normalized) return "";
   const resumedSession = options.resumedSession === true;
   const executionStage = normalized.executionStage;
-  const principalLabel = (principal: PaperclipWakeExecutionPrincipal | null) => {
+  const principalLabel = (principal: PartyclipWakeExecutionPrincipal | null) => {
     if (!principal || !principal.type) return "unknown";
     if (principal.type === "agent") return principal.agentId ? `agent ${principal.agentId}` : "agent";
     return principal.userId ? `user ${principal.userId}` : "user";
@@ -1104,7 +1104,7 @@ async function readSkillRequired(skillDir: string): Promise<boolean> {
 export async function listPaperclipSkillEntries(
   moduleDir: string,
   additionalCandidates: string[] = [],
-): Promise<PaperclipSkillEntry[]> {
+): Promise<PartyclipSkillEntry[]> {
   const root = await resolvePaperclipSkillsDir(moduleDir, additionalCandidates);
   if (!root) return [];
 
@@ -1242,9 +1242,9 @@ export function buildPersistentSkillSnapshot(
   };
 }
 
-function normalizeConfiguredPaperclipRuntimeSkills(value: unknown): PaperclipSkillEntry[] {
+function normalizeConfiguredPaperclipRuntimeSkills(value: unknown): PartyclipSkillEntry[] {
   if (!Array.isArray(value)) return [];
-  const out: PaperclipSkillEntry[] = [];
+  const out: PartyclipSkillEntry[] = [];
   for (const rawEntry of value) {
     const entry = parseObject(rawEntry);
     const key = asString(entry.key, asString(entry.name, "")).trim();
@@ -1269,7 +1269,7 @@ export async function readPaperclipRuntimeSkillEntries(
   config: Record<string, unknown>,
   moduleDir: string,
   additionalCandidates: string[] = [],
-): Promise<PaperclipSkillEntry[]> {
+): Promise<PartyclipSkillEntry[]> {
   const configuredEntries = normalizeConfiguredPaperclipRuntimeSkills(config.partyclipRuntimeSkills);
   if (configuredEntries.length > 0) return configuredEntries;
   return listPaperclipSkillEntries(moduleDir, additionalCandidates);

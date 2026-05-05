@@ -1,6 +1,6 @@
-import type { PaperclipMcpConfig } from "./config.js";
+import type { PartyclipMcpConfig } from "./config.js";
 
-export class PaperclipApiError extends Error {
+export class PartyclipApiError extends Error {
   readonly status: number;
   readonly method: string;
   readonly path: string;
@@ -14,7 +14,7 @@ export class PaperclipApiError extends Error {
     message: string;
   }) {
     super(input.message);
-    this.name = "PaperclipApiError";
+    this.name = "PartyclipApiError";
     this.status = input.status;
     this.method = input.method;
     this.path = input.path;
@@ -48,8 +48,8 @@ async function parseResponseBody(response: Response): Promise<unknown> {
   }
 }
 
-export class PaperclipApiClient {
-  constructor(private readonly config: PaperclipMcpConfig) {}
+export class PartyclipApiClient {
+  constructor(private readonly config: PartyclipMcpConfig) {}
 
   get defaults() {
     return {
@@ -100,7 +100,7 @@ export class PaperclipApiClient {
     const parsedBody = await parseResponseBody(response);
 
     if (!response.ok) {
-      throw new PaperclipApiError({
+      throw new PartyclipApiError({
         status: response.status,
         method: method.toUpperCase(),
         path,

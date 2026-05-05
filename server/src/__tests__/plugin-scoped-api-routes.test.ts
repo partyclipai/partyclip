@@ -1,7 +1,7 @@
 import express from "express";
 import request from "supertest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { pluginManifestV1Schema, type PaperclipPluginManifestV1 } from "@partyclipai/shared";
+import { pluginManifestV1Schema, type PartyclipPluginManifestV1 } from "@partyclipai/shared";
 
 const mockRegistry = vi.hoisted(() => ({
   getById: vi.fn(),
@@ -38,7 +38,7 @@ vi.mock("../services/live-events.js", () => ({
   publishGlobalLiveEvent: vi.fn(),
 }));
 
-function manifest(apiRoutes: NonNullable<PaperclipPluginManifestV1["apiRoutes"]>): PaperclipPluginManifestV1 {
+function manifest(apiRoutes: NonNullable<PartyclipPluginManifestV1["apiRoutes"]>): PartyclipPluginManifestV1 {
   return {
     id: "partyclip.scoped-api-test",
     apiVersion: 1,

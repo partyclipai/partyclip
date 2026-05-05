@@ -1,6 +1,6 @@
-import type { PaperclipPluginManifestV1 } from "@partyclipai/plugin-sdk";
+import type { PartyclipPluginManifestV1 } from "@partyclipai/plugin-sdk";
 
-const manifest: PaperclipPluginManifestV1 = {
+const manifest: PartyclipPluginManifestV1 = {
   id: "partyclipai.plugin-authoring-smoke-example",
   apiVersion: 1,
   version: "0.1.0",

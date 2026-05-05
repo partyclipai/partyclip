@@ -402,7 +402,7 @@ export type PluginApiRouteDeclarationInput = z.infer<typeof pluginApiRouteDeclar
 // ---------------------------------------------------------------------------
 
 /**
- * Zod schema for {@link PaperclipPluginManifestV1} — the complete runtime
+ * Zod schema for {@link PartyclipPluginManifestV1} — the complete runtime
  * validator for plugin manifests read at install time.
  *
  * Field-level constraints (see PLUGIN_SPEC.md §10.1 for the normative rules):
@@ -435,7 +435,7 @@ export type PluginApiRouteDeclarationInput = z.infer<typeof pluginApiRouteDeclar
  * - duplicate `ui.slots[].id` values are rejected
  *
  * @see PLUGIN_SPEC.md §10.1 — Manifest shape
- * @see {@link PaperclipPluginManifestV1} — the inferred TypeScript type
+ * @see {@link PartyclipPluginManifestV1} — the inferred TypeScript type
  */
 export const pluginManifestV1Schema = z.object({
   id: z.string().min(1).regex(

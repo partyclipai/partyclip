@@ -1,4 +1,4 @@
-import type { PaperclipPluginManifestV1 } from "@partyclipai/plugin-sdk";
+import type { PartyclipPluginManifestV1 } from "@partyclipai/plugin-sdk";
 import {
   DEFAULT_CONFIG,
   EXPORT_NAMES,
@@ -11,7 +11,7 @@ import {
   WEBHOOK_KEYS,
 } from "./constants.js";
 
-const manifest: PaperclipPluginManifestV1 = {
+const manifest: PartyclipPluginManifestV1 = {
   id: PLUGIN_ID,
   apiVersion: 1,
   version: PLUGIN_VERSION,

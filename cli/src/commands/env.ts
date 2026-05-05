@@ -1,6 +1,6 @@
 import * as p from "@clack/prompts";
 import pc from "picocolors";
-import type { PaperclipConfig } from "../config/schema.js";
+import type { PartyclipConfig } from "../config/schema.js";
 import { configExists, readConfig, resolveConfigPath } from "../config/store.js";
 import {
   readAgentJwtSecretFromEnv,
@@ -40,7 +40,7 @@ export async function envCommand(opts: { config?: string }): Promise<void> {
   p.intro(pc.bgCyan(pc.black(" partyclip env ")));
 
   const configPath = resolveConfigPath(opts.config);
-  let config: PaperclipConfig | null = null;
+  let config: PartyclipConfig | null = null;
   let configReadError: string | null = null;
 
   if (configExists(opts.config)) {
@@ -109,7 +109,7 @@ export async function envCommand(opts: { config?: string }): Promise<void> {
   p.outro("Done");
 }
 
-function collectDeploymentEnvRows(config: PaperclipConfig | null, configPath: string): EnvVarRow[] {
+function collectDeploymentEnvRows(config: PartyclipConfig | null, configPath: string): EnvVarRow[] {
   const agentJwtEnvFile = resolveAgentJwtEnvFile(configPath);
   const jwtEnv = readAgentJwtSecretFromEnv(configPath);
   const jwtFile = jwtEnv ? null : readAgentJwtSecretFromEnvFile(agentJwtEnvFile);

@@ -9,7 +9,7 @@ import {
   pluginWebhookDeliveries,
 } from "@partyclipai/db";
 import type {
-  PaperclipPluginManifestV1,
+  PartyclipPluginManifestV1,
   PluginStatus,
   InstallPlugin,
   UpdatePluginStatus,
@@ -134,7 +134,7 @@ export function pluginRegistryService(db: Db) {
      * manifest from the package.  This method persists the plugin row and
      * assigns the next install order.
      */
-    install: async (input: InstallPlugin, manifest: PaperclipPluginManifestV1) => {
+    install: async (input: InstallPlugin, manifest: PartyclipPluginManifestV1) => {
       const existing = await getByKey(manifest.id);
       if (existing) {
         if (existing.status !== "uninstalled") {
@@ -198,7 +198,7 @@ export function pluginRegistryService(db: Db) {
       data: {
         packageName?: string;
         version?: string;
-        manifest?: PaperclipPluginManifestV1;
+        manifest?: PartyclipPluginManifestV1;
       },
     ) => {
       const plugin = await getById(id);

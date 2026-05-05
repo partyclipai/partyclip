@@ -54,7 +54,7 @@ describe("resolveEnvironmentExecutionTarget", () => {
       remoteCwd: DEFAULT_SANDBOX_REMOTE_CWD,
       leaseId: "lease-1",
       environmentId: "env-1",
-      paperclipTransport: "bridge",
+      partyclipTransport: "bridge",
       timeoutMs: 30_000,
     });
   });
@@ -84,7 +84,7 @@ describe("resolveEnvironmentExecutionTarget", () => {
       },
       leaseId: "lease-1",
       leaseMetadata: {
-        paperclipApiUrl: "https://partyclip.example.test",
+        partyclipApiUrl: "https://partyclip.example.test",
       },
       lease: null,
       environmentRuntime: null,
@@ -93,8 +93,8 @@ describe("resolveEnvironmentExecutionTarget", () => {
     expect(target).toMatchObject({
       kind: "remote",
       transport: "sandbox",
-      paperclipApiUrl: "https://partyclip.example.test",
-      paperclipTransport: "direct",
+      partyclipApiUrl: "https://partyclip.example.test",
+      partyclipTransport: "direct",
     });
   });
 });

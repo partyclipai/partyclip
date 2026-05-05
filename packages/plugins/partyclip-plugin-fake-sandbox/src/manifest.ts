@@ -1,9 +1,9 @@
-import type { PaperclipPluginManifestV1 } from "@partyclipai/plugin-sdk";
+import type { PartyclipPluginManifestV1 } from "@partyclipai/plugin-sdk";
 
 const PLUGIN_ID = "partyclip.fake-sandbox-provider";
 const PLUGIN_VERSION = "0.1.0";
 
-const manifest: PaperclipPluginManifestV1 = {
+const manifest: PartyclipPluginManifestV1 = {
   id: PLUGIN_ID,
   apiVersion: 1,
   version: PLUGIN_VERSION,

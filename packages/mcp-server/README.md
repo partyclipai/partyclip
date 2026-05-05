@@ -32,52 +32,52 @@ node packages/mcp-server/dist/stdio.js
 
 Read tools:
 
-- `paperclipMe`
-- `paperclipInboxLite`
-- `paperclipListAgents`
-- `paperclipGetAgent`
-- `paperclipListIssues`
-- `paperclipGetIssue`
-- `paperclipGetHeartbeatContext`
-- `paperclipListComments`
-- `paperclipGetComment`
-- `paperclipListIssueApprovals`
-- `paperclipListDocuments`
-- `paperclipGetDocument`
-- `paperclipListDocumentRevisions`
-- `paperclipListProjects`
-- `paperclipGetProject`
-- `paperclipGetIssueWorkspaceRuntime`
-- `paperclipWaitForIssueWorkspaceService`
-- `paperclipListGoals`
-- `paperclipGetGoal`
-- `paperclipListApprovals`
-- `paperclipGetApproval`
-- `paperclipGetApprovalIssues`
-- `paperclipListApprovalComments`
+- `partyclipMe`
+- `partyclipInboxLite`
+- `partyclipListAgents`
+- `partyclipGetAgent`
+- `partyclipListIssues`
+- `partyclipGetIssue`
+- `partyclipGetHeartbeatContext`
+- `partyclipListComments`
+- `partyclipGetComment`
+- `partyclipListIssueApprovals`
+- `partyclipListDocuments`
+- `partyclipGetDocument`
+- `partyclipListDocumentRevisions`
+- `partyclipListProjects`
+- `partyclipGetProject`
+- `partyclipGetIssueWorkspaceRuntime`
+- `partyclipWaitForIssueWorkspaceService`
+- `partyclipListGoals`
+- `partyclipGetGoal`
+- `partyclipListApprovals`
+- `partyclipGetApproval`
+- `partyclipGetApprovalIssues`
+- `partyclipListApprovalComments`
 
 Write tools:
 
-- `paperclipCreateIssue`
-- `paperclipUpdateIssue`
-- `paperclipCheckoutIssue`
-- `paperclipReleaseIssue`
-- `paperclipAddComment`
-- `paperclipSuggestTasks`
-- `paperclipAskUserQuestions`
-- `paperclipRequestConfirmation`
-- `paperclipUpsertIssueDocument`
-- `paperclipRestoreIssueDocumentRevision`
-- `paperclipControlIssueWorkspaceServices`
-- `paperclipCreateApproval`
-- `paperclipLinkIssueApproval`
-- `paperclipUnlinkIssueApproval`
-- `paperclipApprovalDecision`
-- `paperclipAddApprovalComment`
+- `partyclipCreateIssue`
+- `partyclipUpdateIssue`
+- `partyclipCheckoutIssue`
+- `partyclipReleaseIssue`
+- `partyclipAddComment`
+- `partyclipSuggestTasks`
+- `partyclipAskUserQuestions`
+- `partyclipRequestConfirmation`
+- `partyclipUpsertIssueDocument`
+- `partyclipRestoreIssueDocumentRevision`
+- `partyclipControlIssueWorkspaceServices`
+- `partyclipCreateApproval`
+- `partyclipLinkIssueApproval`
+- `partyclipUnlinkIssueApproval`
+- `partyclipApprovalDecision`
+- `partyclipAddApprovalComment`
 
 Escape hatch:
 
-- `paperclipApiRequest`
+- `partyclipApiRequest`
 
-`paperclipApiRequest` is limited to paths under `/api` and JSON bodies. It is
+`partyclipApiRequest` is limited to paths under `/api` and JSON bodies. It is
 meant for endpoints that do not yet have a dedicated MCP tool.

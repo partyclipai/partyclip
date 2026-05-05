@@ -22,7 +22,7 @@ import {
   renderTemplate,
   resolvePaperclipDesiredSkillNames,
   stringifyPaperclipWakePayload,
-  type PaperclipSkillEntry,
+  type PartyclipSkillEntry,
 } from "@partyclipai/adapter-utils/server-utils";
 import { shellQuote } from "@partyclipai/adapter-utils/ssh";
 import {
@@ -265,7 +265,7 @@ async function hashPathContents(
 }
 
 async function buildSkillSetKey(input: {
-  skills: PaperclipSkillEntry[];
+  skills: PartyclipSkillEntry[];
   label: string;
 }): Promise<string> {
   const hash = createHash("sha256");
@@ -280,7 +280,7 @@ async function buildSkillSetKey(input: {
 
 async function resolveSelectedRuntimeSkills(
   config: Record<string, unknown>,
-): Promise<{ allSkills: PaperclipSkillEntry[]; selectedSkills: PaperclipSkillEntry[]; desiredSkillNames: string[] }> {
+): Promise<{ allSkills: PartyclipSkillEntry[]; selectedSkills: PartyclipSkillEntry[]; desiredSkillNames: string[] }> {
   const allSkills = await readPaperclipRuntimeSkillEntries(config, __moduleDir);
   const desiredSkillNames = resolvePaperclipDesiredSkillNames(config, allSkills);
   const desiredSet = new Set(desiredSkillNames);
@@ -381,8 +381,8 @@ async function removeSkillTarget(target: string): Promise<boolean> {
 
 async function reconcileManagedCodexSkills(input: {
   skillsHome: string;
-  allSkills: PaperclipSkillEntry[];
-  selectedSkills: PaperclipSkillEntry[];
+  allSkills: PartyclipSkillEntry[];
+  selectedSkills: PartyclipSkillEntry[];
   onLog: AdapterExecutionContext["onLog"];
 }): Promise<void> {
   const desired = new Set(input.selectedSkills.map((entry) => entry.runtimeName));
