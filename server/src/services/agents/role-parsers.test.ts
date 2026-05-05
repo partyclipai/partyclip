@@ -64,9 +64,18 @@ describe("role parsers — BiasMirror", () => {
     expect((out.artifact.findings as unknown[])).toHaveLength(1);
   });
 
-  it("BLOCK sends back to drafting with BIAS_BLOCKED", () => {
-    const out = parseRoleOutput("BiasMirror", `{"decision":"BLOCK","findings":[]}`);
+  it("BLOCK sends back to drafting with BIAS_BLOCKED when findings are present", () => {
+    const out = parseRoleOutput(
+      "BiasMirror",
+      `{"decision":"BLOCK","findings":[{"category":"tone-drift","severity":"HIGH","quote":"x","explanation":"y","suggestion":"z"}]}`,
+    );
     expect(out.outcome).toEqual({ kind: "block", reasonCode: "BIAS_BLOCKED" });
+  });
+
+  it("BLOCK with no findings is BAD_OUTPUT (must be reviewable)", () => {
+    expect(() =>
+      parseRoleOutput("BiasMirror", `{"decision":"BLOCK","findings":[]}`),
+    ).toThrow(TerminalPipelineError);
   });
 });
 

@@ -1,4 +1,5 @@
 import type { AgentRole } from "@partyclipai/shared/types/agent-role";
+import { biasReportSchema } from "@partyclipai/shared/types/bias-report";
 import type { StageOutcome } from "../pipelines/dispatcher.js";
 import { TerminalPipelineError } from "../pipelines/errors.js";
 
@@ -131,21 +132,25 @@ function parseExecutor(text: string): ParsedAgentOutput {
 
 function parseBiasMirror(text: string): ParsedAgentOutput {
   const obj = extractFirstJsonObject(text);
-  const decision = typeof obj.decision === "string" ? obj.decision.toUpperCase() : "";
-  const findings = Array.isArray(obj.findings) ? obj.findings : [];
-  if (decision === "PASS" || decision === "FLAG") {
-    return {
-      outcome: { kind: "pass" },
-      artifact: { kind: "bias_report", decision, findings },
-    };
+  if (typeof obj.decision === "string") obj.decision = obj.decision.toUpperCase();
+  const result = biasReportSchema.safeParse(obj);
+  if (!result.success) {
+    const first = result.error.issues[0];
+    throw new TerminalPipelineError(
+      `BiasMirror output failed validation at ${first?.path.join(".") ?? "<root>"}: ${first?.message ?? "unknown"}`,
+      "BAD_OUTPUT",
+    );
   }
-  if (decision === "BLOCK") {
-    return {
-      outcome: { kind: "block", reasonCode: "BIAS_BLOCKED" },
-      artifact: { kind: "bias_report", decision, findings },
-    };
+  const report = result.data;
+  const artifact: Record<string, unknown> = {
+    kind: "bias_report",
+    decision: report.decision,
+    findings: report.findings,
+  };
+  if (report.decision === "BLOCK") {
+    return { outcome: { kind: "block", reasonCode: "BIAS_BLOCKED" }, artifact };
   }
-  throw new TerminalPipelineError(`BiasMirror returned unknown decision '${decision}'`, "BAD_OUTPUT");
+  return { outcome: { kind: "pass" }, artifact };
 }
 
 const PARSERS: Partial<Record<AgentRole, (text: string) => ParsedAgentOutput>> = {
