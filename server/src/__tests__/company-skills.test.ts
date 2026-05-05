@@ -159,7 +159,7 @@ describe("project workspace skill discovery", () => {
         "  sources:",
         "    - kind: github-dir",
         "      repo: partyclipai/partyclip",
-        "      path: skills/paperclip",
+        "      path: skills/partyclip",
         "---",
         "",
         "# Inline Metadata Skill",
@@ -180,7 +180,7 @@ describe("project workspace skill discovery", () => {
         {
           kind: "github-dir",
           repo: "partyclipai/partyclip",
-          path: "skills/paperclip",
+          path: "skills/partyclip",
         },
       ],
     });

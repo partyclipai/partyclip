@@ -1522,7 +1522,7 @@ function buildInviteOnboardingManifest(
   }
 ) {
   const baseUrl = requestBaseUrl(req);
-  const skillPath = `/api/invites/${token}/skills/paperclip`;
+  const skillPath = `/api/invites/${token}/skills/partyclip`;
   const skillUrl = baseUrl ? `${baseUrl}${skillPath}` : skillPath;
   const registrationEndpointPath = `/api/invites/${token}/accept`;
   const registrationEndpointUrl = baseUrl
@@ -1600,7 +1600,7 @@ function buildInviteOnboardingManifest(
         name: "paperclip",
         path: skillPath,
         url: skillUrl,
-        installPath: "~/.openclaw/skills/paperclip/SKILL.md"
+        installPath: "~/.openclaw/skills/partyclip/SKILL.md"
       }
     }
   };
@@ -2861,18 +2861,18 @@ export function accessRoutes(
     assertAuthenticated(req);
     res.json({
       skills: [
-        { name: "paperclip", path: "/api/skills/paperclip" },
+        { name: "paperclip", path: "/api/skills/partyclip" },
         {
           name: "para-memory-files",
           path: "/api/skills/para-memory-files"
         },
         {
           name: "paperclip-create-agent",
-          path: "/api/skills/paperclip-create-agent"
+          path: "/api/skills/partyclip-create-agent"
         },
         {
           name: "paperclip-converting-plans-to-tasks",
-          path: "/api/skills/paperclip-converting-plans-to-tasks"
+          path: "/api/skills/partyclip-converting-plans-to-tasks"
         }
       ]
     });
@@ -3139,7 +3139,7 @@ export function accessRoutes(
       skills: [
         {
           name: "paperclip",
-          path: `/api/invites/${token}/skills/paperclip`,
+          path: `/api/invites/${token}/skills/partyclip`,
         },
       ],
     });

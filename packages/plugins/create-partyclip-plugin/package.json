@@ -1,5 +1,5 @@
 {
-  "name": "@partyclipai/create-paperclip-plugin",
+  "name": "@partyclipai/create-partyclip-plugin",
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
@@ -10,11 +10,11 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/partyclipai/partyclip",
-    "directory": "packages/plugins/create-paperclip-plugin"
+    "directory": "packages/plugins/create-partyclip-plugin"
   },
   "type": "module",
   "bin": {
-    "create-paperclip-plugin": "./dist/index.js"
+    "create-partyclip-plugin": "./dist/index.js"
   },
   "exports": {
     ".": "./src/index.ts"
@@ -22,7 +22,7 @@
   "publishConfig": {
     "access": "public",
     "bin": {
-      "create-paperclip-plugin": "./dist/index.js"
+      "create-partyclip-plugin": "./dist/index.js"
     },
     "exports": {
       ".": {

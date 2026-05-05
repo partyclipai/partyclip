@@ -13,7 +13,7 @@
     "test": "vitest run --config ./vitest.config.ts",
     "typecheck": "pnpm --filter @partyclipai/plugin-sdk ensure-build-deps && tsc --noEmit"
   },
-  "paperclipPlugin": {
+  "partyclipPlugin": {
     "manifest": "./dist/manifest.js",
     "worker": "./dist/worker.js",
     "ui": "./dist/ui/"

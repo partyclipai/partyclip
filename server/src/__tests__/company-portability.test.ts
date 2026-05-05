@@ -286,7 +286,7 @@ describe("company portability", () => {
         description: "Paperclip coordination skill",
         markdown: "---\nname: paperclip\ndescription: Paperclip coordination skill\n---\n\n# Paperclip\n",
         sourceType: "github",
-        sourceLocator: "https://github.com/partyclipai/partyclip/tree/master/skills/paperclip",
+        sourceLocator: "https://github.com/partyclipai/partyclip/tree/master/skills/partyclip",
         sourceRef: "0123456789abcdef0123456789abcdef01234567",
         trustLevel: "markdown_only",
         compatibility: "compatible",
@@ -300,7 +300,7 @@ describe("company portability", () => {
           repo: "paperclip",
           ref: "0123456789abcdef0123456789abcdef01234567",
           trackingRef: "master",
-          repoSkillDir: "skills/paperclip",
+          repoSkillDir: "skills/partyclip",
         },
       },
       {

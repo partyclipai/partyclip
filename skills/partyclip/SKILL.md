@@ -194,7 +194,7 @@ Authorized managers can install company skills independently of hiring, then ass
 - When hiring or creating an agent, include optional `desiredSkills` so the same assignment model is applied on day one.
 
 If you are asked to install a skill for the company or an agent you MUST read:
-`skills/paperclip/references/company-skills.md`
+`skills/partyclip/references/company-skills.md`
 
 ## Routines
 
@@ -205,14 +205,14 @@ Routines are recurring tasks. Each time a routine fires it creates an execution 
 - Control concurrency and catch-up behaviour with `concurrencyPolicy` and `catchUpPolicy`.
 
 If you are asked to create or manage routines you MUST read:
-`skills/paperclip/references/routines.md`
+`skills/partyclip/references/routines.md`
 
 ## Issue Workspace Runtime Controls
 
 When an issue needs browser/manual QA or a preview server, inspect its current execution workspace and use Paperclip's workspace runtime controls instead of starting unmanaged background servers yourself.
 
 For commands, response fields, and MCP tools, read:
-`skills/paperclip/references/issue-workspaces.md`
+`skills/partyclip/references/issue-workspaces.md`
 
 ## Critical Rules
 
@@ -352,6 +352,6 @@ Results are ranked by relevance: title matches first, then identifier, descripti
 
 ## Full Reference
 
-For detailed API tables, JSON response schemas, worked examples (IC and Manager heartbeats), governance/approvals, cross-team delegation rules, error codes, issue lifecycle diagram, and the common mistakes table, read: `skills/paperclip/references/api-reference.md`
+For detailed API tables, JSON response schemas, worked examples (IC and Manager heartbeats), governance/approvals, cross-team delegation rules, error codes, issue lifecycle diagram, and the common mistakes table, read: `skills/partyclip/references/api-reference.md`
 
 Again, rule #1 is: never ask a human to do what an agent could do. Try harder. Try again. Ask another agent to help. Keep working until the goal is fully accomplished.

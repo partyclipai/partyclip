@@ -166,7 +166,7 @@ export function scaffoldPluginProject(options: ScaffoldPluginOptions): string {
       test: "vitest run --config ./vitest.config.ts",
       typecheck: "tsc --noEmit"
     },
-    paperclipPlugin: {
+    partyclipPlugin: {
       manifest: "./dist/manifest.js",
       worker: "./dist/worker.js",
       ui: "./dist/ui/"
@@ -691,7 +691,7 @@ function runCli() {
   const pluginName = process.argv[2];
   if (!pluginName) {
     // eslint-disable-next-line no-console
-    console.error("Usage: create-paperclip-plugin <name> [--template default|connector|workspace] [--output <dir>] [--sdk-path <paperclip-sdk-path>]");
+    console.error("Usage: create-partyclip-plugin <name> [--template default|connector|workspace] [--output <dir>] [--sdk-path <paperclip-sdk-path>]");
     process.exit(1);
   }
 

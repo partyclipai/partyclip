@@ -38,4 +38,4 @@ These commands assume the repo root has already been installed once so the local
 
 - `src/manifest.ts` declares the sandbox-provider driver metadata
 - `src/plugin.ts` implements the environment lifecycle hooks
-- `paperclipPlugin.manifest` and `paperclipPlugin.worker` point the host at the built plugin entrypoints in `dist/`
+- `partyclipPlugin.manifest` and `partyclipPlugin.worker` point the host at the built plugin entrypoints in `dist/`

@@ -460,7 +460,7 @@ create_and_approve_gateway_join() {
 persist_claimed_key_artifacts() {
   local claim_json="$1"
   local workspace_dir="${OPENCLAW_CONFIG_DIR%/}/workspace"
-  local skill_dir="${OPENCLAW_CONFIG_DIR%/}/skills/paperclip"
+  local skill_dir="${OPENCLAW_CONFIG_DIR%/}/skills/partyclip"
   local claimed_file="${workspace_dir}/paperclip-claimed-api-key.json"
   local claimed_raw_file="${workspace_dir}/paperclip-claimed-api-key.raw.json"
 
@@ -485,7 +485,7 @@ persist_claimed_key_artifacts() {
   fi
 
   if [[ "$AUTO_INSTALL_SKILL" == "1" ]]; then
-    api_request "GET" "/skills/paperclip"
+    api_request "GET" "/skills/partyclip"
     assert_status "200"
     {
       echo "PAPERCLIP_API_URL=${PAPERCLIP_API_URL_FOR_OPENCLAW}"

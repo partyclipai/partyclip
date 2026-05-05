@@ -51,7 +51,7 @@ type PluginWatchTarget = {
 };
 
 type PluginPackageJson = {
-  paperclipPlugin?: {
+  partyclipPlugin?: {
     manifest?: string;
     worker?: string;
     ui?: string;
@@ -127,9 +127,9 @@ export function resolvePluginWatchTargets(
   }
 
   const entrypointPaths = [
-    packageJson?.paperclipPlugin?.manifest,
-    packageJson?.paperclipPlugin?.worker,
-    packageJson?.paperclipPlugin?.ui,
+    packageJson?.partyclipPlugin?.manifest,
+    packageJson?.partyclipPlugin?.worker,
+    packageJson?.partyclipPlugin?.ui,
   ].filter((value): value is string => typeof value === "string" && value.length > 0);
 
   if (entrypointPaths.length === 0) {

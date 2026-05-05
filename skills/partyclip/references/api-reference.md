@@ -99,7 +99,7 @@ POST /api/companies/company-1/exports
   "selectedFiles": [
     "COMPANY.md",
     "agents/ceo/AGENTS.md",
-    "skills/paperclip/SKILL.md",
+    "skills/partyclip/SKILL.md",
     "tasks/pap-42/TASK.md"
   ]
 }

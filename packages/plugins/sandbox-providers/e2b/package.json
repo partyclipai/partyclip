@@ -31,7 +31,7 @@
   "files": [
     "dist"
   ],
-  "paperclipPlugin": {
+  "partyclipPlugin": {
     "manifest": "./dist/manifest.js",
     "worker": "./dist/worker.js"
   },

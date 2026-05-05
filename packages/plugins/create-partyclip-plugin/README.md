@@ -1,15 +1,15 @@
-# @partyclipai/create-paperclip-plugin
+# @partyclipai/create-partyclip-plugin
 
 Scaffolding tool for creating new Paperclip plugins.
 
 ```bash
-npx @partyclipai/create-paperclip-plugin my-plugin
+npx @partyclipai/create-partyclip-plugin my-plugin
 ```
 
 Or with options:
 
 ```bash
-npx @partyclipai/create-paperclip-plugin @acme/my-plugin \
+npx @partyclipai/create-partyclip-plugin @acme/my-plugin \
   --template connector \
   --category connector \
   --display-name "Acme Connector" \
@@ -34,7 +34,7 @@ Inside this repo, the generated package uses `@partyclipai/plugin-sdk` via `work
 Outside this repo, the scaffold snapshots `@partyclipai/plugin-sdk` from your local Paperclip checkout into a `.paperclip-sdk/` tarball and points the generated package at that local file by default. You can override the SDK source explicitly:
 
 ```bash
-node packages/plugins/create-paperclip-plugin/dist/index.js @acme/my-plugin \
+node packages/plugins/create-partyclip-plugin/dist/index.js @acme/my-plugin \
   --output /absolute/path/to/plugins \
   --sdk-path /absolute/path/to/paperclip/packages/plugins/sdk
 ```
