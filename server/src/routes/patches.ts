@@ -1,8 +1,8 @@
 import { Router, type Request, type Response } from "express";
 import { z } from "zod";
 import type { Db } from "@partyclipai/db";
-import { eq, and } from "drizzle-orm";
-import { patches } from "@partyclipai/db";
+import { eq, and, desc, inArray } from "drizzle-orm";
+import { patches, biasReports, biasFindings } from "@partyclipai/db";
 import type { PatchClassification, PatchState } from "@partyclipai/shared/types/patch";
 import {
   operatorTokenMiddleware,
@@ -91,6 +91,57 @@ export function patchRoutes(db: Db, opts: PatchRoutesOptions): Router {
       return;
     }
     res.json({ patch: detail });
+  });
+
+  router.get("/patches/:id/bias-reports", async (req: Request, res: Response) => {
+    const patchId = String(req.params.id);
+    const [patchRow] = await db
+      .select({ id: patches.id })
+      .from(patches)
+      .where(and(eq(patches.id, patchId), eq(patches.companyId, opts.defaultCompanyId)))
+      .limit(1);
+    if (!patchRow) {
+      res.status(404).json({ error: "patch_not_found" });
+      return;
+    }
+    const reportRows = await db
+      .select({
+        id: biasReports.id,
+        stageRunId: biasReports.stageRunId,
+        overallDecision: biasReports.overallDecision,
+        createdAt: biasReports.createdAt,
+      })
+      .from(biasReports)
+      .where(eq(biasReports.patchId, patchId))
+      .orderBy(desc(biasReports.createdAt));
+    if (reportRows.length === 0) {
+      res.json({ reports: [] });
+      return;
+    }
+    const findingRows = await db
+      .select({
+        id: biasFindings.id,
+        reportId: biasFindings.reportId,
+        category: biasFindings.category,
+        severity: biasFindings.severity,
+        quote: biasFindings.quote,
+        explanation: biasFindings.explanation,
+        suggestion: biasFindings.suggestion,
+      })
+      .from(biasFindings)
+      .where(inArray(biasFindings.reportId, reportRows.map((r) => r.id)));
+    const findingsByReport = new Map<string, typeof findingRows>();
+    for (const f of findingRows) {
+      const arr = findingsByReport.get(f.reportId) ?? [];
+      arr.push(f);
+      findingsByReport.set(f.reportId, arr);
+    }
+    res.json({
+      reports: reportRows.map((r) => ({
+        ...r,
+        findings: findingsByReport.get(r.id) ?? [],
+      })),
+    });
   });
 
   for (const [path, action] of Object.entries(ACTION_PATH_TO_ENUM)) {
