@@ -2297,7 +2297,7 @@ packages:
   '@open-draft/deferred-promise@2.2.0':
     resolution: {integrity: sha512-CecwLWx3rhxVQF6V4bAgPS5t+So2sTbPgAzafKkVizyi7tlwpcFpdFqq+wqF2OwNBmqFuu6tOyouTuxgpMfzmA==}
 
-  '@partyclipai/adapter-utils@2026.325.0':
+  '@paperclipai/adapter-utils@2026.325.0':
     resolution: {integrity: sha512-YDVSAgjkeJ0PvxXDJVN9MZDX7oYRzidLtGHmGgRGd6gSk/bF2ygAKvND4FI1YxDc/cRLQjqAFCpCYaC/9wqIEA==}
 
   '@paralleldrive/cuid2@2.3.1':
@@ -8668,7 +8668,7 @@ snapshots:
 
   '@open-draft/deferred-promise@2.2.0': {}
 
-  '@partyclipai/adapter-utils@2026.325.0': {}
+  '@paperclipai/adapter-utils@2026.325.0': {}
 
   '@paralleldrive/cuid2@2.3.1':
     dependencies:
@@ -11569,7 +11569,7 @@ snapshots:
 
   hermes-paperclip-adapter@0.2.0:
     dependencies:
-      '@partyclipai/adapter-utils': 2026.325.0
+      '@paperclipai/adapter-utils': 2026.325.0
       picocolors: 1.1.1
 
   hono@4.12.12: {}
