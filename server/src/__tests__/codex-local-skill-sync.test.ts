@@ -12,7 +12,7 @@ async function makeTempDir(prefix: string): Promise<string> {
 }
 
 describe("codex local skill sync", () => {
-  const paperclipKey = "partyclipai/partyclip/partyclip";
+  const partyclipKey = "partyclipai/partyclip/partyclip";
   const createAgentKey = "partyclipai/partyclip/partyclip-create-agent";
   const cleanupDirs = new Set<string>();
 
@@ -22,7 +22,7 @@ describe("codex local skill sync", () => {
   });
 
   it("reports configured Paperclip skills for workspace injection on the next run", async () => {
-    const codexHome = await makeTempDir("paperclip-codex-skill-sync-");
+    const codexHome = await makeTempDir("partyclip-codex-skill-sync-");
     cleanupDirs.add(codexHome);
 
     const ctx = {
@@ -33,25 +33,25 @@ describe("codex local skill sync", () => {
         env: {
           CODEX_HOME: codexHome,
         },
-        paperclipSkillSync: {
-          desiredSkills: [paperclipKey],
+        partyclipSkillSync: {
+          desiredSkills: [partyclipKey],
         },
       },
     } as const;
 
     const before = await listCodexSkills(ctx);
     expect(before.mode).toBe("ephemeral");
-    expect(before.desiredSkills).toContain(paperclipKey);
+    expect(before.desiredSkills).toContain(partyclipKey);
     expect(before.desiredSkills).toContain(createAgentKey);
-    expect(before.entries.find((entry) => entry.key === paperclipKey)?.required).toBe(true);
-    expect(before.entries.find((entry) => entry.key === paperclipKey)?.state).toBe("configured");
+    expect(before.entries.find((entry) => entry.key === partyclipKey)?.required).toBe(true);
+    expect(before.entries.find((entry) => entry.key === partyclipKey)?.state).toBe("configured");
     expect(before.entries.find((entry) => entry.key === createAgentKey)?.required).toBe(true);
     expect(before.entries.find((entry) => entry.key === createAgentKey)?.state).toBe("configured");
-    expect(before.entries.find((entry) => entry.key === paperclipKey)?.detail).toContain("CODEX_HOME/skills/");
+    expect(before.entries.find((entry) => entry.key === partyclipKey)?.detail).toContain("CODEX_HOME/skills/");
   });
 
   it("does not persist Paperclip skills into CODEX_HOME during sync", async () => {
-    const codexHome = await makeTempDir("paperclip-codex-skill-prune-");
+    const codexHome = await makeTempDir("partyclip-codex-skill-prune-");
     cleanupDirs.add(codexHome);
 
     const configuredCtx = {
@@ -62,22 +62,22 @@ describe("codex local skill sync", () => {
         env: {
           CODEX_HOME: codexHome,
         },
-        paperclipSkillSync: {
-          desiredSkills: [paperclipKey],
+        partyclipSkillSync: {
+          desiredSkills: [partyclipKey],
         },
       },
     } as const;
 
-    const after = await syncCodexSkills(configuredCtx, [paperclipKey]);
+    const after = await syncCodexSkills(configuredCtx, [partyclipKey]);
     expect(after.mode).toBe("ephemeral");
-    expect(after.entries.find((entry) => entry.key === paperclipKey)?.state).toBe("configured");
-    await expect(fs.lstat(path.join(codexHome, "skills", "paperclip"))).rejects.toMatchObject({
+    expect(after.entries.find((entry) => entry.key === partyclipKey)?.state).toBe("configured");
+    await expect(fs.lstat(path.join(codexHome, "skills", "partyclip"))).rejects.toMatchObject({
       code: "ENOENT",
     });
   });
 
   it("keeps required bundled Paperclip skills configured even when the desired set is emptied", async () => {
-    const codexHome = await makeTempDir("paperclip-codex-skill-required-");
+    const codexHome = await makeTempDir("partyclip-codex-skill-required-");
     cleanupDirs.add(codexHome);
 
     const configuredCtx = {
@@ -88,21 +88,21 @@ describe("codex local skill sync", () => {
         env: {
           CODEX_HOME: codexHome,
         },
-        paperclipSkillSync: {
+        partyclipSkillSync: {
           desiredSkills: [],
         },
       },
     } as const;
 
     const after = await syncCodexSkills(configuredCtx, []);
-    expect(after.desiredSkills).toContain(paperclipKey);
+    expect(after.desiredSkills).toContain(partyclipKey);
     expect(after.desiredSkills).toContain(createAgentKey);
-    expect(after.entries.find((entry) => entry.key === paperclipKey)?.state).toBe("configured");
+    expect(after.entries.find((entry) => entry.key === partyclipKey)?.state).toBe("configured");
     expect(after.entries.find((entry) => entry.key === createAgentKey)?.state).toBe("configured");
   });
 
   it("normalizes legacy flat Paperclip skill refs before reporting configured state", async () => {
-    const codexHome = await makeTempDir("paperclip-codex-legacy-skill-sync-");
+    const codexHome = await makeTempDir("partyclip-codex-legacy-skill-sync-");
     cleanupDirs.add(codexHome);
 
     const snapshot = await listCodexSkills({
@@ -113,16 +113,16 @@ describe("codex local skill sync", () => {
         env: {
           CODEX_HOME: codexHome,
         },
-        paperclipSkillSync: {
-          desiredSkills: ["paperclip"],
+        partyclipSkillSync: {
+          desiredSkills: ["partyclip"],
         },
       },
     });
 
     expect(snapshot.warnings).toEqual([]);
-    expect(snapshot.desiredSkills).toContain(paperclipKey);
-    expect(snapshot.desiredSkills).not.toContain("paperclip");
-    expect(snapshot.entries.find((entry) => entry.key === paperclipKey)?.state).toBe("configured");
-    expect(snapshot.entries.find((entry) => entry.key === "paperclip")).toBeUndefined();
+    expect(snapshot.desiredSkills).toContain(partyclipKey);
+    expect(snapshot.desiredSkills).not.toContain("partyclip");
+    expect(snapshot.entries.find((entry) => entry.key === partyclipKey)?.state).toBe("configured");
+    expect(snapshot.entries.find((entry) => entry.key === "partyclip")).toBeUndefined();
   });
 });

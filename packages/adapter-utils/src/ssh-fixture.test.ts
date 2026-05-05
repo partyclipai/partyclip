@@ -48,7 +48,7 @@ describe("ssh env-lab fixture", () => {
       return;
     }
 
-    const rootDir = await mkdtemp(path.join(os.tmpdir(), "paperclip-ssh-fixture-"));
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "partyclip-ssh-fixture-"));
     cleanupDirs.push(rootDir);
     const statePath = path.join(rootDir, "state.json");
 
@@ -79,7 +79,7 @@ describe("ssh env-lab fixture", () => {
       return;
     }
 
-    const rootDir = await mkdtemp(path.join(os.tmpdir(), "paperclip-ssh-fixture-"));
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "partyclip-ssh-fixture-"));
     cleanupDirs.push(rootDir);
     const statePath = path.join(rootDir, "state.json");
 
@@ -133,13 +133,13 @@ describe("ssh env-lab fixture", () => {
       return;
     }
 
-    const rootDir = await mkdtemp(path.join(os.tmpdir(), "paperclip-ssh-fixture-"));
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "partyclip-ssh-fixture-"));
     cleanupDirs.push(rootDir);
     const statePath = path.join(rootDir, "state.json");
     const localDir = path.join(rootDir, "local-overlay");
 
     await mkdir(localDir, { recursive: true });
-    await writeFile(path.join(localDir, "message.txt"), "hello from paperclip\n", "utf8");
+    await writeFile(path.join(localDir, "message.txt"), "hello from partyclip\n", "utf8");
     await writeFile(path.join(localDir, "._message.txt"), "should never sync\n", "utf8");
 
     const started = await startSshEnvLabFixture({ statePath });
@@ -160,7 +160,7 @@ describe("ssh env-lab fixture", () => {
       `sh -lc 'cat ${JSON.stringify(path.posix.join(remoteDir, "message.txt"))} && if [ -e ${JSON.stringify(path.posix.join(remoteDir, "._message.txt"))} ]; then echo appledouble-present; fi'`,
     );
 
-    expect(result.stdout).toContain("hello from paperclip");
+    expect(result.stdout).toContain("hello from partyclip");
     expect(result.stdout).not.toContain("appledouble-present");
   });
 
@@ -173,7 +173,7 @@ describe("ssh env-lab fixture", () => {
       return;
     }
 
-    const rootDir = await mkdtemp(path.join(os.tmpdir(), "paperclip-ssh-fixture-"));
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "partyclip-ssh-fixture-"));
     cleanupDirs.push(rootDir);
     const statePath = path.join(rootDir, "state.json");
     const sourceDir = path.join(rootDir, "source");
@@ -216,7 +216,7 @@ describe("ssh env-lab fixture", () => {
       return;
     }
 
-    const rootDir = await mkdtemp(path.join(os.tmpdir(), "paperclip-ssh-fixture-"));
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "partyclip-ssh-fixture-"));
     cleanupDirs.push(rootDir);
     const statePath = path.join(rootDir, "state.json");
     const localRepo = path.join(rootDir, "local-workspace");
@@ -224,7 +224,7 @@ describe("ssh env-lab fixture", () => {
     await mkdir(localRepo, { recursive: true });
     await git(localRepo, ["init", "-b", "main"]);
     await git(localRepo, ["config", "user.name", "Paperclip Test"]);
-    await git(localRepo, ["config", "user.email", "test@paperclip.dev"]);
+    await git(localRepo, ["config", "user.email", "test@partyclip.dev"]);
     await writeFile(path.join(localRepo, "tracked.txt"), "base\n", "utf8");
     await writeFile(path.join(localRepo, "._tracked.txt"), "should stay local only\n", "utf8");
     await git(localRepo, ["add", "tracked.txt"]);
@@ -256,7 +256,7 @@ describe("ssh env-lab fixture", () => {
 
     await runSshCommand(
       config,
-      `sh -lc 'cd ${JSON.stringify(started.workspaceDir)} && git config user.name "Paperclip SSH" && git config user.email "ssh@paperclip.dev" && git add tracked.txt untracked.txt && git commit -m "remote update" >/dev/null && printf "remote dirty\\n" > tracked.txt && printf "remote extra\\n" > remote-only.txt'`,
+      `sh -lc 'cd ${JSON.stringify(started.workspaceDir)} && git config user.name "Paperclip SSH" && git config user.email "ssh@partyclip.dev" && git add tracked.txt untracked.txt && git commit -m "remote update" >/dev/null && printf "remote dirty\\n" > tracked.txt && printf "remote extra\\n" > remote-only.txt'`,
       { timeoutMs: 30_000, maxBuffer: 256 * 1024 },
     );
 

@@ -65,7 +65,7 @@ function buildLegacyConfig(sharedRoot: string, publicBaseUrl = "http://127.0.0.1
         baseDir: path.join(sharedRoot, "data", "storage"),
       },
       s3: {
-        bucket: "paperclip",
+        bucket: "partyclip",
         region: "us-east-1",
         prefix: "",
         forcePathStyle: false,
@@ -83,15 +83,15 @@ function buildLegacyConfig(sharedRoot: string, publicBaseUrl = "http://127.0.0.1
 
 describe("worktree config repair", () => {
   it("repairs legacy repo-local worktree config and env files into an isolated instance", async () => {
-    const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-worktree-repair-"));
+    const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-worktree-repair-"));
     const worktreeRoot = path.join(tempRoot, "PAP-884-ai-commits-component");
-    const paperclipDir = path.join(worktreeRoot, ".paperclip");
-    const configPath = path.join(paperclipDir, "config.json");
-    const envPath = path.join(paperclipDir, ".env");
-    const sharedRoot = path.join(tempRoot, ".paperclip", "instances", "default");
-    const isolatedHome = path.join(tempRoot, ".paperclip-worktrees");
+    const partyclipDir = path.join(worktreeRoot, ".partyclip");
+    const configPath = path.join(partyclipDir, "config.json");
+    const envPath = path.join(partyclipDir, ".env");
+    const sharedRoot = path.join(tempRoot, ".partyclip", "instances", "default");
+    const isolatedHome = path.join(tempRoot, ".partyclip-worktrees");
 
-    await fs.mkdir(paperclipDir, { recursive: true });
+    await fs.mkdir(partyclipDir, { recursive: true });
     await fs.writeFile(configPath, JSON.stringify(buildLegacyConfig(sharedRoot), null, 2) + "\n", "utf8");
     await fs.writeFile(
       envPath,
@@ -140,16 +140,16 @@ describe("worktree config repair", () => {
   });
 
   it("avoids sibling worktree ports when repairing legacy configs", async () => {
-    const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-worktree-repair-ports-"));
+    const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-worktree-repair-ports-"));
     const worktreeRoot = path.join(tempRoot, "PAP-880-thumbs-capture-for-evals-feature");
-    const paperclipDir = path.join(worktreeRoot, ".paperclip");
-    const configPath = path.join(paperclipDir, "config.json");
-    const envPath = path.join(paperclipDir, ".env");
-    const sharedRoot = path.join(tempRoot, ".paperclip", "instances", "default");
-    const isolatedHome = path.join(tempRoot, ".paperclip-worktrees");
+    const partyclipDir = path.join(worktreeRoot, ".partyclip");
+    const configPath = path.join(partyclipDir, "config.json");
+    const envPath = path.join(partyclipDir, ".env");
+    const sharedRoot = path.join(tempRoot, ".partyclip", "instances", "default");
+    const isolatedHome = path.join(tempRoot, ".partyclip-worktrees");
     const siblingInstanceRoot = path.join(isolatedHome, "instances", "pap-878-create-a-mine-tab-in-inbox");
 
-    await fs.mkdir(paperclipDir, { recursive: true });
+    await fs.mkdir(partyclipDir, { recursive: true });
     await fs.mkdir(siblingInstanceRoot, { recursive: true });
     await fs.writeFile(configPath, JSON.stringify(buildLegacyConfig(sharedRoot), null, 2) + "\n", "utf8");
     await fs.writeFile(
@@ -211,17 +211,17 @@ describe("worktree config repair", () => {
   });
 
   it("does not persist transient runtime home overrides over repo-local worktree env", async () => {
-    const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-worktree-runtime-override-"));
-    const isolatedHome = path.join(tempRoot, ".paperclip-worktrees");
+    const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-worktree-runtime-override-"));
+    const isolatedHome = path.join(tempRoot, ".partyclip-worktrees");
     const transientHome = path.join(tempRoot, "tests", "e2e", ".tmp", "multiuser-authenticated");
     const worktreeRoot = path.join(tempRoot, "PAP-989-multi-user-implementation-using-plan-from-pap-958");
-    const paperclipDir = path.join(worktreeRoot, ".paperclip");
-    const configPath = path.join(paperclipDir, "config.json");
-    const envPath = path.join(paperclipDir, ".env");
+    const partyclipDir = path.join(worktreeRoot, ".partyclip");
+    const configPath = path.join(partyclipDir, "config.json");
+    const envPath = path.join(partyclipDir, ".env");
     const instanceId = "pap-989-multi-user-implementation-using-plan-from-pap-958";
     const stableInstanceRoot = path.join(isolatedHome, "instances", instanceId);
 
-    await fs.mkdir(paperclipDir, { recursive: true });
+    await fs.mkdir(partyclipDir, { recursive: true });
     await fs.writeFile(
       configPath,
       JSON.stringify(
@@ -256,7 +256,7 @@ describe("worktree config repair", () => {
               baseDir: path.join(transientHome, "instances", instanceId, "data", "storage"),
             },
             s3: {
-              bucket: "paperclip",
+              bucket: "partyclip",
               region: "us-east-1",
               prefix: "",
               forcePathStyle: false,
@@ -318,19 +318,19 @@ describe("worktree config repair", () => {
   });
 
   it("rebalances duplicate ports for already isolated worktree configs", async () => {
-    const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-worktree-rebalance-"));
-    const isolatedHome = path.join(tempRoot, ".paperclip-worktrees");
-    const repoWorktreesRoot = path.join(tempRoot, "repo", ".paperclip", "worktrees");
+    const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-worktree-rebalance-"));
+    const isolatedHome = path.join(tempRoot, ".partyclip-worktrees");
+    const repoWorktreesRoot = path.join(tempRoot, "repo", ".partyclip", "worktrees");
     const siblingWorktreeRoot = path.join(repoWorktreesRoot, "PAP-878-create-a-mine-tab-in-inbox");
     const siblingInstanceRoot = path.join(isolatedHome, "instances", "pap-878-create-a-mine-tab-in-inbox");
     const currentWorktreeRoot = path.join(repoWorktreesRoot, "PAP-884-ai-commits-component");
-    const paperclipDir = path.join(currentWorktreeRoot, ".paperclip");
-    const configPath = path.join(paperclipDir, "config.json");
-    const envPath = path.join(paperclipDir, ".env");
+    const partyclipDir = path.join(currentWorktreeRoot, ".partyclip");
+    const configPath = path.join(partyclipDir, "config.json");
+    const envPath = path.join(partyclipDir, ".env");
     const currentInstanceRoot = path.join(isolatedHome, "instances", "pap-884-ai-commits-component");
-    const siblingConfigPath = path.join(siblingWorktreeRoot, ".paperclip", "config.json");
+    const siblingConfigPath = path.join(siblingWorktreeRoot, ".partyclip", "config.json");
 
-    await fs.mkdir(paperclipDir, { recursive: true });
+    await fs.mkdir(partyclipDir, { recursive: true });
     await fs.mkdir(path.dirname(siblingConfigPath), { recursive: true });
     await fs.writeFile(
       configPath,
@@ -366,7 +366,7 @@ describe("worktree config repair", () => {
               baseDir: path.join(currentInstanceRoot, "data", "storage"),
             },
             s3: {
-              bucket: "paperclip",
+              bucket: "partyclip",
               region: "us-east-1",
               prefix: "",
               forcePathStyle: false,
@@ -440,14 +440,14 @@ describe("worktree config repair", () => {
   });
 
   it("persists runtime-selected worktree ports back into explicit-port auth URLs", async () => {
-    const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-worktree-ports-"));
+    const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-worktree-ports-"));
     const worktreeRoot = path.join(tempRoot, "PAP-878-create-a-mine-tab-in-inbox");
-    const paperclipDir = path.join(worktreeRoot, ".paperclip");
-    const configPath = path.join(paperclipDir, "config.json");
-    const isolatedHome = path.join(tempRoot, ".paperclip-worktrees");
+    const partyclipDir = path.join(worktreeRoot, ".partyclip");
+    const configPath = path.join(partyclipDir, "config.json");
+    const isolatedHome = path.join(tempRoot, ".partyclip-worktrees");
     const instanceRoot = path.join(isolatedHome, "instances", "pap-878-create-a-mine-tab-in-inbox");
 
-    await fs.mkdir(paperclipDir, { recursive: true });
+    await fs.mkdir(partyclipDir, { recursive: true });
     await fs.writeFile(
       configPath,
       JSON.stringify(
@@ -482,7 +482,7 @@ describe("worktree config repair", () => {
               baseDir: path.join(instanceRoot, "data", "storage"),
             },
             s3: {
-              bucket: "paperclip",
+              bucket: "partyclip",
               region: "us-east-1",
               prefix: "",
               forcePathStyle: false,
@@ -522,14 +522,14 @@ describe("worktree config repair", () => {
   });
 
   it("does not rewrite no-port public auth URLs when persisting runtime-selected ports", async () => {
-    const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-worktree-public-ports-"));
+    const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-worktree-public-ports-"));
     const worktreeRoot = path.join(tempRoot, "PAP-125-public-base-url");
-    const paperclipDir = path.join(worktreeRoot, ".paperclip");
-    const configPath = path.join(paperclipDir, "config.json");
-    const isolatedHome = path.join(tempRoot, ".paperclip-worktrees");
+    const partyclipDir = path.join(worktreeRoot, ".partyclip");
+    const configPath = path.join(partyclipDir, "config.json");
+    const isolatedHome = path.join(tempRoot, ".partyclip-worktrees");
     const instanceRoot = path.join(isolatedHome, "instances", "pap-125-public-base-url");
 
-    await fs.mkdir(paperclipDir, { recursive: true });
+    await fs.mkdir(partyclipDir, { recursive: true });
     await fs.writeFile(
       configPath,
       JSON.stringify(
@@ -564,7 +564,7 @@ describe("worktree config repair", () => {
               baseDir: path.join(instanceRoot, "data", "storage"),
             },
             s3: {
-              bucket: "paperclip",
+              bucket: "partyclip",
               region: "us-east-1",
               prefix: "",
               forcePathStyle: false,

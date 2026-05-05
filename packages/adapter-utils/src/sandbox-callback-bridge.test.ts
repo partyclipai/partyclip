@@ -106,7 +106,7 @@ describe("sandbox callback bridge", () => {
   });
 
   it("round-trips localhost bridge requests over the sandbox queue without forwarding the bridge token", async () => {
-    const rootDir = await mkdtemp(path.join(os.tmpdir(), "paperclip-bridge-runtime-"));
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "partyclip-bridge-runtime-"));
     cleanupDirs.push(rootDir);
 
     const localWorkspaceDir = path.join(rootDir, "local-workspace");
@@ -136,7 +136,7 @@ describe("sandbox callback bridge", () => {
       ],
     });
 
-    const queueDir = path.posix.join(prepared.runtimeRootDir, "paperclip-bridge");
+    const queueDir = path.posix.join(prepared.runtimeRootDir, "partyclip-bridge");
     const directories = sandboxCallbackBridgeDirectories(queueDir);
     const bridgeToken = createSandboxCallbackBridgeToken();
     const seenRequests: Array<{
@@ -250,7 +250,7 @@ describe("sandbox callback bridge", () => {
   });
 
   it("denies non-allowlisted requests by default", async () => {
-    const rootDir = await mkdtemp(path.join(os.tmpdir(), "paperclip-bridge-default-policy-"));
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "partyclip-bridge-default-policy-"));
     cleanupDirs.push(rootDir);
 
     const queueDir = path.posix.join(rootDir, "queue");
@@ -296,7 +296,7 @@ describe("sandbox callback bridge", () => {
   });
 
   it("drains already-queued requests on stop", async () => {
-    const rootDir = await mkdtemp(path.join(os.tmpdir(), "paperclip-bridge-drain-"));
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "partyclip-bridge-drain-"));
     cleanupDirs.push(rootDir);
 
     const queueDir = path.posix.join(rootDir, "queue");
@@ -352,7 +352,7 @@ describe("sandbox callback bridge", () => {
   });
 
   it("writes fast 503 responses for queued requests that miss the drain deadline", async () => {
-    const rootDir = await mkdtemp(path.join(os.tmpdir(), "paperclip-bridge-drain-timeout-"));
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "partyclip-bridge-drain-timeout-"));
     cleanupDirs.push(rootDir);
 
     const queueDir = path.posix.join(rootDir, "queue");
@@ -414,7 +414,7 @@ describe("sandbox callback bridge", () => {
   });
 
   it("rejects non-JSON request bodies and full queues at the bridge server", async () => {
-    const rootDir = await mkdtemp(path.join(os.tmpdir(), "paperclip-bridge-server-guards-"));
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "partyclip-bridge-server-guards-"));
     cleanupDirs.push(rootDir);
 
     const localWorkspaceDir = path.join(rootDir, "local-workspace");
@@ -438,7 +438,7 @@ describe("sandbox callback bridge", () => {
       assets: [{ key: "bridge", localDir: bridgeAsset.localDir }],
     });
 
-    const queueDir = path.posix.join(prepared.runtimeRootDir, "paperclip-bridge");
+    const queueDir = path.posix.join(prepared.runtimeRootDir, "partyclip-bridge");
     const directories = sandboxCallbackBridgeDirectories(queueDir);
     const bridgeToken = createSandboxCallbackBridgeToken();
 
@@ -496,7 +496,7 @@ describe("sandbox callback bridge", () => {
   });
 
   it("returns a 502 when the host response times out", async () => {
-    const rootDir = await mkdtemp(path.join(os.tmpdir(), "paperclip-bridge-timeout-"));
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "partyclip-bridge-timeout-"));
     cleanupDirs.push(rootDir);
 
     const localWorkspaceDir = path.join(rootDir, "local-workspace");
@@ -519,7 +519,7 @@ describe("sandbox callback bridge", () => {
       assets: [{ key: "bridge", localDir: bridgeAsset.localDir }],
     });
 
-    const queueDir = path.posix.join(prepared.runtimeRootDir, "paperclip-bridge");
+    const queueDir = path.posix.join(prepared.runtimeRootDir, "partyclip-bridge");
     const bridgeToken = createSandboxCallbackBridgeToken();
     const bridge = await startSandboxCallbackBridgeServer({
       runner,
@@ -548,7 +548,7 @@ describe("sandbox callback bridge", () => {
   });
 
   it("returns a 502 for malformed host response files", async () => {
-    const rootDir = await mkdtemp(path.join(os.tmpdir(), "paperclip-bridge-malformed-response-"));
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "partyclip-bridge-malformed-response-"));
     cleanupDirs.push(rootDir);
 
     const localWorkspaceDir = path.join(rootDir, "local-workspace");
@@ -571,7 +571,7 @@ describe("sandbox callback bridge", () => {
       assets: [{ key: "bridge", localDir: bridgeAsset.localDir }],
     });
 
-    const queueDir = path.posix.join(prepared.runtimeRootDir, "paperclip-bridge");
+    const queueDir = path.posix.join(prepared.runtimeRootDir, "partyclip-bridge");
     const directories = sandboxCallbackBridgeDirectories(queueDir);
     const bridgeToken = createSandboxCallbackBridgeToken();
     const bridge = await startSandboxCallbackBridgeServer({

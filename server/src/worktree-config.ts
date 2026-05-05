@@ -128,7 +128,7 @@ function resolveWorktreeRuntimeContext(
     nonEmpty(persistedEnv.PARTYCLIP_HOME) ??
       nonEmpty(env.PARTYCLIP_HOME) ??
       nonEmpty(env.PARTYCLIP_WORKTREES_DIR) ??
-      "~/.paperclip-worktrees",
+      "~/.partyclip-worktrees",
   );
   const instanceRoot = path.resolve(homeDir, "instances", instanceId);
 
@@ -155,11 +155,11 @@ function writeConfigFile(configPath: string, config: PaperclipConfig): void {
 
 function resolveRepoManagedWorktreesRoot(worktreeRoot: string): string | null {
   const normalized = path.resolve(worktreeRoot);
-  const marker = `${path.sep}.paperclip${path.sep}worktrees${path.sep}`;
+  const marker = `${path.sep}.partyclip${path.sep}worktrees${path.sep}`;
   const index = normalized.indexOf(marker);
   if (index === -1) return null;
   const repoRoot = normalized.slice(0, index);
-  return path.resolve(repoRoot, ".paperclip", "worktrees");
+  return path.resolve(repoRoot, ".partyclip", "worktrees");
 }
 
 function collectSiblingWorktreePorts(context: WorktreeRuntimeContext): {
@@ -186,7 +186,7 @@ function collectSiblingWorktreePorts(context: WorktreeRuntimeContext): {
     for (const entry of fs.readdirSync(repoManagedWorktreesRoot, { withFileTypes: true })) {
       if (!entry.isDirectory()) continue;
 
-      const siblingConfigPath = path.resolve(repoManagedWorktreesRoot, entry.name, ".paperclip", "config.json");
+      const siblingConfigPath = path.resolve(repoManagedWorktreesRoot, entry.name, ".partyclip", "config.json");
       if (path.resolve(siblingConfigPath) === path.resolve(context.configPath)) continue;
       if (fs.existsSync(siblingConfigPath)) {
         siblingConfigPaths.add(siblingConfigPath);

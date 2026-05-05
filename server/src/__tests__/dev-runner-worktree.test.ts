@@ -25,15 +25,15 @@ function createTempRoot(prefix: string): string {
 
 describe("dev-runner worktree env bootstrap", () => {
   it("detects linked git worktrees from .git files", () => {
-    const root = createTempRoot("paperclip-dev-runner-worktree-");
+    const root = createTempRoot("partyclip-dev-runner-worktree-");
     fs.writeFileSync(path.join(root, ".git"), "gitdir: /tmp/partyclip/.git/worktrees/feature\n", "utf8");
 
     expect(isLinkedGitWorktreeCheckout(root)).toBe(true);
   });
 
   it("loads repo-local Paperclip env for initialized worktrees without overriding explicit env", () => {
-    const root = createTempRoot("paperclip-dev-runner-worktree-env-");
-    fs.mkdirSync(path.join(root, ".paperclip"), { recursive: true });
+    const root = createTempRoot("partyclip-dev-runner-worktree-env-");
+    fs.mkdirSync(path.join(root, ".partyclip"), { recursive: true });
     fs.writeFileSync(path.join(root, ".git"), "gitdir: /tmp/partyclip/.git/worktrees/feature\n", "utf8");
     fs.writeFileSync(
       resolveWorktreeEnvFilePath(root),
@@ -64,7 +64,7 @@ describe("dev-runner worktree env bootstrap", () => {
   });
 
   it("reports uninitialized linked worktrees so dev runner can fail fast", () => {
-    const root = createTempRoot("paperclip-dev-runner-worktree-missing-");
+    const root = createTempRoot("partyclip-dev-runner-worktree-missing-");
     fs.writeFileSync(path.join(root, ".git"), "gitdir: /tmp/partyclip/.git/worktrees/feature\n", "utf8");
 
     expect(bootstrapDevRunnerWorktreeEnv(root, {})).toEqual({

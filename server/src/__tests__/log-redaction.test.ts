@@ -7,12 +7,12 @@ import {
 
 describe("log redaction", () => {
   it("redacts the active username inside home-directory paths", () => {
-    const userName = "paperclipuser";
+    const userName = "partyclipuser";
     const maskedUserName = maskUserNameForLogs(userName);
     const input = [
       `cwd=/Users/${userName}/partyclip`,
       `home=/home/${userName}/workspace`,
-      `win=C:\\Users\\${userName}\\paperclip`,
+      `win=C:\\Users\\${userName}\\partyclip`,
     ].join("\n");
 
     const result = redactCurrentUserText(input, {
@@ -22,12 +22,12 @@ describe("log redaction", () => {
 
     expect(result).toContain(`cwd=/Users/${maskedUserName}/partyclip`);
     expect(result).toContain(`home=/home/${maskedUserName}/workspace`);
-    expect(result).toContain(`win=C:\\Users\\${maskedUserName}\\paperclip`);
+    expect(result).toContain(`win=C:\\Users\\${maskedUserName}\\partyclip`);
     expect(result).not.toContain(userName);
   });
 
   it("redacts standalone username mentions without mangling larger tokens", () => {
-    const userName = "paperclipuser";
+    const userName = "partyclipuser";
     const maskedUserName = maskUserNameForLogs(userName);
     const result = redactCurrentUserText(
       `user ${userName} said ${userName}/project should stay but apaperclipuserz should not change`,
@@ -43,7 +43,7 @@ describe("log redaction", () => {
   });
 
   it("recursively redacts nested event payloads", () => {
-    const userName = "paperclipuser";
+    const userName = "partyclipuser";
     const maskedUserName = maskUserNameForLogs(userName);
     const result = redactCurrentUserValue({
       cwd: `/Users/${userName}/partyclip`,

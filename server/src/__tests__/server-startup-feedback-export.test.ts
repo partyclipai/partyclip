@@ -77,7 +77,7 @@ function buildTestConfig(overrides: Record<string, unknown> = {}) {
     secretsMasterKeyFilePath: "/tmp/partyclip-master.key",
     storageProvider: "local_disk",
     storageLocalDiskBaseDir: "/tmp/partyclip-storage",
-    storageS3Bucket: "paperclip-test",
+    storageS3Bucket: "partyclip-test",
     storageS3Region: "us-east-1",
     storageS3Endpoint: undefined,
     storageS3Prefix: "",

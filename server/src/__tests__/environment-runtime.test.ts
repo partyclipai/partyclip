@@ -324,7 +324,7 @@ describeEmbeddedPostgres("environmentRuntimeService", () => {
       return;
     }
 
-    const fixtureRoot = await mkdtemp(path.join(os.tmpdir(), "paperclip-environment-runtime-ssh-"));
+    const fixtureRoot = await mkdtemp(path.join(os.tmpdir(), "partyclip-environment-runtime-ssh-"));
     fixtureRoots.push(fixtureRoot);
     const statePath = path.join(fixtureRoot, "state.json");
     const fixture = await startSshEnvLabFixture({ statePath });
@@ -372,7 +372,7 @@ describeEmbeddedPostgres("environmentRuntimeService", () => {
         username: sshConfig.username,
         remoteWorkspacePath: sshConfig.remoteWorkspacePath,
         remoteCwd: sshConfig.remoteWorkspacePath,
-        paperclipApiUrl: runtimeApiUrl,
+        partyclipApiUrl: runtimeApiUrl,
       });
 
       const released = await runtime.releaseRunLeases(runId);
@@ -447,13 +447,13 @@ describeEmbeddedPostgres("environmentRuntimeService", () => {
     });
     await db.insert(plugins).values({
       id: pluginId,
-      pluginKey: "paperclip.fake-plugin-sandbox-provider",
+      pluginKey: "partyclip.fake-plugin-sandbox-provider",
       packageName: "@partyclipai/plugin-fake-sandbox",
       version: "1.0.0",
       apiVersion: 1,
       categories: ["automation"],
       manifestJson: {
-        id: "paperclip.fake-plugin-sandbox-provider",
+        id: "partyclip.fake-plugin-sandbox-provider",
         apiVersion: 1,
         version: "1.0.0",
         displayName: "Fake Plugin Sandbox Provider",

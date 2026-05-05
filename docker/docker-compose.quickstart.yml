@@ -1,5 +1,5 @@
 services:
-  paperclip:
+  partyclip:
     build:
       context: ..
       dockerfile: Dockerfile
@@ -15,4 +15,4 @@ services:
       PARTYCLIP_PUBLIC_URL: "${PARTYCLIP_PUBLIC_URL:-http://localhost:3100}"
       BETTER_AUTH_SECRET: "${BETTER_AUTH_SECRET:?BETTER_AUTH_SECRET must be set}"
     volumes:
-      - "${PARTYCLIP_DATA_DIR:-../data/docker-paperclip}:/partyclip"
+      - "${PARTYCLIP_DATA_DIR:-../data/docker-partyclip}:/partyclip"

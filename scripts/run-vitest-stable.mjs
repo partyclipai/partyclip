@@ -80,7 +80,7 @@ function isRouteOrAuthzTest(file) {
 function runVitest(args, label) {
   console.log(`\n[test:run] ${label}`);
   invocationIndex += 1;
-  const testRoot = mkdtempSync(path.join(os.tmpdir(), `paperclip-vitest-${process.pid}-${invocationIndex}-`));
+  const testRoot = mkdtempSync(path.join(os.tmpdir(), `partyclip-vitest-${process.pid}-${invocationIndex}-`));
   const env = {
     ...process.env,
     PARTYCLIP_HOME: path.join(testRoot, "home"),

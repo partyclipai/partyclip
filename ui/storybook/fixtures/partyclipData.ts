@@ -21,8 +21,8 @@ import type { LiveRunForIssue } from "@/api/heartbeats";
 const now = new Date("2026-04-20T12:00:00.000Z");
 const recent = (minutesAgo: number) => new Date(now.getTime() - minutesAgo * 60_000);
 const storybookRepoRoot = "~/partyclip";
-const storybookWorkspaceRoot = `${storybookRepoRoot}/.paperclip/workspaces`;
-const storybookWorktreeRoot = `${storybookRepoRoot}/.paperclip/worktrees`;
+const storybookWorkspaceRoot = `${storybookRepoRoot}/.partyclip/workspaces`;
+const storybookWorktreeRoot = `${storybookRepoRoot}/.partyclip/worktrees`;
 
 export const storybookCompanies: Company[] = [
   {
@@ -104,7 +104,7 @@ export const storybookAuthSession: AuthSession = {
   user: {
     id: "user-board",
     name: "Riley Board",
-    email: "riley@paperclip.local",
+    email: "riley@partyclip.local",
     image: null,
   },
 };
@@ -611,9 +611,9 @@ function createProject(overrides: Partial<Project> = {}): Project {
       repoUrl: "https://github.com/partyclipai/partyclip",
       repoRef: "master",
       defaultRef: "master",
-      repoName: "paperclip",
+      repoName: "partyclip",
       localFolder: storybookRepoRoot,
-      managedFolder: ".paperclip/worktrees/storybook",
+      managedFolder: ".partyclip/worktrees/storybook",
       effectiveLocalFolder: storybookRepoRoot,
       origin: "local_folder",
     },

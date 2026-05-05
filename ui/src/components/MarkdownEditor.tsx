@@ -1023,7 +1023,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
       <div
         ref={containerRef}
         className={cn(
-          "relative paperclip-mdxeditor-scope",
+          "relative partyclip-mdxeditor-scope",
           bordered ? "rounded-md border border-border bg-transparent" : "bg-transparent",
           className,
         )}
@@ -1070,7 +1070,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
     <div
       ref={containerRef}
       className={cn(
-        "relative paperclip-mdxeditor-scope",
+        "relative partyclip-mdxeditor-scope",
         bordered ? "rounded-md border border-border bg-transparent" : "bg-transparent",
         isDragOver && "ring-1 ring-primary/60 bg-accent/20",
         className,
@@ -1209,9 +1209,9 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
         onError={(payload) => {
           setRichEditorError(payload.error);
         }}
-        className={cn("paperclip-mdxeditor", !bordered && "paperclip-mdxeditor--borderless")}
+        className={cn("partyclip-mdxeditor", !bordered && "partyclip-mdxeditor--borderless")}
         contentEditableClassName={cn(
-          "paperclip-mdxeditor-content focus:outline-none [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:list-item",
+          "partyclip-mdxeditor-content focus:outline-none [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:list-item",
           contentClassName,
         )}
         additionalLexicalNodes={[MentionAwareLinkNode, mentionAwareLinkNodeReplacement]}

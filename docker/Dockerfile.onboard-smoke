@@ -26,15 +26,15 @@ RUN apt-get update \
   && apt-get update \
   && apt-get install -y --no-install-recommends nodejs \
   && locale-gen en_US.UTF-8 \
-  && groupadd --gid 10001 paperclip \
-  && useradd --create-home --shell /bin/bash --uid "${HOST_UID}" --gid 10001 paperclip \
+  && groupadd --gid 10001 partyclip \
+  && useradd --create-home --shell /bin/bash --uid "${HOST_UID}" --gid 10001 partyclip \
   && mkdir -p /partyclip /home/partyclip/workspace \
-  && chown -R paperclip:paperclip /partyclip /home/partyclip \
+  && chown -R partyclip:partyclip /partyclip /home/partyclip \
   && rm -rf /var/lib/apt/lists/*
 
 VOLUME ["/partyclip"]
 WORKDIR /home/partyclip/workspace
 EXPOSE 3100
-USER paperclip
+USER partyclip
 
 CMD ["bash", "-lc", "set -euo pipefail; mkdir -p \"$PARTYCLIP_HOME\"; npx --yes \"partyclipai@${PARTYCLIPAI_VERSION}\" onboard --yes --data-dir \"$PARTYCLIP_HOME\""]

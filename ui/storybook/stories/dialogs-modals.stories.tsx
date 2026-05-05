@@ -32,8 +32,8 @@ import {
 } from "../fixtures/partyclipData";
 
 const COMPANY_ID = "company-storybook";
-const SELECTED_COMPANY_STORAGE_KEY = "paperclip.selectedCompanyId";
-const ISSUE_DRAFT_STORAGE_KEY = "paperclip:issue-draft";
+const SELECTED_COMPANY_STORAGE_KEY = "partyclip.selectedCompanyId";
+const ISSUE_DRAFT_STORAGE_KEY = "partyclip:issue-draft";
 
 const storybookGoals: Goal[] = [
   {
@@ -170,7 +170,7 @@ const closeReadinessReady: ExecutionWorkspaceCloseReadiness = {
       kind: "git_worktree_remove",
       label: "Remove git worktree",
       description: "Removes the issue worktree from the local worktree parent directory.",
-      command: "git worktree remove .paperclip/worktrees/PAP-1641-create-super-detailed-storybooks-for-our-project",
+      command: "git worktree remove .partyclip/worktrees/PAP-1641-create-super-detailed-storybooks-for-our-project",
     },
     {
       kind: "archive_record",
@@ -184,7 +184,7 @@ const closeReadinessReady: ExecutionWorkspaceCloseReadiness = {
   isProjectPrimaryWorkspace: false,
   git: {
     repoRoot: "/Users/dotta/partyclip",
-    workspacePath: "/Users/dotta/partyclip/.paperclip/worktrees/PAP-1641-create-super-detailed-storybooks-for-our-project",
+    workspacePath: "/Users/dotta/partyclip/.partyclip/worktrees/PAP-1641-create-super-detailed-storybooks-for-our-project",
     branchName: "PAP-1641-create-super-detailed-storybooks-for-our-project",
     baseRef: "master",
     hasDirtyTrackedFiles: true,
@@ -263,9 +263,9 @@ function Section({
   children: ReactNode;
 }) {
   return (
-    <section className="paperclip-story__frame overflow-hidden">
+    <section className="partyclip-story__frame overflow-hidden">
       <div className="border-b border-border px-5 py-4">
-        <div className="paperclip-story__label">{eyebrow}</div>
+        <div className="partyclip-story__label">{eyebrow}</div>
         <div className="mt-1 flex flex-wrap items-end justify-between gap-3">
           <div>
             <h2 className="text-xl font-semibold">{title}</h2>
@@ -282,8 +282,8 @@ function Section({
 
 function StoryShell({ children }: { children: ReactNode }) {
   return (
-    <div className="paperclip-story">
-      <main className="paperclip-story__inner space-y-6">{children}</main>
+    <div className="partyclip-story">
+      <main className="partyclip-story__inner space-y-6">{children}</main>
     </div>
   );
 }
@@ -359,7 +359,7 @@ function hydrateDialogQueries(queryClient: ReturnType<typeof useQueryClient>) {
         status: "active",
         user: {
           id: "user-board",
-          email: "riley@paperclip.local",
+          email: "riley@partyclip.local",
           name: "Riley Board",
           image: null,
         },

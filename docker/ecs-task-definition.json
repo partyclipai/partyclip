@@ -1,5 +1,5 @@
 {
-  "family": "paperclip-server",
+  "family": "partyclip-server",
   "networkMode": "awsvpc",
   "requiresCompatibilities": ["FARGATE"],
   "cpu": "2048",
@@ -8,7 +8,7 @@
   "taskRoleArn": "arn:aws:iam::<ACCOUNT_ID>:role/partyclip-ecs-task",
   "containerDefinitions": [
     {
-      "name": "paperclip-server",
+      "name": "partyclip-server",
       "image": "<ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/partyclip-server:latest",
       "essential": true,
       "portMappings": [
@@ -34,28 +34,28 @@
       "secrets": [
         {
           "name": "DATABASE_URL",
-          "valueFrom": "arn:aws:secretsmanager:<REGION>:<ACCOUNT_ID>:secret:paperclip/database-url"
+          "valueFrom": "arn:aws:secretsmanager:<REGION>:<ACCOUNT_ID>:secret:partyclip/database-url"
         },
         {
           "name": "BETTER_AUTH_SECRET",
-          "valueFrom": "arn:aws:secretsmanager:<REGION>:<ACCOUNT_ID>:secret:paperclip/better-auth-secret"
+          "valueFrom": "arn:aws:secretsmanager:<REGION>:<ACCOUNT_ID>:secret:partyclip/better-auth-secret"
         },
         {
           "name": "ANTHROPIC_API_KEY",
-          "valueFrom": "arn:aws:secretsmanager:<REGION>:<ACCOUNT_ID>:secret:paperclip/anthropic-api-key"
+          "valueFrom": "arn:aws:secretsmanager:<REGION>:<ACCOUNT_ID>:secret:partyclip/anthropic-api-key"
         },
         {
           "name": "OPENAI_API_KEY",
-          "valueFrom": "arn:aws:secretsmanager:<REGION>:<ACCOUNT_ID>:secret:paperclip/openai-api-key"
+          "valueFrom": "arn:aws:secretsmanager:<REGION>:<ACCOUNT_ID>:secret:partyclip/openai-api-key"
         },
         {
           "name": "GITHUB_TOKEN",
-          "valueFrom": "arn:aws:secretsmanager:<REGION>:<ACCOUNT_ID>:secret:paperclip/github-token"
+          "valueFrom": "arn:aws:secretsmanager:<REGION>:<ACCOUNT_ID>:secret:partyclip/github-token"
         }
       ],
       "mountPoints": [
         {
-          "sourceVolume": "paperclip-data",
+          "sourceVolume": "partyclip-data",
           "containerPath": "/partyclip",
           "readOnly": false
         }
@@ -79,7 +79,7 @@
   ],
   "volumes": [
     {
-      "name": "paperclip-data",
+      "name": "partyclip-data",
       "efsVolumeConfiguration": {
         "fileSystemId": "<EFS_ID>",
         "rootDirectory": "/",

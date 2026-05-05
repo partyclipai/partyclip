@@ -61,7 +61,7 @@ OPENCLAW_IMAGE="${OPENCLAW_IMAGE:-openclaw:local}"
 OPENCLAW_TMP_DIR="${OPENCLAW_TMP_DIR:-${TMPDIR:-/tmp}}"
 OPENCLAW_TMP_DIR="${OPENCLAW_TMP_DIR%/}"
 OPENCLAW_TMP_DIR="${OPENCLAW_TMP_DIR:-/tmp}"
-OPENCLAW_CONFIG_DIR="${OPENCLAW_CONFIG_DIR:-$OPENCLAW_TMP_DIR/openclaw-paperclip-smoke}"
+OPENCLAW_CONFIG_DIR="${OPENCLAW_CONFIG_DIR:-$OPENCLAW_TMP_DIR/openclaw-partyclip-smoke}"
 OPENCLAW_WORKSPACE_DIR="${OPENCLAW_WORKSPACE_DIR:-$OPENCLAW_CONFIG_DIR/workspace}"
 OPENCLAW_GATEWAY_PORT="${OPENCLAW_GATEWAY_PORT:-18789}"
 OPENCLAW_BRIDGE_PORT="${OPENCLAW_BRIDGE_PORT:-18790}"
@@ -189,7 +189,7 @@ OPENCLAW_IMAGE=$OPENCLAW_IMAGE
 OPENAI_API_KEY=$OPENAI_API_KEY
 EOF
 
-COMPOSE_OVERRIDE="${OPENCLAW_DOCKER_DIR}/.paperclip-openclaw.override.yml"
+COMPOSE_OVERRIDE="${OPENCLAW_DOCKER_DIR}/.partyclip-openclaw.override.yml"
 cat > "$COMPOSE_OVERRIDE" <<EOF
 services:
   openclaw-gateway:
@@ -241,7 +241,7 @@ if [[ "$READY" != "1" ]]; then
   fail "gateway did not become healthy in ${OPENCLAW_WAIT_SECONDS}s"
 fi
 
-paperclip_base_url="$(detect_paperclip_base_url || true)"
+partyclip_base_url="$(detect_paperclip_base_url || true)"
 dashboard_output="$(compose run --rm openclaw-cli dashboard --no-open)"
 dashboard_url="$(grep -Eo 'https?://[^[:space:]]+#token=[^[:space:]]+' <<<"$dashboard_output" | head -n1 || true)"
 if [[ -z "$dashboard_url" ]]; then
@@ -268,9 +268,9 @@ State:
   OPENCLAW_RESET_STATE=$OPENCLAW_RESET_STATE
 Paperclip URL for OpenClaw container:
 EOF
-  if [[ -n "$paperclip_base_url" ]]; then
+  if [[ -n "$partyclip_base_url" ]]; then
     cat <<EOF
-  $paperclip_base_url
+  $partyclip_base_url
   (Use this base URL for invite/onboarding links from inside OpenClaw Docker.)
 EOF
   else
@@ -301,9 +301,9 @@ State:
   OPENCLAW_RESET_STATE=$OPENCLAW_RESET_STATE
 Paperclip URL for OpenClaw container:
 EOF
-  if [[ -n "$paperclip_base_url" ]]; then
+  if [[ -n "$partyclip_base_url" ]]; then
     cat <<EOF
-  $paperclip_base_url
+  $partyclip_base_url
   (Use this base URL for invite/onboarding links from inside OpenClaw Docker.)
 EOF
   else

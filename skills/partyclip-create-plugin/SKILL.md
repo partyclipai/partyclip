@@ -1,5 +1,5 @@
 ---
-name: paperclip-create-plugin
+name: partyclip-create-plugin
 description: >
   Create new Paperclip plugins with the current alpha SDK/runtime. Use when
   scaffolding a plugin package, adding a new example plugin, or updating plugin
@@ -37,7 +37,7 @@ pnpm --filter @partyclipai/create-partyclip-plugin build
 node packages/plugins/create-partyclip-plugin/dist/index.js <npm-package-name> --output <target-dir>
 ```
 
-For a plugin that lives outside the Paperclip repo, pass `--sdk-path` and let the scaffold snapshot the local SDK/shared packages into `.paperclip-sdk/`:
+For a plugin that lives outside the Paperclip repo, pass `--sdk-path` and let the scaffold snapshot the local SDK/shared packages into `.partyclip-sdk/`:
 
 ```bash
 pnpm --filter @partyclipai/create-partyclip-plugin build

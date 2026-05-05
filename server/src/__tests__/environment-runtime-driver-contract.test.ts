@@ -284,7 +284,7 @@ describeEmbeddedPostgres("environment runtime driver contract", () => {
       return;
     }
 
-    const fixtureRoot = await mkdtemp(path.join(os.tmpdir(), "paperclip-env-runtime-contract-ssh-"));
+    const fixtureRoot = await mkdtemp(path.join(os.tmpdir(), "partyclip-env-runtime-contract-ssh-"));
     fixtureRoots.push(fixtureRoot);
     const fixture = await startSshEnvLabFixture({ statePath: path.join(fixtureRoot, "state.json") });
     const sshConfig = await buildSshEnvLabFixtureConfig(fixture);
@@ -304,7 +304,7 @@ describeEmbeddedPostgres("environment runtime driver contract", () => {
           username: sshConfig.username,
           remoteWorkspacePath: sshConfig.remoteWorkspacePath,
           remoteCwd: sshConfig.remoteWorkspacePath,
-          paperclipApiUrl: runtimeApiUrl,
+          partyclipApiUrl: runtimeApiUrl,
         });
       },
       setup: async () => async () => {

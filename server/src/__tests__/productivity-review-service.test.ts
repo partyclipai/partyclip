@@ -38,7 +38,7 @@ describeEmbeddedPostgres("productivity review service", () => {
   let db: ReturnType<typeof createDb>;
 
   beforeAll(async () => {
-    tempDb = await startEmbeddedPostgresTestDatabase("paperclip-productivity-review-");
+    tempDb = await startEmbeddedPostgresTestDatabase("partyclip-productivity-review-");
     db = createDb(tempDb.connectionString);
   }, 30_000);
 

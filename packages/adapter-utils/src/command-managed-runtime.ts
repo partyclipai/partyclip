@@ -26,7 +26,7 @@ export interface CommandManagedRuntimeSpec {
   leaseId?: string | null;
   remoteCwd: string;
   timeoutMs?: number | null;
-  paperclipApiUrl?: string | null;
+  partyclipApiUrl?: string | null;
 }
 
 export type CommandManagedRuntimeAsset = SandboxManagedRuntimeAsset;
@@ -36,7 +36,7 @@ function shellQuote(value: string) {
 }
 
 function mergeRuntimeExcludes(entries: string[] | undefined): string[] {
-  return [...new Set([".paperclip-runtime", ...(entries ?? [])])];
+  return [...new Set([".partyclip-runtime", ...(entries ?? [])])];
 }
 
 const REMOTE_WRITE_BASE64_CHUNK_SIZE = 32 * 1024;
@@ -78,7 +78,7 @@ export function createCommandManagedRuntimeClient(input: {
     writeFile: async (remotePath, bytes) => {
       const body = toBuffer(bytes).toString("base64");
       const remoteDir = path.posix.dirname(remotePath);
-      const remoteTempPath = `${remotePath}.paperclip-upload.b64`;
+      const remoteTempPath = `${remotePath}.partyclip-upload.b64`;
 
       await runShell(
         `mkdir -p ${shellQuote(remoteDir)} && rm -f ${shellQuote(remoteTempPath)} && : > ${shellQuote(remoteTempPath)}`,
@@ -151,7 +151,7 @@ export async function prepareCommandManagedRuntime(input: {
     remoteCwd: workspaceRemoteDir,
     timeoutMs,
     apiKey: null,
-    paperclipApiUrl: input.spec.paperclipApiUrl ?? null,
+    partyclipApiUrl: input.spec.partyclipApiUrl ?? null,
   };
   const client = createCommandManagedRuntimeClient({
     runner: input.runner,

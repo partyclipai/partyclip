@@ -145,7 +145,7 @@ export function loadConfig(): Config {
       fileStorage?.localDisk?.baseDir ??
       resolveDefaultStorageDir(),
   );
-  const storageS3Bucket = process.env.PARTYCLIP_STORAGE_S3_BUCKET ?? fileStorage?.s3?.bucket ?? "paperclip";
+  const storageS3Bucket = process.env.PARTYCLIP_STORAGE_S3_BUCKET ?? fileStorage?.s3?.bucket ?? "partyclip";
   const storageS3Region = process.env.PARTYCLIP_STORAGE_S3_REGION ?? fileStorage?.s3?.region ?? "us-east-1";
   const storageS3Endpoint = process.env.PARTYCLIP_STORAGE_S3_ENDPOINT ?? fileStorage?.s3?.endpoint ?? undefined;
   const storageS3Prefix = process.env.PARTYCLIP_STORAGE_S3_PREFIX ?? fileStorage?.s3?.prefix ?? "";

@@ -192,7 +192,7 @@ Or manually:
 
 ```bash
 git clone https://github.com/partyclipai/partyclip.git
-cd paperclip
+cd partyclip
 pnpm install
 pnpm dev
 ```
@@ -268,7 +268,7 @@ See [doc/DEVELOPING.md](https://github.com/partyclipai/partyclip/blob/master/doc
 
 ## Community & Plugins
 
-Find Plugins and more at [awesome-paperclip](https://github.com/gsxdsm/awesome-paperclip)
+Find Plugins and more at [awesome-partyclip](https://github.com/gsxdsm/awesome-partyclip)
 
 ## Contributing
 

@@ -21,7 +21,7 @@ export interface SshCommandResult {
 
 export interface SshRemoteExecutionSpec extends SshConnectionConfig {
   remoteCwd: string;
-  paperclipApiUrl?: string | null;
+  partyclipApiUrl?: string | null;
 }
 
 export interface SshEnvLabSupport {
@@ -83,9 +83,9 @@ export function parseSshRemoteExecutionSpec(value: unknown): SshRemoteExecutionS
     port: portValue,
     username,
     remoteCwd,
-    paperclipApiUrl:
-      typeof parsed.paperclipApiUrl === "string" && parsed.paperclipApiUrl.trim().length > 0
-        ? parsed.paperclipApiUrl.trim()
+    partyclipApiUrl:
+      typeof parsed.partyclipApiUrl === "string" && parsed.partyclipApiUrl.trim().length > 0
+        ? parsed.partyclipApiUrl.trim()
         : null,
     remoteWorkspacePath:
       typeof parsed.remoteWorkspacePath === "string" && parsed.remoteWorkspacePath.trim().length > 0
@@ -232,7 +232,7 @@ async function createSshAuthArgs(
 
   if (config.strictHostKeyChecking) {
     if (config.knownHosts) {
-      const knownHosts = await withTempFile("paperclip-ssh-known-hosts-", config.knownHosts, 0o600);
+      const knownHosts = await withTempFile("partyclip-ssh-known-hosts-", config.knownHosts, 0o600);
       tempFiles.push(knownHosts.cleanup);
       sshArgs.push("-o", `UserKnownHostsFile=${knownHosts.path}`);
     }
@@ -241,7 +241,7 @@ async function createSshAuthArgs(
   }
 
   if (config.privateKey) {
-    const privateKey = await withTempFile("paperclip-ssh-key-", config.privateKey, 0o600);
+    const privateKey = await withTempFile("partyclip-ssh-key-", config.privateKey, 0o600);
     tempFiles.push(privateKey.cleanup);
     sshArgs.push("-i", privateKey.path);
   }
@@ -453,7 +453,7 @@ async function importGitWorkspaceToSsh(input: {
   remoteDir: string;
   snapshot: LocalGitWorkspaceSnapshot;
 }): Promise<void> {
-  const bundleDir = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-ssh-bundle-"));
+  const bundleDir = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-ssh-bundle-"));
   const bundlePath = path.join(bundleDir, "workspace.bundle");
   const tempRef = "refs/partyclip/ssh-sync/import";
 
@@ -469,8 +469,8 @@ async function importGitWorkspaceToSsh(input: {
 
     const remoteSetupScript = [
       "set -e",
-      `mkdir -p ${shellQuote(path.posix.join(input.remoteDir, ".paperclip-runtime"))}`,
-      `tmp_bundle=$(mktemp ${shellQuote(path.posix.join(input.remoteDir, ".paperclip-runtime", "import-XXXXXX.bundle"))})`,
+      `mkdir -p ${shellQuote(path.posix.join(input.remoteDir, ".partyclip-runtime"))}`,
+      `tmp_bundle=$(mktemp ${shellQuote(path.posix.join(input.remoteDir, ".partyclip-runtime", "import-XXXXXX.bundle"))})`,
       'trap \'rm -f "$tmp_bundle"\' EXIT',
       'cat > "$tmp_bundle"',
       `if [ ! -d ${shellQuote(path.posix.join(input.remoteDir, ".git"))} ]; then git init ${shellQuote(input.remoteDir)} >/dev/null; fi`,
@@ -479,7 +479,7 @@ async function importGitWorkspaceToSsh(input: {
         ? `git -C ${shellQuote(input.remoteDir)} checkout --force -B ${shellQuote(input.snapshot.branchName)} ${shellQuote(input.snapshot.headCommit)} >/dev/null`
         : `git -C ${shellQuote(input.remoteDir)} -c advice.detachedHead=false checkout --force --detach ${shellQuote(input.snapshot.headCommit)} >/dev/null`,
       `git -C ${shellQuote(input.remoteDir)} reset --hard ${shellQuote(input.snapshot.headCommit)} >/dev/null`,
-      `git -C ${shellQuote(input.remoteDir)} clean -fdx -e .paperclip-runtime >/dev/null`,
+      `git -C ${shellQuote(input.remoteDir)} clean -fdx -e .partyclip-runtime >/dev/null`,
     ].join("\n");
 
     await streamLocalFileToSsh({
@@ -501,7 +501,7 @@ async function exportGitWorkspaceFromSsh(input: {
   remoteDir: string;
   localDir: string;
 }): Promise<void> {
-  const bundleDir = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-ssh-bundle-"));
+  const bundleDir = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-ssh-bundle-"));
   const bundlePath = path.join(bundleDir, "workspace.bundle");
   const importedRef = "refs/partyclip/ssh-sync/imported";
 
@@ -509,8 +509,8 @@ async function exportGitWorkspaceFromSsh(input: {
     const exportScript = [
       "set -e",
       `git -C ${shellQuote(input.remoteDir)} update-ref refs/partyclip/ssh-sync/export HEAD`,
-      `mkdir -p ${shellQuote(path.posix.join(input.remoteDir, ".paperclip-runtime"))}`,
-      `tmp_bundle=$(mktemp ${shellQuote(path.posix.join(input.remoteDir, ".paperclip-runtime", "export-XXXXXX.bundle"))})`,
+      `mkdir -p ${shellQuote(path.posix.join(input.remoteDir, ".partyclip-runtime"))}`,
+      `tmp_bundle=$(mktemp ${shellQuote(path.posix.join(input.remoteDir, ".partyclip-runtime", "export-XXXXXX.bundle"))})`,
       'cleanup() { rm -f "$tmp_bundle"; git -C ' + shellQuote(input.remoteDir) + ' update-ref -d refs/partyclip/ssh-sync/export >/dev/null 2>&1 || true; }',
       'trap cleanup EXIT',
       `git -C ${shellQuote(input.remoteDir)} bundle create "$tmp_bundle" refs/partyclip/ssh-sync/export >/dev/null`,
@@ -860,7 +860,7 @@ export async function syncDirectoryFromSsh(input: {
   preserveLocalEntries?: string[];
 }): Promise<void> {
   const auth = await createSshAuthArgs(input.spec);
-  const stagingDir = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-ssh-sync-back-"));
+  const stagingDir = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-ssh-sync-back-"));
   const remoteTarScript = [
     `cd ${shellQuote(input.remoteDir)}`,
     `tar ${[...tarExcludeArgs(input.exclude).map(shellQuote), "-cf", "-", "."].join(" ")}`,
@@ -962,7 +962,7 @@ export async function prepareWorkspaceForSshExecution(input: {
       spec: input.spec,
       localDir: input.localDir,
       remoteDir,
-      exclude: [".git", ".paperclip-runtime"],
+      exclude: [".git", ".partyclip-runtime"],
     });
     await removeDeletedPathsOnSsh({
       spec: input.spec,
@@ -975,13 +975,13 @@ export async function prepareWorkspaceForSshExecution(input: {
   await clearRemoteDirectory({
     spec: input.spec,
     remoteDir,
-    preserveEntries: [".paperclip-runtime"],
+    preserveEntries: [".partyclip-runtime"],
   });
   await syncDirectoryToSsh({
     spec: input.spec,
     localDir: input.localDir,
     remoteDir,
-    exclude: [".paperclip-runtime"],
+    exclude: [".partyclip-runtime"],
   });
 }
 
@@ -1003,7 +1003,7 @@ export async function restoreWorkspaceFromSshExecution(input: {
       spec: input.spec,
       remoteDir,
       localDir: input.localDir,
-      exclude: [".git", ".paperclip-runtime"],
+      exclude: [".git", ".partyclip-runtime"],
       preserveLocalEntries: [".git"],
     });
     return;
@@ -1013,7 +1013,7 @@ export async function restoreWorkspaceFromSshExecution(input: {
     spec: input.spec,
     remoteDir,
     localDir: input.localDir,
-    exclude: [".paperclip-runtime"],
+    exclude: [".partyclip-runtime"],
   });
 }
 

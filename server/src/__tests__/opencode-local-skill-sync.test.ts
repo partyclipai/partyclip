@@ -12,7 +12,7 @@ async function makeTempDir(prefix: string): Promise<string> {
 }
 
 describe("opencode local skill sync", () => {
-  const paperclipKey = "partyclipai/partyclip/partyclip";
+  const partyclipKey = "partyclipai/partyclip/partyclip";
   const cleanupDirs = new Set<string>();
 
   afterEach(async () => {
@@ -21,7 +21,7 @@ describe("opencode local skill sync", () => {
   });
 
   it("reports configured Paperclip skills and installs them into the shared Claude/OpenCode skills home", async () => {
-    const home = await makeTempDir("paperclip-opencode-skill-sync-");
+    const home = await makeTempDir("partyclip-opencode-skill-sync-");
     cleanupDirs.add(home);
 
     const ctx = {
@@ -32,8 +32,8 @@ describe("opencode local skill sync", () => {
         env: {
           HOME: home,
         },
-        paperclipSkillSync: {
-          desiredSkills: [paperclipKey],
+        partyclipSkillSync: {
+          desiredSkills: [partyclipKey],
         },
       },
     } as const;
@@ -41,17 +41,17 @@ describe("opencode local skill sync", () => {
     const before = await listOpenCodeSkills(ctx);
     expect(before.mode).toBe("persistent");
     expect(before.warnings).toContain("OpenCode currently uses the shared Claude skills home (~/.claude/skills).");
-    expect(before.desiredSkills).toContain(paperclipKey);
-    expect(before.entries.find((entry) => entry.key === paperclipKey)?.required).toBe(true);
-    expect(before.entries.find((entry) => entry.key === paperclipKey)?.state).toBe("missing");
+    expect(before.desiredSkills).toContain(partyclipKey);
+    expect(before.entries.find((entry) => entry.key === partyclipKey)?.required).toBe(true);
+    expect(before.entries.find((entry) => entry.key === partyclipKey)?.state).toBe("missing");
 
-    const after = await syncOpenCodeSkills(ctx, [paperclipKey]);
-    expect(after.entries.find((entry) => entry.key === paperclipKey)?.state).toBe("installed");
-    expect((await fs.lstat(path.join(home, ".claude", "skills", "paperclip"))).isSymbolicLink()).toBe(true);
+    const after = await syncOpenCodeSkills(ctx, [partyclipKey]);
+    expect(after.entries.find((entry) => entry.key === partyclipKey)?.state).toBe("installed");
+    expect((await fs.lstat(path.join(home, ".claude", "skills", "partyclip"))).isSymbolicLink()).toBe(true);
   });
 
   it("keeps required bundled Paperclip skills installed even when the desired set is emptied", async () => {
-    const home = await makeTempDir("paperclip-opencode-skill-prune-");
+    const home = await makeTempDir("partyclip-opencode-skill-prune-");
     cleanupDirs.add(home);
 
     const configuredCtx = {
@@ -62,13 +62,13 @@ describe("opencode local skill sync", () => {
         env: {
           HOME: home,
         },
-        paperclipSkillSync: {
-          desiredSkills: [paperclipKey],
+        partyclipSkillSync: {
+          desiredSkills: [partyclipKey],
         },
       },
     } as const;
 
-    await syncOpenCodeSkills(configuredCtx, [paperclipKey]);
+    await syncOpenCodeSkills(configuredCtx, [partyclipKey]);
 
     const clearedCtx = {
       ...configuredCtx,
@@ -76,15 +76,15 @@ describe("opencode local skill sync", () => {
         env: {
           HOME: home,
         },
-        paperclipSkillSync: {
+        partyclipSkillSync: {
           desiredSkills: [],
         },
       },
     } as const;
 
     const after = await syncOpenCodeSkills(clearedCtx, []);
-    expect(after.desiredSkills).toContain(paperclipKey);
-    expect(after.entries.find((entry) => entry.key === paperclipKey)?.state).toBe("installed");
-    expect((await fs.lstat(path.join(home, ".claude", "skills", "paperclip"))).isSymbolicLink()).toBe(true);
+    expect(after.desiredSkills).toContain(partyclipKey);
+    expect(after.entries.find((entry) => entry.key === partyclipKey)?.state).toBe("installed");
+    expect((await fs.lstat(path.join(home, ".claude", "skills", "partyclip"))).isSymbolicLink()).toBe(true);
   });
 });

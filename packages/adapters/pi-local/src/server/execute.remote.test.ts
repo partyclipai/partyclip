@@ -86,7 +86,7 @@ describe("pi remote execution", () => {
   });
 
   it("prepares the workspace, syncs Pi skills, and restores workspace changes for remote SSH execution", async () => {
-    const rootDir = await mkdtemp(path.join(os.tmpdir(), "paperclip-pi-remote-"));
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "partyclip-pi-remote-"));
     cleanupDirs.push(rootDir);
     const workspaceDir = path.join(rootDir, "workspace");
     await mkdir(workspaceDir, { recursive: true });
@@ -111,7 +111,7 @@ describe("pi remote execution", () => {
         model: "openai/gpt-5.4-mini",
       },
       context: {
-        paperclipWorkspace: {
+        partyclipWorkspace: {
           cwd: workspaceDir,
           source: "project_primary",
         },
@@ -126,7 +126,7 @@ describe("pi remote execution", () => {
           privateKey: "PRIVATE KEY",
           knownHosts: "[127.0.0.1]:2222 ssh-ed25519 AAAA",
           strictHostKeyChecking: true,
-          paperclipApiUrl: "http://198.51.100.10:3102",
+          partyclipApiUrl: "http://198.51.100.10:3102",
         },
       },
       onLog: async () => {},
@@ -140,19 +140,19 @@ describe("pi remote execution", () => {
         port: 2222,
         username: "fixture",
         remoteCwd: "/remote/workspace",
-        paperclipApiUrl: "http://198.51.100.10:3102",
+        partyclipApiUrl: "http://198.51.100.10:3102",
       },
     });
-    expect(String(result.sessionId)).toContain("/remote/workspace/.paperclip-runtime/pi/sessions/");
+    expect(String(result.sessionId)).toContain("/remote/workspace/.partyclip-runtime/pi/sessions/");
     expect(prepareWorkspaceForSshExecution).toHaveBeenCalledTimes(1);
     expect(syncDirectoryToSsh).toHaveBeenCalledTimes(1);
     expect(syncDirectoryToSsh).toHaveBeenCalledWith(expect.objectContaining({
-      remoteDir: "/remote/workspace/.paperclip-runtime/pi/skills",
+      remoteDir: "/remote/workspace/.partyclip-runtime/pi/skills",
       followSymlinks: true,
     }));
     expect(runSshCommand).toHaveBeenCalledWith(
       expect.anything(),
-      expect.stringContaining(".paperclip-runtime/pi/sessions"),
+      expect.stringContaining(".partyclip-runtime/pi/sessions"),
       expect.anything(),
     );
     const call = runChildProcess.mock.calls[0] as unknown as
@@ -160,14 +160,14 @@ describe("pi remote execution", () => {
       | undefined;
     expect(call?.[2]).toContain("--session");
     expect(call?.[2]).toContain("--skill");
-    expect(call?.[2]).toContain("/remote/workspace/.paperclip-runtime/pi/skills");
+    expect(call?.[2]).toContain("/remote/workspace/.partyclip-runtime/pi/skills");
     expect(call?.[3].env.PARTYCLIP_API_URL).toBe("http://198.51.100.10:3102");
     expect(call?.[3].remoteExecution?.remoteCwd).toBe("/remote/workspace");
     expect(restoreWorkspaceFromSshExecution).toHaveBeenCalledTimes(1);
   });
 
   it("resumes saved Pi sessions for remote SSH execution only when the identity matches", async () => {
-    const rootDir = await mkdtemp(path.join(os.tmpdir(), "paperclip-pi-remote-resume-"));
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "partyclip-pi-remote-resume-"));
     cleanupDirs.push(rootDir);
     const workspaceDir = path.join(rootDir, "workspace");
     await mkdir(workspaceDir, { recursive: true });
@@ -182,9 +182,9 @@ describe("pi remote execution", () => {
         adapterConfig: {},
       },
       runtime: {
-        sessionId: "/remote/workspace/.paperclip-runtime/pi/sessions/session-123.jsonl",
+        sessionId: "/remote/workspace/.partyclip-runtime/pi/sessions/session-123.jsonl",
         sessionParams: {
-          sessionId: "/remote/workspace/.paperclip-runtime/pi/sessions/session-123.jsonl",
+          sessionId: "/remote/workspace/.partyclip-runtime/pi/sessions/session-123.jsonl",
           cwd: "/remote/workspace",
           remoteExecution: {
             transport: "ssh",
@@ -202,7 +202,7 @@ describe("pi remote execution", () => {
         model: "openai/gpt-5.4-mini",
       },
       context: {
-        paperclipWorkspace: {
+        partyclipWorkspace: {
           cwd: workspaceDir,
           source: "project_primary",
         },
@@ -224,6 +224,6 @@ describe("pi remote execution", () => {
 
     const call = runChildProcess.mock.calls[0] as unknown as [string, string, string[]] | undefined;
     expect(call?.[2]).toContain("--session");
-    expect(call?.[2]).toContain("/remote/workspace/.paperclip-runtime/pi/sessions/session-123.jsonl");
+    expect(call?.[2]).toContain("/remote/workspace/.partyclip-runtime/pi/sessions/session-123.jsonl");
   });
 });

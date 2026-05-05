@@ -88,8 +88,8 @@ async function createEmbeddedPostgresTestInstance(tempDirPrefix: string) {
   const EmbeddedPostgres = await getEmbeddedPostgresCtor();
   const instance = new EmbeddedPostgres({
     databaseDir: dataDir,
-    user: "paperclip",
-    password: "paperclip",
+    user: "partyclip",
+    password: "partyclip",
     port,
     persistent: true,
     initdbFlags: ["--encoding=UTF8", "--locale=C", "--lc-messages=C"],
@@ -112,7 +112,7 @@ function formatEmbeddedPostgresError(error: unknown): string {
 
 async function probeEmbeddedPostgresSupport(): Promise<EmbeddedPostgresTestSupport> {
   const { dataDir, instance } = await createEmbeddedPostgresTestInstance(
-    "paperclip-embedded-postgres-probe-",
+    "partyclip-embedded-postgres-probe-",
   );
 
   try {
@@ -147,7 +147,7 @@ export async function startEmbeddedPostgresTestDatabase(
     await instance.start();
 
     const adminConnectionString = `postgres://partyclip:partyclip@127.0.0.1:${port}/postgres`;
-    await ensurePostgresDatabase(adminConnectionString, "paperclip");
+    await ensurePostgresDatabase(adminConnectionString, "partyclip");
     const connectionString = `postgres://partyclip:partyclip@127.0.0.1:${port}/partyclip`;
     await applyPendingMigrations(connectionString);
 

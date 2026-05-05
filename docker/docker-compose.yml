@@ -2,11 +2,11 @@ services:
   db:
     image: postgres:17-alpine
     environment:
-      POSTGRES_USER: paperclip
-      POSTGRES_PASSWORD: paperclip
-      POSTGRES_DB: paperclip
+      POSTGRES_USER: partyclip
+      POSTGRES_PASSWORD: partyclip
+      POSTGRES_DB: partyclip
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U paperclip -d paperclip"]
+      test: ["CMD-SHELL", "pg_isready -U partyclip -d partyclip"]
       interval: 2s
       timeout: 5s
       retries: 30
@@ -30,11 +30,11 @@ services:
       PARTYCLIP_PUBLIC_URL: "${PARTYCLIP_PUBLIC_URL:-http://localhost:3100}"
       BETTER_AUTH_SECRET: "${BETTER_AUTH_SECRET:?BETTER_AUTH_SECRET must be set}"
     volumes:
-      - paperclip-data:/partyclip
+      - partyclip-data:/partyclip
     depends_on:
       db:
         condition: service_healthy
 
 volumes:
   pgdata:
-  paperclip-data:
+  partyclip-data:

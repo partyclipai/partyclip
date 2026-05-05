@@ -85,7 +85,7 @@ function writeTestConfig(configPath: string, tempRoot: string, port: number, con
         baseDir: path.join(tempRoot, "storage"),
       },
       s3: {
-        bucket: "paperclip",
+        bucket: "partyclip",
         region: "us-east-1",
         prefix: "",
         forcePathStyle: false,
@@ -106,7 +106,7 @@ function writeTestConfig(configPath: string, tempRoot: string, port: number, con
 
 interface TestPaperclipEnv {
   configPath: string;
-  paperclipHome: string;
+  partyclipHome: string;
   instanceId: string;
   shellHome?: string;
 }
@@ -120,10 +120,10 @@ function createBasePaperclipEnv(options: TestPaperclipEnv) {
   }
 
   env.PARTYCLIP_CONFIG = options.configPath;
-  env.PARTYCLIP_HOME = options.paperclipHome;
+  env.PARTYCLIP_HOME = options.partyclipHome;
   env.PARTYCLIP_INSTANCE_ID = options.instanceId;
-  env.PARTYCLIP_CONTEXT = path.join(options.paperclipHome, "context.json");
-  env.PARTYCLIP_AUTH_STORE = path.join(options.paperclipHome, "auth.json");
+  env.PARTYCLIP_CONTEXT = path.join(options.partyclipHome, "context.json");
+  env.PARTYCLIP_AUTH_STORE = path.join(options.partyclipHome, "auth.json");
   if (options.shellHome) {
     env.HOME = options.shellHome;
   }
@@ -271,23 +271,23 @@ describeEmbeddedPostgres("partyclipai company import/export e2e", () => {
   let configPath = "";
   let exportDir = "";
   let apiBase = "";
-  let paperclipHome = "";
+  let partyclipHome = "";
   let cliShellHome = "";
-  let paperclipInstanceId = "";
+  let partyclipInstanceId = "";
   let serverProcess: ServerProcess | null = null;
   let tempDb: Awaited<ReturnType<typeof startEmbeddedPostgresTestDatabase>> | null = null;
 
   beforeAll(async () => {
-    tempRoot = mkdtempSync(path.join(os.tmpdir(), "paperclip-company-cli-e2e-"));
+    tempRoot = mkdtempSync(path.join(os.tmpdir(), "partyclip-company-cli-e2e-"));
     configPath = path.join(tempRoot, "config", "config.json");
     exportDir = path.join(tempRoot, "exported-company");
-    paperclipHome = path.join(tempRoot, "paperclip-home");
+    partyclipHome = path.join(tempRoot, "partyclip-home");
     cliShellHome = path.join(tempRoot, "shell-home");
-    paperclipInstanceId = "company-cli-e2e";
-    mkdirSync(paperclipHome, { recursive: true });
+    partyclipInstanceId = "company-cli-e2e";
+    mkdirSync(partyclipHome, { recursive: true });
     mkdirSync(cliShellHome, { recursive: true });
 
-    tempDb = await startEmbeddedPostgresTestDatabase("paperclip-company-cli-db-");
+    tempDb = await startEmbeddedPostgresTestDatabase("partyclip-company-cli-db-");
 
     const port = await getAvailablePort();
     writeTestConfig(configPath, tempRoot, port, tempDb.connectionString);
@@ -301,8 +301,8 @@ describeEmbeddedPostgres("partyclipai company import/export e2e", () => {
       {
         cwd: repoRoot,
         env: createServerEnv(configPath, port, tempDb.connectionString, {
-          paperclipHome,
-          instanceId: paperclipInstanceId,
+          partyclipHome,
+          instanceId: partyclipInstanceId,
           shellHome: cliShellHome,
         }),
         stdio: ["ignore", "pipe", "pipe"],
@@ -338,15 +338,15 @@ describeEmbeddedPostgres("partyclipai company import/export e2e", () => {
       ["context", "set", "--profile", "isolation-check", "--api-base", "https://example.test"],
       {
         configPath,
-        paperclipHome,
-        instanceId: paperclipInstanceId,
+        partyclipHome,
+        instanceId: partyclipInstanceId,
         shellHome: cliShellHome,
         includeConfigArg: false,
       },
     );
 
-    const expectedContextPath = path.join(paperclipHome, "context.json");
-    const leakedContextPath = path.join(cliShellHome, ".paperclip", "context.json");
+    const expectedContextPath = path.join(partyclipHome, "context.json");
+    const leakedContextPath = path.join(cliShellHome, ".partyclip", "context.json");
     expect(cliContext.contextPath).toBe(expectedContextPath);
     expect(cliContext.profileName).toBe("isolation-check");
     expect(cliContext.profile.apiBase).toBe("https://example.test");
@@ -434,8 +434,8 @@ describeEmbeddedPostgres("partyclipai company import/export e2e", () => {
       {
         apiBase,
         configPath,
-        paperclipHome,
-        instanceId: paperclipInstanceId,
+        partyclipHome,
+        instanceId: partyclipInstanceId,
         shellHome: cliShellHome,
       },
     );
@@ -443,7 +443,7 @@ describeEmbeddedPostgres("partyclipai company import/export e2e", () => {
     expect(exportResult.ok).toBe(true);
     expect(exportResult.filesWritten).toBeGreaterThan(0);
     expect(readFileSync(path.join(exportDir, "COMPANY.md"), "utf8")).toContain(sourceCompany.name);
-    expect(readFileSync(path.join(exportDir, ".paperclip.yaml"), "utf8")).toContain('schema: "paperclip/v1"');
+    expect(readFileSync(path.join(exportDir, ".partyclip.yaml"), "utf8")).toContain('schema: "partyclip/v1"');
 
     const importedNew = await runCliJson<{
       company: { id: string; name: string; action: string };
@@ -464,8 +464,8 @@ describeEmbeddedPostgres("partyclipai company import/export e2e", () => {
       {
         apiBase,
         configPath,
-        paperclipHome,
-        instanceId: paperclipInstanceId,
+        partyclipHome,
+        instanceId: partyclipInstanceId,
         shellHome: cliShellHome,
       },
     );
@@ -518,8 +518,8 @@ describeEmbeddedPostgres("partyclipai company import/export e2e", () => {
       {
         apiBase,
         configPath,
-        paperclipHome,
-        instanceId: paperclipInstanceId,
+        partyclipHome,
+        instanceId: partyclipInstanceId,
         shellHome: cliShellHome,
       },
     );
@@ -551,8 +551,8 @@ describeEmbeddedPostgres("partyclipai company import/export e2e", () => {
       {
         apiBase,
         configPath,
-        paperclipHome,
-        instanceId: paperclipInstanceId,
+        partyclipHome,
+        instanceId: partyclipInstanceId,
         shellHome: cliShellHome,
       },
     );
@@ -583,7 +583,7 @@ describeEmbeddedPostgres("partyclipai company import/export e2e", () => {
     const zipPath = path.join(tempRoot, "exported-company.zip");
     const portableFiles: Record<string, string> = {};
     collectTextFiles(exportDir, exportDir, portableFiles);
-    writeFileSync(zipPath, createStoredZipArchive(portableFiles, "paperclip-demo"));
+    writeFileSync(zipPath, createStoredZipArchive(portableFiles, "partyclip-demo"));
 
     const importedFromZip = await runCliJson<{
       company: { id: string; name: string; action: string };
@@ -604,8 +604,8 @@ describeEmbeddedPostgres("partyclipai company import/export e2e", () => {
       {
         apiBase,
         configPath,
-        paperclipHome,
-        instanceId: paperclipInstanceId,
+        partyclipHome,
+        instanceId: partyclipInstanceId,
         shellHome: cliShellHome,
       },
     );

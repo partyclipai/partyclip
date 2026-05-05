@@ -32,7 +32,7 @@ describe("agent skill contract", () => {
       desiredSkills: [],
       entries: [{
         key: "partyclipai/partyclip/partyclip",
-        runtimeName: "paperclip",
+        runtimeName: "partyclip",
         desired: true,
         managed: true,
         state: "configured",

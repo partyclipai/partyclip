@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { paperclipConfigSchema, type PaperclipConfig } from "./schema.js";
+import { partyclipConfigSchema, type PaperclipConfig } from "./schema.js";
 import {
   resolveDefaultConfigPath,
   resolvePaperclipInstanceId,
@@ -13,7 +13,7 @@ function findConfigFileFromAncestors(startDir: string): string | null {
   let currentDir = absoluteStartDir;
 
   while (true) {
-    const candidate = path.resolve(currentDir, ".paperclip", DEFAULT_CONFIG_BASENAME);
+    const candidate = path.resolve(currentDir, ".partyclip", DEFAULT_CONFIG_BASENAME);
     if (fs.existsSync(candidate)) {
       return candidate;
     }
@@ -88,7 +88,7 @@ export function readConfig(configPath?: string): PaperclipConfig | null {
   if (!fs.existsSync(filePath)) return null;
   const raw = parseJson(filePath);
   const migrated = migrateLegacyConfig(raw);
-  const parsed = paperclipConfigSchema.safeParse(migrated);
+  const parsed = partyclipConfigSchema.safeParse(migrated);
   if (!parsed.success) {
     throw new Error(`Invalid config at ${filePath}: ${formatValidationError(parsed.error)}`);
   }

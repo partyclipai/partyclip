@@ -40,7 +40,7 @@ vi.mock("../services/live-events.js", () => ({
 
 function manifest(apiRoutes: NonNullable<PaperclipPluginManifestV1["apiRoutes"]>): PaperclipPluginManifestV1 {
   return {
-    id: "paperclip.scoped-api-test",
+    id: "partyclip.scoped-api-test",
     apiVersion: 1,
     version: "1.0.0",
     displayName: "Scoped API Test",

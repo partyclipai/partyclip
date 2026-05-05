@@ -223,7 +223,7 @@ function formatSeededWorktreeExecutionQuarantineSummary(
   ].join(", ");
 }
 
-const WORKTREE_NAME_PREFIX = "paperclip-";
+const WORKTREE_NAME_PREFIX = "partyclip-";
 
 function resolveWorktreeMakeName(name: string): string {
   const value = nonEmpty(name);
@@ -519,11 +519,11 @@ async function findAvailablePort(preferredPort: number, reserved = new Set<numbe
 
 function resolveRepoManagedWorktreesRoot(cwd: string): string | null {
   const normalized = path.resolve(cwd);
-  const marker = `${path.sep}.paperclip${path.sep}worktrees${path.sep}`;
+  const marker = `${path.sep}.partyclip${path.sep}worktrees${path.sep}`;
   const index = normalized.indexOf(marker);
   if (index === -1) return null;
   const repoRoot = normalized.slice(0, index);
-  return path.resolve(repoRoot, ".paperclip", "worktrees");
+  return path.resolve(repoRoot, ".partyclip", "worktrees");
 }
 
 function collectClaimedWorktreePorts(homeDir: string, currentInstanceId: string, cwd: string): {
@@ -549,7 +549,7 @@ function collectClaimedWorktreePorts(homeDir: string, currentInstanceId: string,
   if (repoManagedWorktreesRoot && existsSync(repoManagedWorktreesRoot)) {
     for (const entry of readdirSync(repoManagedWorktreesRoot, { withFileTypes: true })) {
       if (!entry.isDirectory()) continue;
-      const configPath = path.resolve(repoManagedWorktreesRoot, entry.name, ".paperclip", "config.json");
+      const configPath = path.resolve(repoManagedWorktreesRoot, entry.name, ".partyclip", "config.json");
       if (existsSync(configPath)) {
         configPaths.add(configPath);
       }
@@ -806,7 +806,7 @@ export function resolveSourceConfigPath(opts: WorktreeInitOptions): string {
   if (!opts.fromDataDir && !opts.fromInstance) {
     return resolveConfigPath();
   }
-  const sourceHome = path.resolve(expandHomePrefix(opts.fromDataDir ?? "~/.paperclip"));
+  const sourceHome = path.resolve(expandHomePrefix(opts.fromDataDir ?? "~/.partyclip"));
   const sourceInstanceId = sanitizeWorktreeInstanceId(opts.fromInstance ?? "default");
   return path.resolve(sourceHome, "instances", sourceInstanceId, "config.json");
 }
@@ -895,7 +895,7 @@ function resolveExistingGitWorktree(selector: string, cwd: string): MergeSourceC
       worktree: directPath,
       branch: null,
       branchLabel: path.basename(directPath),
-      hasPaperclipConfig: existsSync(path.resolve(directPath, ".paperclip", "config.json")),
+      hasPaperclipConfig: existsSync(path.resolve(directPath, ".partyclip", "config.json")),
       isCurrent: directPath === path.resolve(cwd),
     };
   }
@@ -915,7 +915,7 @@ async function ensureRepairTargetWorktree(input: {
 }): Promise<ResolvedWorktreeRepairTarget | null> {
   const cwd = process.cwd();
   const currentRoot = path.resolve(cwd);
-  const currentConfigPath = path.resolve(currentRoot, ".paperclip", "config.json");
+  const currentConfigPath = path.resolve(currentRoot, ".partyclip", "config.json");
 
   if (!input.selector) {
     if (isPrimaryGitWorktree(cwd)) {
@@ -934,7 +934,7 @@ async function ensureRepairTargetWorktree(input: {
   if (existing) {
     return {
       rootPath: existing.worktree,
-      configPath: path.resolve(existing.worktree, ".paperclip", "config.json"),
+      configPath: path.resolve(existing.worktree, ".partyclip", "config.json"),
       label: existing.branchLabel,
       branchName: existing.branchLabel === "(detached)" ? null : existing.branchLabel,
       created: false,
@@ -945,7 +945,7 @@ async function ensureRepairTargetWorktree(input: {
   const branchName = validateGitBranchName(repoRoot, input.selector);
   const targetPath = path.resolve(
     repoRoot,
-    ".paperclip",
+    ".partyclip",
     "worktrees",
     resolveRepairWorktreeDirName(branchName),
   );
@@ -977,7 +977,7 @@ async function ensureRepairTargetWorktree(input: {
 
   return {
     rootPath: targetPath,
-    configPath: path.resolve(targetPath, ".paperclip", "config.json"),
+    configPath: path.resolve(targetPath, ".partyclip", "config.json"),
     label: branchName,
     branchName,
     created: true,
@@ -1074,8 +1074,8 @@ async function ensureEmbeddedPostgres(dataDir: string, preferredPort: number): P
   const logBuffer = createEmbeddedPostgresLogBuffer();
   const instance = new EmbeddedPostgres({
     databaseDir: dataDir,
-    user: "paperclip",
-    password: "paperclip",
+    user: "partyclip",
+    password: "partyclip",
     port,
     persistent: true,
     initdbFlags: ["--encoding=UTF8", "--locale=C", "--lc-messages=C"],
@@ -1299,7 +1299,7 @@ async function seedWorktreeDatabase(input: {
         input.sourceConfig.database.embeddedPostgresPort,
       );
       const sourceAdminConnectionString = `postgres://partyclip:partyclip@127.0.0.1:${sourceHandle.port}/postgres`;
-      await ensurePostgresDatabase(sourceAdminConnectionString, "paperclip");
+      await ensurePostgresDatabase(sourceAdminConnectionString, "partyclip");
     }
     const sourceConnectionString = resolveSourceConnectionString(
       input.sourceConfig,
@@ -1323,7 +1323,7 @@ async function seedWorktreeDatabase(input: {
     );
 
     const adminConnectionString = `postgres://partyclip:partyclip@127.0.0.1:${targetHandle.port}/postgres`;
-    await ensurePostgresDatabase(adminConnectionString, "paperclip");
+    await ensurePostgresDatabase(adminConnectionString, "partyclip");
     const targetConnectionString = `postgres://partyclip:partyclip@127.0.0.1:${targetHandle.port}/partyclip`;
     await runDatabaseRestore({
       connectionString: targetConnectionString,
@@ -1664,7 +1664,7 @@ function toMergeSourceChoices(cwd: string): MergeSourceChoice[] {
       worktree: worktreePath,
       branch: entry.branch,
       branchLabel,
-      hasPaperclipConfig: existsSync(path.resolve(worktreePath, ".paperclip", "config.json")),
+      hasPaperclipConfig: existsSync(path.resolve(worktreePath, ".partyclip", "config.json")),
       isCurrent: worktreePath === currentCwd,
     };
   });
@@ -1903,7 +1903,7 @@ function resolveAttachmentLookupStorages(input: {
     input.targetEndpoint.configPath,
     ...toMergeSourceChoices(process.cwd())
       .filter((choice) => choice.hasPaperclipConfig)
-      .map((choice) => path.resolve(choice.worktree, ".paperclip", "config.json")),
+      .map((choice) => path.resolve(choice.worktree, ".partyclip", "config.json")),
   ];
   const seen = new Set<string>();
   const storages: ConfiguredStorage[] = [];
@@ -2462,7 +2462,7 @@ export async function worktreeListCommand(opts: WorktreeListOptions): Promise<vo
   for (const choice of choices) {
     const flags = [
       choice.isCurrent ? "current" : null,
-      choice.hasPaperclipConfig ? "paperclip" : "no-paperclip-config",
+      choice.hasPaperclipConfig ? "partyclip" : "no-partyclip-config",
     ].filter((value): value is string => value !== null);
     p.log.message(`${choice.branchLabel}  ${choice.worktree}  [${flags.join(", ")}]`);
   }
@@ -2474,7 +2474,7 @@ function resolveEndpointFromChoice(choice: MergeSourceChoice): ResolvedWorktreeE
   }
   return {
     rootPath: choice.worktree,
-    configPath: path.resolve(choice.worktree, ".paperclip", "config.json"),
+    configPath: path.resolve(choice.worktree, ".partyclip", "config.json"),
     label: choice.branchLabel,
     isCurrent: false,
   };
@@ -2501,9 +2501,9 @@ function resolveWorktreeEndpointFromSelector(
     if (allowCurrent && directPath === currentEndpoint.rootPath) {
       return currentEndpoint;
     }
-    const configPath = path.resolve(directPath, ".paperclip", "config.json");
+    const configPath = path.resolve(directPath, ".partyclip", "config.json");
     if (!existsSync(configPath)) {
-      throw new Error(`Resolved worktree path ${directPath} does not contain .paperclip/config.json.`);
+      throw new Error(`Resolved worktree path ${directPath} does not contain .partyclip/config.json.`);
     }
     return {
       rootPath: directPath,
@@ -3245,7 +3245,7 @@ export function registerWorktreeCommands(program: Command): void {
   program
     .command("worktree:make")
     .description("Create ~/NAME as a git worktree, then initialize an isolated Paperclip instance inside it")
-    .argument("<name>", "Worktree name — auto-prefixed with paperclip- if needed (created at ~/partyclip-NAME)")
+    .argument("<name>", "Worktree name — auto-prefixed with partyclip- if needed (created at ~/partyclip-NAME)")
     .option("--start-point <ref>", "Remote ref to base the new branch on (env: PARTYCLIP_WORKTREE_START_POINT)")
     .option("--instance <id>", "Explicit isolated instance id")
     .option("--home <path>", `Home root for worktree instances (env: PARTYCLIP_WORKTREES_DIR, default: ${DEFAULT_WORKTREE_HOME})`)
@@ -3320,7 +3320,7 @@ export function registerWorktreeCommands(program: Command): void {
   worktree
     .command("repair")
     .description("Create or repair a linked worktree-local Paperclip instance without touching the primary checkout")
-    .option("--branch <name>", "Existing branch/worktree selector to repair, or a branch name to create under .paperclip/worktrees")
+    .option("--branch <name>", "Existing branch/worktree selector to repair, or a branch name to create under .partyclip/worktrees")
     .option("--home <path>", `Home root for worktree instances (env: PARTYCLIP_WORKTREES_DIR, default: ${DEFAULT_WORKTREE_HOME})`)
     .option("--from-config <path>", "Source config.json to seed from")
     .option("--from-data-dir <path>", "Source PARTYCLIP_HOME used when deriving the source config")
@@ -3334,7 +3334,7 @@ export function registerWorktreeCommands(program: Command): void {
   program
     .command("worktree:cleanup")
     .description("Safely remove a worktree, its branch, and its isolated instance data")
-    .argument("<name>", "Worktree name — auto-prefixed with paperclip- if needed")
+    .argument("<name>", "Worktree name — auto-prefixed with partyclip- if needed")
     .option("--instance <id>", "Explicit instance id (if different from the worktree name)")
     .option("--home <path>", `Home root for worktree instances (env: PARTYCLIP_WORKTREES_DIR, default: ${DEFAULT_WORKTREE_HOME})`)
     .option("--force", "Bypass safety checks (uncommitted changes, unique commits)", false)

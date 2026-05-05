@@ -83,7 +83,7 @@ const PARTYCLIP_SKILL_ROOT_RELATIVE_CANDIDATES = [
   "../../skills",
   "../../../../../skills",
 ];
-const MATERIALIZED_SKILL_SENTINEL = ".paperclip-materialized-skill.json";
+const MATERIALIZED_SKILL_SENTINEL = ".partyclip-materialized-skill.json";
 const MATERIALIZED_SKILL_LOCK_OWNER = "owner.json";
 const MATERIALIZED_SKILL_LOCK_STALE_MS = 30_000;
 
@@ -156,7 +156,7 @@ function buildManagedSkillOrigin(entry: { required?: boolean }): Pick<
 > {
   if (entry.required) {
     return {
-      origin: "paperclip_required",
+      origin: "partyclip_required",
       originLabel: "Required by Paperclip",
       readOnly: false,
     };
@@ -1270,7 +1270,7 @@ export async function readPaperclipRuntimeSkillEntries(
   moduleDir: string,
   additionalCandidates: string[] = [],
 ): Promise<PaperclipSkillEntry[]> {
-  const configuredEntries = normalizeConfiguredPaperclipRuntimeSkills(config.paperclipRuntimeSkills);
+  const configuredEntries = normalizeConfiguredPaperclipRuntimeSkills(config.partyclipRuntimeSkills);
   if (configuredEntries.length > 0) return configuredEntries;
   return listPaperclipSkillEntries(moduleDir, additionalCandidates);
 }
@@ -1297,7 +1297,7 @@ export function readPaperclipSkillSyncPreference(config: Record<string, unknown>
   explicit: boolean;
   desiredSkills: string[];
 } {
-  const raw = config.paperclipSkillSync;
+  const raw = config.partyclipSkillSync;
   if (typeof raw !== "object" || raw === null || Array.isArray(raw)) {
     return { explicit: false, desiredSkills: [] };
   }
@@ -1360,7 +1360,7 @@ export function writePaperclipSkillSyncPreference(
   desiredSkills: string[],
 ): Record<string, unknown> {
   const next = { ...config };
-  const raw = next.paperclipSkillSync;
+  const raw = next.partyclipSkillSync;
   const current =
     typeof raw === "object" && raw !== null && !Array.isArray(raw)
       ? { ...(raw as Record<string, unknown>) }
@@ -1372,7 +1372,7 @@ export function writePaperclipSkillSyncPreference(
         .filter(Boolean),
     ),
   );
-  next.paperclipSkillSync = current;
+  next.partyclipSkillSync = current;
   return next;
 }
 

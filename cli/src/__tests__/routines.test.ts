@@ -67,7 +67,7 @@ function writeTestConfig(configPath: string, tempRoot: string, connectionString:
         baseDir: path.join(tempRoot, "storage"),
       },
       s3: {
-        bucket: "paperclip",
+        bucket: "partyclip",
         region: "us-east-1",
         prefix: "",
         forcePathStyle: false,
@@ -93,9 +93,9 @@ describeEmbeddedPostgres("disableAllRoutinesInConfig", () => {
   let configPath = "";
 
   beforeAll(async () => {
-    tempDb = await startEmbeddedPostgresTestDatabase("paperclip-routines-cli-db-");
+    tempDb = await startEmbeddedPostgresTestDatabase("partyclip-routines-cli-db-");
     db = createDb(tempDb.connectionString);
-    tempRoot = mkdtempSync(path.join(os.tmpdir(), "paperclip-routines-cli-config-"));
+    tempRoot = mkdtempSync(path.join(os.tmpdir(), "partyclip-routines-cli-config-"));
     configPath = path.join(tempRoot, "config.json");
     writeTestConfig(configPath, tempRoot, tempDb.connectionString);
   }, 20_000);

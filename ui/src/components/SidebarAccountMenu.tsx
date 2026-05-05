@@ -21,7 +21,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "../lib/utils";
 
 const PROFILE_SETTINGS_PATH = "/instance/settings/profile";
-const DOCS_URL = "https://docs.paperclip.ing/";
+const DOCS_URL = "https://docs.partyclip.ing/";
 
 interface SidebarAccountMenuProps {
   deploymentMode?: DeploymentMode;

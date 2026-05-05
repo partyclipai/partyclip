@@ -150,7 +150,7 @@ describe("heartbeat comment wake batching", () => {
   let tempDb: Awaited<ReturnType<typeof startEmbeddedPostgresTestDatabase>> | null = null;
 
   beforeAll(async () => {
-    const started = await startEmbeddedPostgresTestDatabase("paperclip-heartbeat-comment-wake-");
+    const started = await startEmbeddedPostgresTestDatabase("partyclip-heartbeat-comment-wake-");
     db = createDb(started.connectionString);
     tempDb = started;
   }, 120_000);
@@ -447,7 +447,7 @@ describe("heartbeat comment wake batching", () => {
       }, 90_000);
 
       const secondPayload = gateway.getAgentPayloads()[1] ?? {};
-      expect(secondPayload.paperclip).toMatchObject({
+      expect(secondPayload.partyclip).toMatchObject({
         wake: {
           commentIds: [comment2.id, comment3.id],
           latestCommentId: comment3.id,
@@ -570,7 +570,7 @@ describe("heartbeat comment wake batching", () => {
 
       await waitFor(() => gateway.getAgentPayloads().length === 2);
       const promotedPayload = gateway.getAgentPayloads()[1] ?? {};
-      expect(promotedPayload.paperclip).toMatchObject({
+      expect(promotedPayload.partyclip).toMatchObject({
         wake: {
           commentIds: [queuedComment.id],
           latestCommentId: queuedComment.id,
@@ -765,7 +765,7 @@ describe("heartbeat comment wake batching", () => {
       });
 
       const secondPayload = gateway.getAgentPayloads()[1] ?? {};
-      expect(secondPayload.paperclip).toMatchObject({
+      expect(secondPayload.partyclip).toMatchObject({
         wake: {
           reason: "issue_commented",
           commentIds: [comment2.id],
@@ -965,7 +965,7 @@ describe("heartbeat comment wake batching", () => {
       expect(issueAfterPromotion?.completedAt).not.toBeNull();
 
       const secondPayload = gateway.getAgentPayloads()[1] ?? {};
-      expect(secondPayload.paperclip).toMatchObject({
+      expect(secondPayload.partyclip).toMatchObject({
         wake: {
           reason: "issue_comment_mentioned",
           commentIds: [comment.id],
@@ -1051,7 +1051,7 @@ describe("heartbeat comment wake batching", () => {
       expect(firstRun).not.toBeNull();
       await waitFor(() => gateway.getAgentPayloads().length === 1);
       const firstPayload = gateway.getAgentPayloads()[0] ?? {};
-      expect(firstPayload.paperclip).toMatchObject({
+      expect(firstPayload.partyclip).toMatchObject({
         wake: {
           reason: "issue_assigned",
           issue: {

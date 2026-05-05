@@ -35,7 +35,7 @@ describe("feedbackService.saveIssueVote", () => {
   let tempDirs: string[] = [];
 
   beforeAll(async () => {
-    const started = await startEmbeddedPostgresTestDatabase("paperclip-feedback-service-");
+    const started = await startEmbeddedPostgresTestDatabase("partyclip-feedback-service-");
     db = createDb(started.connectionString);
     svc = feedbackService(db);
     tempDb = started;
@@ -124,7 +124,7 @@ describe("feedbackService.saveIssueVote", () => {
     // Random UUIDs occasionally produce digit pairs like "4880-8614" that
     // cross segment boundaries and match the phone pattern.
     const runId = "abcde123-face-beef-cafe-abcdef654321";
-    const instructionsDir = fs.mkdtempSync(path.join(os.tmpdir(), "paperclip-feedback-instructions-"));
+    const instructionsDir = fs.mkdtempSync(path.join(os.tmpdir(), "partyclip-feedback-instructions-"));
     tempDirs.push(instructionsDir);
     const instructionsPath = path.join(instructionsDir, "AGENTS.md");
     fs.writeFileSync(
@@ -145,7 +145,7 @@ describe("feedbackService.saveIssueVote", () => {
         id: randomUUID(),
         companyId,
         key: "partyclipai/partyclip/partyclip",
-        slug: "paperclip",
+        slug: "partyclip",
         name: "Paperclip",
         markdown: "# Paperclip",
         sourceType: "catalog",
@@ -638,8 +638,8 @@ describe("feedbackService.saveIssueVote", () => {
 
     expect(trace?.status).toBe("pending");
     expect(trace?.exportId).toMatch(/^fbexp_/);
-    expect(trace?.schemaVersion).toBe("paperclip-feedback-envelope-v2");
-    expect(trace?.bundleVersion).toBe("paperclip-feedback-bundle-v2");
+    expect(trace?.schemaVersion).toBe("partyclip-feedback-envelope-v2");
+    expect(trace?.bundleVersion).toBe("partyclip-feedback-bundle-v2");
     expect(trace?.payloadDigest).toMatch(/^[a-f0-9]{64}$/);
     expect(primaryContent?.createdByRunId).toBe(runId);
     expect(String(primaryContent?.body)).toContain("[REDACTED]");
@@ -698,15 +698,15 @@ describe("feedbackService.saveIssueVote", () => {
 
     expect(localTrace?.status).toBe("local_only");
     expect(localTrace?.exportId).toBeNull();
-    expect(localTrace?.payloadVersion).toBe("paperclip-feedback-v1");
+    expect(localTrace?.payloadVersion).toBe("partyclip-feedback-v1");
     expect(localTrace?.payloadSnapshot?.bundle).toBeNull();
     expect(sharedTrace?.status).toBe("pending");
     expect(sharedTrace?.exportId).toMatch(/^fbexp_/);
-    expect(sharedTrace?.payloadVersion).toBe("paperclip-feedback-v1");
+    expect(sharedTrace?.payloadVersion).toBe("partyclip-feedback-v1");
   });
 
   it("captures Claude project session artifacts as full traces", async () => {
-    const claudeRoot = fs.mkdtempSync(path.join(os.tmpdir(), "paperclip-feedback-claude-"));
+    const claudeRoot = fs.mkdtempSync(path.join(os.tmpdir(), "partyclip-feedback-claude-"));
     tempDirs.push(claudeRoot);
     const sessionId = randomUUID();
     const projectDir = path.join(claudeRoot, "projects", "workspace-1");
@@ -780,7 +780,7 @@ describe("feedbackService.saveIssueVote", () => {
   });
 
   it("captures OpenCode message and part files as full traces", async () => {
-    const opencodeRoot = fs.mkdtempSync(path.join(os.tmpdir(), "paperclip-feedback-opencode-"));
+    const opencodeRoot = fs.mkdtempSync(path.join(os.tmpdir(), "partyclip-feedback-opencode-"));
     tempDirs.push(opencodeRoot);
     const sessionId = "ses_test_feedback_trace";
     const sessionDir = path.join(opencodeRoot, "storage", "session", "global");
@@ -995,7 +995,7 @@ describe("feedbackService.saveIssueVote", () => {
       issueIdentifier: traces[0]?.issueIdentifier,
       captureStatus: expect.stringMatching(/^(full|partial|unavailable)$/),
       envelope: {
-        destination: "paperclip_labs_feedback_v1",
+        destination: "partyclip_labs_feedback_v1",
         exportId: traces[0]?.exportId,
       },
     });

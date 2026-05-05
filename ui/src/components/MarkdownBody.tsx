@@ -49,7 +49,7 @@ function MarkdownIssueLink({
     <Link
       to={`/issues/${identifier}`}
       data-mention-kind="issue"
-      className="paperclip-markdown-issue-ref"
+      className="partyclip-markdown-issue-ref"
       title={title}
       aria-label={issueLabel}
     >
@@ -232,7 +232,7 @@ function CodeBlock({
   const label = failed ? "Copy failed" : copied ? "Copied!" : "Copy";
 
   return (
-    <div className="paperclip-markdown-codeblock">
+    <div className="partyclip-markdown-codeblock">
       <pre
         {...preProps}
         ref={preRef}
@@ -245,7 +245,7 @@ function CodeBlock({
         onClick={handleCopy}
         aria-label="Copy code"
         title={label}
-        className="paperclip-markdown-codeblock-copy"
+        className="partyclip-markdown-codeblock-copy"
         data-copied={copied || undefined}
         data-failed={failed || undefined}
       >
@@ -254,7 +254,7 @@ function CodeBlock({
         ) : (
           <Copy aria-hidden="true" className="h-3.5 w-3.5" />
         )}
-        <span className="paperclip-markdown-codeblock-copy-label">{label}</span>
+        <span className="partyclip-markdown-codeblock-copy-label">{label}</span>
       </button>
     </div>
   );
@@ -279,7 +279,7 @@ function MermaidDiagramBlock({ source, darkMode }: { source: string; darkMode: b
           fontFamily: "inherit",
           suppressErrorRendering: true,
         });
-        const rendered = await mermaid.render(`paperclip-mermaid-${renderId}`, source);
+        const rendered = await mermaid.render(`partyclip-mermaid-${renderId}`, source);
         if (!active) return;
         setSvg(rendered.svg);
       })
@@ -298,15 +298,15 @@ function MermaidDiagramBlock({ source, darkMode }: { source: string; darkMode: b
   }, [darkMode, renderId, source]);
 
   return (
-    <div className="paperclip-mermaid">
+    <div className="partyclip-mermaid">
       {svg ? (
         <div dangerouslySetInnerHTML={{ __html: svg }} />
       ) : (
         <>
-          <p className={cn("paperclip-mermaid-status", error && "paperclip-mermaid-status-error")}>
+          <p className={cn("partyclip-mermaid-status", error && "partyclip-mermaid-status-error")}>
             {error ? `Unable to render Mermaid diagram: ${error}` : "Rendering Mermaid diagram..."}
           </p>
-          <pre className="paperclip-mermaid-source">
+          <pre className="partyclip-mermaid-source">
             <code className="language-mermaid">{source}</code>
           </pre>
         </>
@@ -395,9 +395,9 @@ export function MarkdownBody({
           <a
             href={targetHref}
             className={cn(
-              "paperclip-mention-chip",
-              `paperclip-mention-chip--${parsed.kind}`,
-              parsed.kind === "project" && "paperclip-project-mention-chip",
+              "partyclip-mention-chip",
+              `partyclip-mention-chip--${parsed.kind}`,
+              parsed.kind === "project" && "partyclip-project-mention-chip",
             )}
             data-mention-kind={parsed.kind}
             style={{ ...mergeWrapStyle(linkStyle as React.CSSProperties | undefined), ...mentionChipInlineStyle(parsed) }}
@@ -446,7 +446,7 @@ export function MarkdownBody({
   return (
     <div
       className={cn(
-        "paperclip-markdown prose prose-sm min-w-0 max-w-full break-words overflow-hidden",
+        "partyclip-markdown prose prose-sm min-w-0 max-w-full break-words overflow-hidden",
         theme === "dark" && "prose-invert",
         className,
       )}

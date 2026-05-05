@@ -1,12 +1,12 @@
 [Unit]
 Description=Paperclip AI Agent Orchestrator
-Requires=paperclip-db.service
-After=paperclip-db.service
+Requires=partyclip-db.service
+After=partyclip-db.service
 
 [Container]
-Image=paperclip-local
-ContainerName=paperclip
-Pod=paperclip.pod
+Image=partyclip-local
+ContainerName=partyclip
+Pod=partyclip.pod
 Volume=%h/.local/share/partyclip:/partyclip:Z
 Environment=HOST=0.0.0.0
 Environment=PARTYCLIP_HOME=/partyclip

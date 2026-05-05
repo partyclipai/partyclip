@@ -92,11 +92,11 @@ export function resolveManagedClaudeConfigSeedDir(
   env: NodeJS.ProcessEnv,
   companyId?: string,
 ): string {
-  const paperclipHome = nonEmpty(env.PARTYCLIP_HOME) ?? path.resolve(os.homedir(), ".paperclip");
+  const partyclipHome = nonEmpty(env.PARTYCLIP_HOME) ?? path.resolve(os.homedir(), ".partyclip");
   const instanceId = nonEmpty(env.PARTYCLIP_INSTANCE_ID) ?? DEFAULT_PARTYCLIP_INSTANCE_ID;
   return companyId
-    ? path.resolve(paperclipHome, "instances", instanceId, "companies", companyId, "claude-config-seed")
-    : path.resolve(paperclipHome, "instances", instanceId, "claude-config-seed");
+    ? path.resolve(partyclipHome, "instances", instanceId, "companies", companyId, "claude-config-seed")
+    : path.resolve(partyclipHome, "instances", instanceId, "claude-config-seed");
 }
 
 export async function prepareClaudeConfigSeed(
@@ -122,12 +122,12 @@ export async function prepareClaudeConfigSeed(
   if (copiedFiles.length > 0) {
     await onLog(
       "stdout",
-      `[paperclip] Prepared Claude config seed "${targetDir}" from "${sourceDir}" (${copiedFiles.map((file) => file.name).join(", ")}).\n`,
+      `[partyclip] Prepared Claude config seed "${targetDir}" from "${sourceDir}" (${copiedFiles.map((file) => file.name).join(", ")}).\n`,
     );
   } else {
     await onLog(
       "stdout",
-      `[paperclip] No local Claude config seed files were found in "${sourceDir}". Remote Claude auth may still require login.\n`,
+      `[partyclip] No local Claude config seed files were found in "${sourceDir}". Remote Claude auth may still require login.\n`,
     );
   }
 

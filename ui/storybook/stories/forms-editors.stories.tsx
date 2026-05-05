@@ -34,9 +34,9 @@ function Section({
   children: ReactNode;
 }) {
   return (
-    <section className="paperclip-story__frame overflow-hidden">
+    <section className="partyclip-story__frame overflow-hidden">
       <div className="border-b border-border px-5 py-4">
-        <div className="paperclip-story__label">{eyebrow}</div>
+        <div className="partyclip-story__label">{eyebrow}</div>
         <div className="mt-1 flex flex-wrap items-end justify-between gap-3">
           <div>
             <h2 className="text-xl font-semibold">{title}</h2>
@@ -78,8 +78,8 @@ function StatePanel({
 
 function StoryShell({ children }: { children: ReactNode }) {
   return (
-    <div className="paperclip-story">
-      <main className="paperclip-story__inner space-y-6">{children}</main>
+    <div className="partyclip-story">
+      <main className="partyclip-story__inner space-y-6">{children}</main>
     </div>
   );
 }
@@ -289,9 +289,9 @@ const storybookProject: Project = {
     repoUrl: "https://github.com/partyclipai/partyclip",
     repoRef: "master",
     defaultRef: "master",
-    repoName: "paperclip",
+    repoName: "partyclip",
     localFolder: "/Users/dotta/partyclip",
-    managedFolder: "paperclip",
+    managedFolder: "partyclip",
     effectiveLocalFolder: "/Users/dotta/partyclip",
     origin: "local_folder",
   },
@@ -615,10 +615,10 @@ function PickerGallery() {
 function FormsEditorsShowcase() {
   return (
     <StoryShell>
-      <section className="paperclip-story__frame p-6">
+      <section className="partyclip-story__frame p-6">
         <div className="flex flex-wrap items-start justify-between gap-5">
           <div>
-            <div className="paperclip-story__label">Forms and editors</div>
+            <div className="partyclip-story__label">Forms and editors</div>
             <h1 className="mt-2 text-3xl font-semibold tracking-tight">Paperclip form controls under realistic state</h1>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-muted-foreground">
               Dense control-plane forms need to hold empty, filled, validation, and disabled states without losing scan
@@ -715,7 +715,7 @@ export const RoutineRunVariablesDialogOpen: Story = {
 };
 
 const foldCurtainLongMarkdown = [
-  "# paperclip-bench",
+  "# partyclip-bench",
   "",
   "Ship criteria for the benchmark harness — these notes are intentionally lengthy so the fold-curtain clips them.",
   "",

@@ -37,7 +37,7 @@ describeEmbeddedPostgres("cleanup removal services", () => {
   let tempDb: Awaited<ReturnType<typeof startEmbeddedPostgresTestDatabase>> | null = null;
 
   beforeAll(async () => {
-    tempDb = await startEmbeddedPostgresTestDatabase("paperclip-cleanup-removal-");
+    tempDb = await startEmbeddedPostgresTestDatabase("partyclip-cleanup-removal-");
     db = createDb(tempDb.connectionString);
   }, 20_000);
 
@@ -167,7 +167,7 @@ describeEmbeddedPostgres("cleanup removal services", () => {
       id: randomUUID(),
       companyId,
       key: "partyclipai/partyclip/partyclip",
-      slug: "paperclip",
+      slug: "partyclip",
       name: "Paperclip",
       markdown: "# Paperclip",
     });

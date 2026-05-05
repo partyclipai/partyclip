@@ -38,7 +38,7 @@ describeEmbeddedPostgres("companySkillService.detail", () => {
   const cleanupDirs = new Set<string>();
 
   beforeAll(async () => {
-    tempDb = await startEmbeddedPostgresTestDatabase("paperclip-company-skills-detail-");
+    tempDb = await startEmbeddedPostgresTestDatabase("partyclip-company-skills-detail-");
     db = createDb(tempDb.connectionString);
     svc = companySkillService(db);
   }, 20_000);
@@ -102,7 +102,7 @@ describeEmbeddedPostgres("companySkillService.detail", () => {
     const companyId = randomUUID();
     const skillId = randomUUID();
     const skillKey = `company/${companyId}/reflection-coach`;
-    const skillDir = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-reflection-skill-"));
+    const skillDir = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-reflection-skill-"));
     cleanupDirs.add(skillDir);
     await fs.writeFile(path.join(skillDir, "SKILL.md"), "# Reflection Coach\n", "utf8");
 
@@ -134,7 +134,7 @@ describeEmbeddedPostgres("companySkillService.detail", () => {
       role: "engineer",
       adapterType: "codex_local",
       adapterConfig: {
-        paperclipSkillSync: {
+        partyclipSkillSync: {
           desiredSkills: [skillKey],
         },
       },
@@ -159,7 +159,7 @@ describeEmbeddedPostgres("companySkillService.detail", () => {
     const companyId = randomUUID();
     const skillId = randomUUID();
     const skillKey = `company/${companyId}/reflection-coach`;
-    const skillDir = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-reflection-skill-"));
+    const skillDir = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-reflection-skill-"));
     cleanupDirs.add(skillDir);
     await fs.writeFile(path.join(skillDir, "SKILL.md"), "# Reflection Coach\n", "utf8");
 
@@ -194,7 +194,7 @@ describeEmbeddedPostgres("companySkillService.detail", () => {
         description: null,
         markdown: `# Large Reference Skill\n\n${"x".repeat(32_000)}`,
         sourceType: "catalog",
-        sourceLocator: "paperclip://catalog/large-reference-skill",
+        sourceLocator: "partyclip://catalog/large-reference-skill",
         trustLevel: "markdown_only",
         compatibility: "compatible",
         fileInventory: [{ path: "SKILL.md", kind: "skill" }],
@@ -208,7 +208,7 @@ describeEmbeddedPostgres("companySkillService.detail", () => {
       role: "engineer",
       adapterType: "codex_local",
       adapterConfig: {
-        paperclipSkillSync: {
+        partyclipSkillSync: {
           desiredSkills: ["reflection-coach"],
         },
       },

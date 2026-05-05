@@ -67,7 +67,7 @@ function installStorybookApiFixtures() {
             status: "active",
             user: {
               id: "user-board",
-              email: "board@paperclip.local",
+              email: "board@partyclip.local",
               name: "Board Operator",
               image: null,
             },
@@ -77,7 +77,7 @@ function installStorybookApiFixtures() {
             status: "active",
             user: {
               id: "user-product",
-              email: "product@paperclip.local",
+              email: "product@partyclip.local",
               name: "Product Lead",
               image: null,
             },

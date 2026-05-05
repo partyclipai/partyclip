@@ -124,7 +124,7 @@ async function createRuntimeSkill(root: string, input: {
   runtimeName?: string;
   body?: string;
 }) {
-  const runtimeName = input.runtimeName ?? "paperclip-test-skill";
+  const runtimeName = input.runtimeName ?? "partyclip-test-skill";
   const key = input.key ?? `company/${runtimeName}`;
   const source = path.join(root, "skills", runtimeName);
   await fs.mkdir(source, { recursive: true });
@@ -168,7 +168,7 @@ function buildContext(root: string, overrides: Partial<AdapterExecutionContext> 
     },
     context: {
       issueId: "issue-1",
-      paperclipTaskMarkdown: "Task context",
+      partyclipTaskMarkdown: "Task context",
     },
     onLog: async () => {},
     ...overrides,
@@ -177,7 +177,7 @@ function buildContext(root: string, overrides: Partial<AdapterExecutionContext> 
 
 describe("acpx_local execute", () => {
   it("streams ACPX session, status, text, and tool events before returning success", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-acpx-success-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-acpx-success-"));
     try {
       const runtime = new FakeRuntime({} as AcpRuntimeOptions);
       const logs: LogEntry[] = [];
@@ -216,7 +216,7 @@ describe("acpx_local execute", () => {
   });
 
   it("reuses a compatible warm session and starts fresh when cwd changes", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-acpx-reuse-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-acpx-reuse-"));
     const other = path.join(root, "other");
     await fs.mkdir(other);
     try {
@@ -265,7 +265,7 @@ describe("acpx_local execute", () => {
   });
 
   it("closes duplicate warm handles from concurrent runs for the same session key", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-acpx-concurrent-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-acpx-concurrent-"));
     try {
       const runtimes: FakeRuntime[] = [];
       const warmHandles = new Map();
@@ -288,7 +288,7 @@ describe("acpx_local execute", () => {
       expect(runtimes).toHaveLength(2);
       expect(warmHandles.size).toBe(1);
       expect(runtimes.flatMap((runtime) => runtime.closeInputs).filter((input) =>
-        input.reason === "paperclip duplicate warm handle cleanup"
+        input.reason === "partyclip duplicate warm handle cleanup"
       )).toHaveLength(1);
     } finally {
       await fs.rm(root, { recursive: true, force: true });
@@ -296,7 +296,7 @@ describe("acpx_local execute", () => {
   });
 
   it("retries with a fresh session when ACPX cannot resume the saved backend session", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-acpx-resume-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-acpx-resume-"));
     try {
       const runtime = new FakeRuntime({} as AcpRuntimeOptions);
       const firstExecute = createAcpxLocalExecutor({
@@ -336,7 +336,7 @@ describe("acpx_local execute", () => {
   });
 
   it("cancels and closes stale handles on timeout", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-acpx-timeout-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-acpx-timeout-"));
     try {
       const neverFinishes = new FakeRuntime(
         {} as AcpRuntimeOptions,
@@ -385,7 +385,7 @@ describe("acpx_local execute", () => {
   });
 
   it("returns structured auth errors", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-acpx-error-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-acpx-error-"));
     try {
       const runtime = new FakeRuntime({} as AcpRuntimeOptions);
       runtime.nextEnsureError = new Error("authentication required: login first");
@@ -400,7 +400,7 @@ describe("acpx_local execute", () => {
   });
 
   it("returns structured ACP protocol errors", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-acpx-protocol-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-acpx-protocol-"));
     try {
       const runtime = new FakeRuntime({} as AcpRuntimeOptions);
       runtime.nextEnsureError = Object.assign(new Error("protocol init failed"), {
@@ -420,7 +420,7 @@ describe("acpx_local execute", () => {
   });
 
   it("materializes selected skills for ACPX Claude and passes public session metadata", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-acpx-claude-skills-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-acpx-claude-skills-"));
     try {
       const skill = await createRuntimeSkill(root, {});
       let runtime: FakeRuntime | null = null;
@@ -438,8 +438,8 @@ describe("acpx_local execute", () => {
           cwd: root,
           stateDir: path.join(root, "state"),
           promptTemplate: "Do the assigned work.",
-          paperclipRuntimeSkills: [skill],
-          paperclipSkillSync: {
+          partyclipRuntimeSkills: [skill],
+          partyclipSkillSync: {
             desiredSkills: [skill.key],
           },
         },
@@ -467,7 +467,7 @@ describe("acpx_local execute", () => {
   });
 
   it("includes skill content in the ACPX Claude session fingerprint", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-acpx-claude-fingerprint-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-acpx-claude-fingerprint-"));
     try {
       const skill = await createRuntimeSkill(root, { body: "---\nrequired: false\n---\nFirst version.\n" });
       const runtimes: FakeRuntime[] = [];
@@ -484,8 +484,8 @@ describe("acpx_local execute", () => {
           cwd: root,
           stateDir: path.join(root, "state"),
           promptTemplate: "Do the assigned work.",
-          paperclipRuntimeSkills: [skill],
-          paperclipSkillSync: {
+          partyclipRuntimeSkills: [skill],
+          partyclipSkillSync: {
             desiredSkills: [skill.key],
           },
         },
@@ -511,7 +511,7 @@ describe("acpx_local execute", () => {
   });
 
   it("materializes selected skills into the effective ACPX Codex CODEX_HOME", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-acpx-codex-skills-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-acpx-codex-skills-"));
     try {
       const skill = await createRuntimeSkill(root, {});
       const codexHome = path.join(root, "codex-home");
@@ -531,8 +531,8 @@ describe("acpx_local execute", () => {
           stateDir: path.join(root, "state"),
           promptTemplate: "Do the assigned work.",
           env: { CODEX_HOME: codexHome },
-          paperclipRuntimeSkills: [skill],
-          paperclipSkillSync: {
+          partyclipRuntimeSkills: [skill],
+          partyclipSkillSync: {
             desiredSkills: [skill.key],
           },
         },
@@ -559,7 +559,7 @@ describe("acpx_local execute", () => {
   });
 
   it("keeps ACPX custom skill selection tracked without runtime materialization", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-acpx-custom-skills-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-acpx-custom-skills-"));
     try {
       const skill = await createRuntimeSkill(root, {});
       let runtime: FakeRuntime | null = null;
@@ -578,8 +578,8 @@ describe("acpx_local execute", () => {
           cwd: root,
           stateDir: path.join(root, "state"),
           promptTemplate: "Do the assigned work.",
-          paperclipRuntimeSkills: [skill],
-          paperclipSkillSync: {
+          partyclipRuntimeSkills: [skill],
+          partyclipSkillSync: {
             desiredSkills: [skill.key],
           },
         },

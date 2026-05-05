@@ -3,7 +3,7 @@
 # Kill all local Paperclip dev server processes (across all worktrees).
 #
 # Usage:
-#   scripts/kill-dev.sh        # kill all paperclip dev processes
+#   scripts/kill-dev.sh        # kill all partyclip dev processes
 #   scripts/kill-dev.sh --dry  # preview what would be killed
 #
 
@@ -99,16 +99,16 @@ done < <(ps aux | grep -E 'agent-browser/browsers/chrome-.*/Google Chrome for Te
 
 candidate_pidfiles=()
 candidate_pidfiles+=(
-  "$HOME"/.paperclip/instances/*/db/postmaster.pid
-  "$REPO_ROOT"/.paperclip/instances/*/db/postmaster.pid
-  "$REPO_ROOT"/.paperclip/runtime-services/instances/*/db/postmaster.pid
+  "$HOME"/.partyclip/instances/*/db/postmaster.pid
+  "$REPO_ROOT"/.partyclip/instances/*/db/postmaster.pid
+  "$REPO_ROOT"/.partyclip/runtime-services/instances/*/db/postmaster.pid
 )
 
 for sibling_root in "$REPO_PARENT"/partyclip*; do
   [[ -d "$sibling_root" ]] || continue
   candidate_pidfiles+=(
-    "$sibling_root"/.paperclip/instances/*/db/postmaster.pid
-    "$sibling_root"/.paperclip/runtime-services/instances/*/db/postmaster.pid
+    "$sibling_root"/.partyclip/instances/*/db/postmaster.pid
+    "$sibling_root"/.partyclip/runtime-services/instances/*/db/postmaster.pid
   )
 done
 

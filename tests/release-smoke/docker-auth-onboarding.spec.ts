@@ -3,11 +3,11 @@ import { expect, test, type Page } from "@playwright/test";
 const ADMIN_EMAIL =
   process.env.PARTYCLIP_RELEASE_SMOKE_EMAIL ??
   process.env.SMOKE_ADMIN_EMAIL ??
-  "smoke-admin@paperclip.local";
+  "smoke-admin@partyclip.local";
 const ADMIN_PASSWORD =
   process.env.PARTYCLIP_RELEASE_SMOKE_PASSWORD ??
   process.env.SMOKE_ADMIN_PASSWORD ??
-  "paperclip-smoke-password";
+  "partyclip-smoke-password";
 
 const COMPANY_NAME = `Release-Smoke-${Date.now()}`;
 const AGENT_NAME = "CEO";

@@ -132,10 +132,10 @@ async function runGit(cwd: string, args: string[]) {
 }
 
 async function createTempRepo() {
-  const repoRoot = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-execution-workspace-"));
+  const repoRoot = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-execution-workspace-"));
   await runGit(repoRoot, ["init"]);
   await runGit(repoRoot, ["config", "user.name", "Paperclip Test"]);
-  await runGit(repoRoot, ["config", "user.email", "test@paperclip.local"]);
+  await runGit(repoRoot, ["config", "user.email", "test@partyclip.local"]);
   await fs.writeFile(path.join(repoRoot, "README.md"), "# Test repo\n", "utf8");
   await runGit(repoRoot, ["add", "README.md"]);
   await runGit(repoRoot, ["commit", "-m", "Initial commit"]);
@@ -150,7 +150,7 @@ describeEmbeddedPostgres("executionWorkspaceService.getCloseReadiness", () => {
   const tempDirs = new Set<string>();
 
   beforeAll(async () => {
-    tempDb = await startEmbeddedPostgresTestDatabase("paperclip-execution-workspaces-service-");
+    tempDb = await startEmbeddedPostgresTestDatabase("partyclip-execution-workspaces-service-");
     db = createDb(tempDb.connectionString);
     svc = executionWorkspaceService(db);
   }, 20_000);
@@ -346,11 +346,11 @@ describeEmbeddedPostgres("executionWorkspaceService.getCloseReadiness", () => {
   it("warns about dirty and unmerged git worktrees and reports cleanup actions", async () => {
     const repoRoot = await createTempRepo();
     tempDirs.add(repoRoot);
-    const worktreePath = path.join(path.dirname(repoRoot), `paperclip-worktree-${randomUUID()}`);
+    const worktreePath = path.join(path.dirname(repoRoot), `partyclip-worktree-${randomUUID()}`);
     tempDirs.add(worktreePath);
 
-    await runGit(repoRoot, ["branch", "paperclip-close-check"]);
-    await runGit(repoRoot, ["worktree", "add", worktreePath, "paperclip-close-check"]);
+    await runGit(repoRoot, ["branch", "partyclip-close-check"]);
+    await runGit(repoRoot, ["worktree", "add", worktreePath, "partyclip-close-check"]);
     await fs.writeFile(path.join(worktreePath, "feature.txt"), "hello\n", "utf8");
     await runGit(worktreePath, ["add", "feature.txt"]);
     await runGit(worktreePath, ["commit", "-m", "Feature commit"]);
@@ -402,7 +402,7 @@ describeEmbeddedPostgres("executionWorkspaceService.getCloseReadiness", () => {
       providerType: "git_worktree",
       cwd: worktreePath,
       providerRef: worktreePath,
-      branchName: "paperclip-close-check",
+      branchName: "partyclip-close-check",
       baseRef: "main",
       metadata: {
         createdByRuntime: true,
@@ -422,7 +422,7 @@ describeEmbeddedPostgres("executionWorkspaceService.getCloseReadiness", () => {
       isDestructiveCloseAllowed: true,
       git: {
         workspacePath: worktreePath,
-        branchName: "paperclip-close-check",
+        branchName: "partyclip-close-check",
         baseRef: "main",
         createdByRuntime: true,
         hasDirtyTrackedFiles: false,

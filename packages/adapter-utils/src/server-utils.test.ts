@@ -62,7 +62,7 @@ describe("buildInvocationEnvForLogs", () => {
 
 describe("materializePaperclipSkillCopy", () => {
   it("refuses to materialize into an ancestor of the source", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-skill-copy-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-skill-copy-"));
     try {
       const source = path.join(root, "parent", "skill");
       await fs.mkdir(source, { recursive: true });
@@ -78,7 +78,7 @@ describe("materializePaperclipSkillCopy", () => {
   });
 
   it("does not delete and recopy an unchanged materialized skill target", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-skill-copy-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-skill-copy-"));
     try {
       const source = path.join(root, "source");
       const target = path.join(root, "target");
@@ -98,7 +98,7 @@ describe("materializePaperclipSkillCopy", () => {
   });
 
   it("breaks stale materialization locks left by dead processes", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-skill-copy-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-skill-copy-"));
     try {
       const source = path.join(root, "source");
       const target = path.join(root, "target");

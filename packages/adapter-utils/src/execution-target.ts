@@ -39,7 +39,7 @@ export interface AdapterSshExecutionTarget {
   environmentId?: string | null;
   leaseId?: string | null;
   remoteCwd: string;
-  paperclipApiUrl?: string | null;
+  partyclipApiUrl?: string | null;
   spec: SshRemoteExecutionSpec;
 }
 
@@ -50,8 +50,8 @@ export interface AdapterSandboxExecutionTarget {
   environmentId?: string | null;
   leaseId?: string | null;
   remoteCwd: string;
-  paperclipApiUrl?: string | null;
-  paperclipTransport?: "direct" | "bridge";
+  partyclipApiUrl?: string | null;
+  partyclipTransport?: "direct" | "bridge";
   timeoutMs?: number | null;
   runner?: CommandManagedRuntimeRunner;
 }
@@ -127,12 +127,12 @@ function resolveDefaultPaperclipApiUrl(): string {
 }
 
 function resolveSandboxPaperclipTransport(
-  target: Pick<AdapterSandboxExecutionTarget, "paperclipTransport" | "paperclipApiUrl">,
+  target: Pick<AdapterSandboxExecutionTarget, "partyclipTransport" | "partyclipApiUrl">,
 ): "direct" | "bridge" {
-  if (target.paperclipTransport === "direct" || target.paperclipTransport === "bridge") {
-    return target.paperclipTransport;
+  if (target.partyclipTransport === "direct" || target.partyclipTransport === "bridge") {
+    return target.partyclipTransport;
   }
-  return target.paperclipApiUrl ? "direct" : "bridge";
+  return target.partyclipApiUrl ? "direct" : "bridge";
 }
 
 function isAdapterExecutionTargetInstance(value: unknown): value is AdapterExecutionTarget {
@@ -184,9 +184,9 @@ export function adapterExecutionTargetPaperclipApiUrl(
   target: AdapterExecutionTarget | null | undefined,
 ): string | null {
   if (target?.kind !== "remote") return null;
-  if (target.transport === "ssh") return target.paperclipApiUrl ?? target.spec.paperclipApiUrl ?? null;
+  if (target.transport === "ssh") return target.partyclipApiUrl ?? target.spec.partyclipApiUrl ?? null;
   if (resolveSandboxPaperclipTransport(target) === "bridge") return null;
-  return target.paperclipApiUrl ?? null;
+  return target.partyclipApiUrl ?? null;
 }
 
 export function adapterExecutionTargetUsesPaperclipBridge(
@@ -458,15 +458,15 @@ export function adapterExecutionTargetSessionIdentity(
 ): Record<string, unknown> | null {
   if (!target || target.kind === "local") return null;
   if (target.transport === "ssh") return buildRemoteExecutionSessionIdentity(target.spec);
-  const paperclipTransport = resolveSandboxPaperclipTransport(target);
+  const partyclipTransport = resolveSandboxPaperclipTransport(target);
   return {
     transport: "sandbox",
     providerKey: target.providerKey ?? null,
     environmentId: target.environmentId ?? null,
     leaseId: target.leaseId ?? null,
     remoteCwd: target.remoteCwd,
-    paperclipTransport,
-    ...(paperclipTransport === "direct" && target.paperclipApiUrl ? { paperclipApiUrl: target.paperclipApiUrl } : {}),
+    partyclipTransport,
+    ...(partyclipTransport === "direct" && target.partyclipApiUrl ? { partyclipApiUrl: target.partyclipApiUrl } : {}),
   };
 }
 
@@ -486,8 +486,8 @@ export function adapterExecutionTargetSessionMatches(
     readStringMeta(parsedSaved, "environmentId") === current?.environmentId &&
     readStringMeta(parsedSaved, "leaseId") === current?.leaseId &&
     readStringMeta(parsedSaved, "remoteCwd") === current?.remoteCwd &&
-    readStringMeta(parsedSaved, "paperclipTransport") === (current?.paperclipTransport ?? null) &&
-    readStringMeta(parsedSaved, "paperclipApiUrl") === (current?.paperclipApiUrl ?? null)
+    readStringMeta(parsedSaved, "partyclipTransport") === (current?.partyclipTransport ?? null) &&
+    readStringMeta(parsedSaved, "partyclipApiUrl") === (current?.partyclipApiUrl ?? null)
   );
 }
 
@@ -512,14 +512,14 @@ export function parseAdapterExecutionTarget(value: unknown): AdapterExecutionTar
       environmentId: readStringMeta(parsed, "environmentId"),
       leaseId: readStringMeta(parsed, "leaseId"),
       remoteCwd: spec.remoteCwd,
-      paperclipApiUrl: readStringMeta(parsed, "paperclipApiUrl") ?? spec.paperclipApiUrl ?? null,
+      partyclipApiUrl: readStringMeta(parsed, "partyclipApiUrl") ?? spec.partyclipApiUrl ?? null,
       spec,
     };
   }
 
   if (kind === "remote" && readStringMeta(parsed, "transport") === "sandbox") {
     const remoteCwd = readStringMeta(parsed, "remoteCwd");
-    const paperclipTransport = readStringMeta(parsed, "paperclipTransport");
+    const partyclipTransport = readStringMeta(parsed, "partyclipTransport");
     if (!remoteCwd) return null;
     return {
       kind: "remote",
@@ -528,10 +528,10 @@ export function parseAdapterExecutionTarget(value: unknown): AdapterExecutionTar
       environmentId: readStringMeta(parsed, "environmentId"),
       leaseId: readStringMeta(parsed, "leaseId"),
       remoteCwd,
-      paperclipApiUrl: readStringMeta(parsed, "paperclipApiUrl"),
-      paperclipTransport:
-        paperclipTransport === "direct" || paperclipTransport === "bridge"
-          ? paperclipTransport
+      partyclipApiUrl: readStringMeta(parsed, "partyclipApiUrl"),
+      partyclipTransport:
+        partyclipTransport === "direct" || partyclipTransport === "bridge"
+          ? partyclipTransport
           : undefined,
       timeoutMs: typeof parsed.timeoutMs === "number" ? parsed.timeoutMs : null,
     };
@@ -553,7 +553,7 @@ export function adapterExecutionTargetFromRemoteExecution(
       environmentId: metadata.environmentId ?? null,
       leaseId: metadata.leaseId ?? null,
       remoteCwd: ssh.remoteCwd,
-      paperclipApiUrl: ssh.paperclipApiUrl ?? null,
+      partyclipApiUrl: ssh.partyclipApiUrl ?? null,
       spec: ssh,
     };
   }
@@ -615,7 +615,7 @@ export async function prepareAdapterExecutionTargetRuntime(input: {
       leaseId: target.leaseId,
       remoteCwd: target.remoteCwd,
       timeoutMs: target.timeoutMs,
-      paperclipApiUrl: target.paperclipApiUrl,
+      partyclipApiUrl: target.partyclipApiUrl,
     },
     adapterKey: input.adapterKey,
     workspaceLocalDir: input.workspaceLocalDir,
@@ -637,7 +637,7 @@ export function runtimeAssetDir(
   key: string,
   fallbackRemoteCwd: string,
 ): string {
-  return prepared.assetDirs[key] ?? path.posix.join(fallbackRemoteCwd, ".paperclip-runtime", key);
+  return prepared.assetDirs[key] ?? path.posix.join(fallbackRemoteCwd, ".partyclip-runtime", key);
 }
 
 function buildBridgeResponseHeaders(response: Response): Record<string, string> {
@@ -717,8 +717,8 @@ export async function startAdapterExecutionTargetPaperclipBridge(input: {
   const runtimeRootDir =
     input.runtimeRootDir?.trim().length
       ? input.runtimeRootDir.trim()
-      : path.posix.join(target.remoteCwd, ".paperclip-runtime", input.adapterKey);
-  const bridgeRuntimeDir = path.posix.join(runtimeRootDir, "paperclip-bridge");
+      : path.posix.join(target.remoteCwd, ".partyclip-runtime", input.adapterKey);
+  const bridgeRuntimeDir = path.posix.join(runtimeRootDir, "partyclip-bridge");
   const queueDir = path.posix.join(bridgeRuntimeDir, "queue");
   const assetRemoteDir = path.posix.join(bridgeRuntimeDir, "server");
   const bridgeToken = createSandboxCallbackBridgeToken();
@@ -734,7 +734,7 @@ export async function startAdapterExecutionTargetPaperclipBridge(input: {
 
   await onLog(
     "stdout",
-    `[paperclip] Starting sandbox callback bridge for ${input.adapterKey} in ${bridgeRuntimeDir}.\n`,
+    `[partyclip] Starting sandbox callback bridge for ${input.adapterKey} in ${bridgeRuntimeDir}.\n`,
   );
 
   const bridgeAsset = await createSandboxCallbackBridgeAsset();

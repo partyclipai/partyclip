@@ -103,10 +103,10 @@ describe("MarkdownBody", () => {
     expect(html).toContain('data-mention-kind="user"');
     expect(html).toContain('href="/agents/agent-123"');
     expect(html).toContain('data-mention-kind="agent"');
-    expect(html).toContain("--paperclip-mention-icon-mask");
+    expect(html).toContain("--partyclip-mention-icon-mask");
     expect(html).toContain('href="/projects/project-456"');
     expect(html).toContain('data-mention-kind="project"');
-    expect(html).toContain("--paperclip-mention-project-color:#336699");
+    expect(html).toContain("--partyclip-mention-project-color:#336699");
     expect(html).toContain('href="/skills/skill-789"');
     expect(html).toContain('data-mention-kind="skill"');
   });
@@ -172,8 +172,8 @@ describe("MarkdownBody", () => {
     expect(html).toContain("text-green-600");
     expect(html).toContain(">PAP-1271<");
     expect(html).toContain('data-mention-kind="issue"');
-    expect(html).toContain("paperclip-markdown-issue-ref");
-    expect(html).not.toContain("paperclip-mention-chip--issue");
+    expect(html).toContain("partyclip-markdown-issue-ref");
+    expect(html).not.toContain("partyclip-mention-chip--issue");
   });
 
   it("uses concise issue aria labels until a distinct title is available", () => {
@@ -197,7 +197,7 @@ describe("MarkdownBody", () => {
     expect(html).toContain('target="_blank"');
     expect(html).toContain("lucide-external-link");
     expect(html).not.toContain('href="/issues/PAPA-115"');
-    expect(html).not.toContain("paperclip-markdown-issue-ref");
+    expect(html).not.toContain("partyclip-markdown-issue-ref");
   });
 
   it("linkifies plain internal issue paths in markdown text", () => {
@@ -245,7 +245,7 @@ describe("MarkdownBody", () => {
     expect(html).toContain('href="/issues/PAP-1271"');
     expect(html).toContain('<code style="overflow-wrap:anywhere;word-break:break-word">PAP-1271</code>');
     expect(html).toContain("text-green-600");
-    expect(html).toContain("paperclip-markdown-issue-ref");
+    expect(html).toContain("partyclip-markdown-issue-ref");
   });
 
   it("keeps trailing punctuation outside auto-linked issue references", () => {
@@ -282,7 +282,7 @@ describe("MarkdownBody", () => {
   it("applies wrap-friendly styles to long inline content", () => {
     const html = renderMarkdown("averyveryveryveryveryveryveryveryveryverylongtoken");
 
-    expect(html).toContain('class="paperclip-markdown prose prose-sm min-w-0 max-w-full break-words overflow-hidden');
+    expect(html).toContain('class="partyclip-markdown prose prose-sm min-w-0 max-w-full break-words overflow-hidden');
     expect(html).toContain('style="overflow-wrap:anywhere;word-break:break-word"');
     expect(html).toContain("<p");
   });
@@ -369,8 +369,8 @@ describe("MarkdownBody", () => {
   it("renders a copy button alongside fenced code blocks", () => {
     const html = renderMarkdown("```ts\nconst a = 1;\n```");
 
-    expect(html).toContain("paperclip-markdown-codeblock");
-    expect(html).toContain("paperclip-markdown-codeblock-copy");
+    expect(html).toContain("partyclip-markdown-codeblock");
+    expect(html).toContain("partyclip-markdown-codeblock-copy");
     expect(html).toContain('aria-label="Copy code"');
     expect(html).toContain("lucide-copy");
   });
@@ -378,7 +378,7 @@ describe("MarkdownBody", () => {
   it("does not render a copy button on inline code", () => {
     const html = renderMarkdown("Reference `inline-code` here.");
 
-    expect(html).not.toContain("paperclip-markdown-codeblock-copy");
+    expect(html).not.toContain("partyclip-markdown-codeblock-copy");
   });
 
   it("renders internal issue links and bare identifiers as inline issue refs", () => {
@@ -390,7 +390,7 @@ describe("MarkdownBody", () => {
     expect(html).toContain('href="/issues/PAP-42"');
     expect(html).toContain('href="/issues/PAP-77"');
     expect(html).toContain('data-mention-kind="issue"');
-    expect(html).toContain("paperclip-markdown-issue-ref");
-    expect(html).not.toContain("paperclip-mention-chip--issue");
+    expect(html).toContain("partyclip-markdown-issue-ref");
+    expect(html).not.toContain("partyclip-mention-chip--issue");
   });
 });

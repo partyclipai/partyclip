@@ -140,7 +140,7 @@ describe.sequential("cli auth routes", () => {
     expect(skillRes.status, skillRes.text || JSON.stringify(skillRes.body)).toBe(401);
   });
 
-  it.sequential("serves the invite-scoped paperclip skill anonymously for active invites", async () => {
+  it.sequential("serves the invite-scoped partyclip skill anonymously for active invites", async () => {
     const invite = {
       id: "invite-1",
       companyId: "company-1",

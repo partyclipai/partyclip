@@ -35,7 +35,7 @@ These adapters ship as standalone npm packages and are installed via the plugin 
 
 | Adapter | Package | Type Key | Description |
 |---------|---------|----------|-------------|
-| Droid Local | `@henkey/droid-paperclip-adapter` | `droid_local` | Runs Factory Droid locally |
+| Droid Local | `@henkey/droid-partyclip-adapter` | `droid_local` | Runs Factory Droid locally |
 
 ## External Adapters
 
@@ -44,7 +44,7 @@ You can build and distribute adapters as standalone packages — no changes to P
 ```sh
 # Install from npm via API
 curl -X POST http://localhost:3102/api/adapters \
-  -d '{"packageName": "my-paperclip-adapter"}'
+  -d '{"packageName": "my-partyclip-adapter"}'
 
 # Or link from a local directory
 curl -X POST http://localhost:3102/api/adapters \

@@ -14,11 +14,11 @@ const payload = {
   argv: process.argv.slice(2),
   prompt: fs.readFileSync(0, "utf8"),
   codexHome: process.env.CODEX_HOME || null,
-  paperclipWakePayloadJson: process.env.PARTYCLIP_WAKE_PAYLOAD_JSON || null,
-  paperclipApiUrl: process.env.PARTYCLIP_API_URL || null,
-  paperclipApiKey: process.env.PARTYCLIP_API_KEY || null,
-  paperclipApiBridgeMode: process.env.PARTYCLIP_API_BRIDGE_MODE || null,
-  paperclipEnvKeys: Object.keys(process.env)
+  partyclipWakePayloadJson: process.env.PARTYCLIP_WAKE_PAYLOAD_JSON || null,
+  partyclipApiUrl: process.env.PARTYCLIP_API_URL || null,
+  partyclipApiKey: process.env.PARTYCLIP_API_KEY || null,
+  partyclipApiBridgeMode: process.env.PARTYCLIP_API_BRIDGE_MODE || null,
+  partyclipEnvKeys: Object.keys(process.env)
     .filter((key) => key.startsWith("PARTYCLIP_"))
     .sort(),
 };
@@ -46,11 +46,11 @@ type CapturePayload = {
   argv: string[];
   prompt: string;
   codexHome: string | null;
-  paperclipWakePayloadJson: string | null;
-  paperclipApiUrl?: string | null;
-  paperclipApiKey?: string | null;
-  paperclipApiBridgeMode?: string | null;
-  paperclipEnvKeys: string[];
+  partyclipWakePayloadJson: string | null;
+  partyclipApiUrl?: string | null;
+  partyclipApiKey?: string | null;
+  partyclipApiBridgeMode?: string | null;
+  partyclipEnvKeys: string[];
 };
 
 type LogEntry = {
@@ -94,14 +94,14 @@ function createLocalSandboxRunner() {
 
 describe("codex execute", () => {
   it("uses a Paperclip-managed CODEX_HOME outside worktree mode while preserving shared auth and config", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-codex-execute-default-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-codex-execute-default-"));
     const workspace = path.join(root, "workspace");
     const commandPath = path.join(root, "codex");
     const capturePath = path.join(root, "capture.json");
     const sharedCodexHome = path.join(root, "shared-codex-home");
-    const paperclipHome = path.join(root, "paperclip-home");
+    const partyclipHome = path.join(root, "partyclip-home");
     const managedCodexHome = path.join(
-      paperclipHome,
+      partyclipHome,
       "instances",
       "default",
       "companies",
@@ -120,7 +120,7 @@ describe("codex execute", () => {
     const previousPaperclipInWorktree = process.env.PARTYCLIP_IN_WORKTREE;
     const previousCodexHome = process.env.CODEX_HOME;
     process.env.HOME = root;
-    process.env.PARTYCLIP_HOME = paperclipHome;
+    process.env.PARTYCLIP_HOME = partyclipHome;
     delete process.env.PARTYCLIP_INSTANCE_ID;
     delete process.env.PARTYCLIP_IN_WORKTREE;
     process.env.CODEX_HOME = sharedCodexHome;
@@ -148,7 +148,7 @@ describe("codex execute", () => {
           env: {
             PARTYCLIP_TEST_CAPTURE_PATH: capturePath,
           },
-          promptTemplate: "Follow the paperclip heartbeat.",
+          promptTemplate: "Follow the partyclip heartbeat.",
         },
         context: {},
         authToken: "run-jwt-token",
@@ -192,7 +192,7 @@ describe("codex execute", () => {
   });
 
   it("emits a command note that Codex auto-applies repo-scoped AGENTS.md files", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-codex-execute-notes-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-codex-execute-notes-"));
     const workspace = path.join(root, "workspace");
     const commandPath = path.join(root, "codex");
     const capturePath = path.join(root, "capture.json");
@@ -225,7 +225,7 @@ describe("codex execute", () => {
           env: {
             PARTYCLIP_TEST_CAPTURE_PATH: capturePath,
           },
-          promptTemplate: "Follow the paperclip heartbeat.",
+          promptTemplate: "Follow the partyclip heartbeat.",
         },
         context: {},
         authToken: "run-jwt-token",
@@ -248,7 +248,7 @@ describe("codex execute", () => {
   });
 
   it("logs HOME and the resolved executable path in invocation metadata", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-codex-execute-meta-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-codex-execute-meta-"));
     const workspace = path.join(root, "workspace");
     const binDir = path.join(root, "bin");
     const commandPath = path.join(binDir, "codex");
@@ -286,7 +286,7 @@ describe("codex execute", () => {
           env: {
             PARTYCLIP_TEST_CAPTURE_PATH: capturePath,
           },
-          promptTemplate: "Follow the paperclip heartbeat.",
+          promptTemplate: "Follow the partyclip heartbeat.",
         },
         context: {},
         authToken: "run-jwt-token",
@@ -312,7 +312,7 @@ describe("codex execute", () => {
   });
 
   it("injects bridge env into sandbox-managed remote runs", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-codex-execute-sandbox-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-codex-execute-sandbox-"));
     const localWorkspace = path.join(root, "workspace");
     const remoteWorkspace = path.join(root, "sandbox");
     const binDir = path.join(root, "bin");
@@ -351,7 +351,7 @@ describe("codex execute", () => {
           env: {
             PARTYCLIP_TEST_CAPTURE_PATH: capturePath,
           },
-          promptTemplate: "Follow the paperclip heartbeat.",
+          promptTemplate: "Follow the partyclip heartbeat.",
         },
         context: {},
         executionTarget: {
@@ -372,10 +372,10 @@ describe("codex execute", () => {
       expect(result.errorMessage).toBeNull();
 
       const capture = JSON.parse(await fs.readFile(capturePath, "utf8")) as CapturePayload;
-      expect(capture.codexHome).toBe(path.join(remoteWorkspace, ".paperclip-runtime", "codex", "home"));
-      expect(capture.paperclipApiUrl).toMatch(/^http:\/\/127\.0\.0\.1:\d+$/);
-      expect(capture.paperclipApiKey).not.toBe("run-jwt-token");
-      expect(capture.paperclipApiBridgeMode).toBe("queue_v1");
+      expect(capture.codexHome).toBe(path.join(remoteWorkspace, ".partyclip-runtime", "codex", "home"));
+      expect(capture.partyclipApiUrl).toMatch(/^http:\/\/127\.0\.0\.1:\d+$/);
+      expect(capture.partyclipApiKey).not.toBe("run-jwt-token");
+      expect(capture.partyclipApiBridgeMode).toBe("queue_v1");
     } finally {
       if (previousHome === undefined) delete process.env.HOME;
       else process.env.HOME = previousHome;
@@ -386,7 +386,7 @@ describe("codex execute", () => {
   });
 
   it("injects structured Paperclip wake payloads into env and prompt", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-codex-execute-wake-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-codex-execute-wake-"));
     const workspace = path.join(root, "workspace");
     const commandPath = path.join(root, "codex");
     const capturePath = path.join(root, "capture.json");
@@ -418,14 +418,14 @@ describe("codex execute", () => {
           env: {
             PARTYCLIP_TEST_CAPTURE_PATH: capturePath,
           },
-          promptTemplate: "Follow the paperclip heartbeat.",
+          promptTemplate: "Follow the partyclip heartbeat.",
         },
         context: {
           issueId: "issue-1",
           taskId: "issue-1",
           wakeReason: "issue_commented",
           wakeCommentId: "comment-2",
-          paperclipWake: {
+          partyclipWake: {
             reason: "issue_commented",
             issue: {
               id: "issue-1",
@@ -471,9 +471,9 @@ describe("codex execute", () => {
       expect(result.errorMessage).toBeNull();
 
       const capture = JSON.parse(await fs.readFile(capturePath, "utf8")) as CapturePayload;
-      expect(capture.paperclipEnvKeys).toContain("PARTYCLIP_WAKE_PAYLOAD_JSON");
-      expect(capture.paperclipWakePayloadJson).not.toBeNull();
-      expect(JSON.parse(capture.paperclipWakePayloadJson ?? "{}")).toMatchObject({
+      expect(capture.partyclipEnvKeys).toContain("PARTYCLIP_WAKE_PAYLOAD_JSON");
+      expect(capture.partyclipWakePayloadJson).not.toBeNull();
+      expect(JSON.parse(capture.partyclipWakePayloadJson ?? "{}")).toMatchObject({
         reason: "issue_commented",
         latestCommentId: "comment-2",
         commentIds: ["comment-1", "comment-2"],
@@ -494,7 +494,7 @@ describe("codex execute", () => {
   });
 
   it("classifies remote-compaction high-demand failures as retryable transient upstream errors", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-codex-execute-transient-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-codex-execute-transient-"));
     const workspace = path.join(root, "workspace");
     const commandPath = path.join(root, "codex");
     await fs.mkdir(workspace, { recursive: true });
@@ -525,7 +525,7 @@ describe("codex execute", () => {
         config: {
           command: commandPath,
           cwd: workspace,
-          promptTemplate: "Follow the paperclip heartbeat.",
+          promptTemplate: "Follow the partyclip heartbeat.",
         },
         context: {},
         authToken: "run-jwt-token",
@@ -544,7 +544,7 @@ describe("codex execute", () => {
   });
 
   it("persists retry-not-before metadata for codex usage-limit failures", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-codex-execute-usage-limit-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-codex-execute-usage-limit-"));
     const workspace = path.join(root, "workspace");
     const commandPath = path.join(root, "codex");
     await fs.mkdir(workspace, { recursive: true });
@@ -581,7 +581,7 @@ describe("codex execute", () => {
           command: commandPath,
           cwd: workspace,
           model: "gpt-5.3-codex-spark",
-          promptTemplate: "Follow the paperclip heartbeat.",
+          promptTemplate: "Follow the partyclip heartbeat.",
         },
         context: {},
         authToken: "run-jwt-token",
@@ -606,7 +606,7 @@ describe("codex execute", () => {
   });
 
   it("uses safer invocation settings and a fresh-session handoff for codex transient fallback retries", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-codex-execute-fallback-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-codex-execute-fallback-"));
     const workspace = path.join(root, "workspace");
     const commandPath = path.join(root, "codex");
     const capturePath = path.join(root, "capture.json");
@@ -644,11 +644,11 @@ describe("codex execute", () => {
           env: {
             PARTYCLIP_TEST_CAPTURE_PATH: capturePath,
           },
-          promptTemplate: "Follow the paperclip heartbeat.",
+          promptTemplate: "Follow the partyclip heartbeat.",
         },
         context: {
           codexTransientFallbackMode: "fresh_session_safer_invocation",
-          paperclipContinuationSummary: {
+          partyclipContinuationSummary: {
             key: "continuation-summary",
             title: "Continuation Summary",
             body: "Issue continuation summary for the next fresh session.",
@@ -682,7 +682,7 @@ describe("codex execute", () => {
   });
 
   it("renders execution-stage wake instructions for reviewer and executor roles", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-codex-execute-stage-wake-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-codex-execute-stage-wake-"));
     const workspace = path.join(root, "workspace");
     const commandPath = path.join(root, "codex");
     const capturePath = path.join(root, "capture.json");
@@ -714,13 +714,13 @@ describe("codex execute", () => {
           env: {
             PARTYCLIP_TEST_CAPTURE_PATH: capturePath,
           },
-          promptTemplate: "Follow the paperclip heartbeat.",
+          promptTemplate: "Follow the partyclip heartbeat.",
         },
         context: {
           issueId: "issue-1",
           taskId: "issue-1",
           wakeReason: "execution_review_requested",
-          paperclipWake: {
+          partyclipWake: {
             reason: "execution_review_requested",
             issue: {
               id: "issue-1",
@@ -783,13 +783,13 @@ describe("codex execute", () => {
           env: {
             PARTYCLIP_TEST_CAPTURE_PATH: executorCapturePath,
           },
-          promptTemplate: "Follow the paperclip heartbeat.",
+          promptTemplate: "Follow the partyclip heartbeat.",
         },
         context: {
           issueId: "issue-1",
           taskId: "issue-1",
           wakeReason: "execution_changes_requested",
-          paperclipWake: {
+          partyclipWake: {
             reason: "execution_changes_requested",
             issue: {
               id: "issue-1",
@@ -836,7 +836,7 @@ describe("codex execute", () => {
   });
 
   it("renders an issue-scoped wake prompt even when the wake has no comments yet", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-codex-execute-issue-wake-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-codex-execute-issue-wake-"));
     const workspace = path.join(root, "workspace");
     const commandPath = path.join(root, "codex");
     const capturePath = path.join(root, "capture.json");
@@ -868,13 +868,13 @@ describe("codex execute", () => {
           env: {
             PARTYCLIP_TEST_CAPTURE_PATH: capturePath,
           },
-          promptTemplate: "Follow the paperclip heartbeat.",
+          promptTemplate: "Follow the partyclip heartbeat.",
         },
         context: {
           issueId: "issue-1",
           taskId: "issue-1",
           wakeReason: "issue_assigned",
-          paperclipWake: {
+          partyclipWake: {
             reason: "issue_assigned",
             issue: {
               id: "issue-1",
@@ -904,9 +904,9 @@ describe("codex execute", () => {
       expect(result.errorMessage).toBeNull();
 
       const capture = JSON.parse(await fs.readFile(capturePath, "utf8")) as CapturePayload;
-      expect(capture.paperclipEnvKeys).toContain("PARTYCLIP_WAKE_PAYLOAD_JSON");
-      expect(capture.paperclipWakePayloadJson).not.toBeNull();
-      expect(JSON.parse(capture.paperclipWakePayloadJson ?? "{}")).toMatchObject({
+      expect(capture.partyclipEnvKeys).toContain("PARTYCLIP_WAKE_PAYLOAD_JSON");
+      expect(capture.partyclipWakePayloadJson).not.toBeNull();
+      expect(JSON.parse(capture.partyclipWakePayloadJson ?? "{}")).toMatchObject({
         reason: "issue_assigned",
         issue: {
           identifier: "PAP-1201",
@@ -932,7 +932,7 @@ describe("codex execute", () => {
   });
 
   it("uses a compact wake delta instead of the full heartbeat prompt when resuming a session", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-codex-execute-resume-wake-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-codex-execute-resume-wake-"));
     const workspace = path.join(root, "workspace");
     const commandPath = path.join(root, "codex");
     const capturePath = path.join(root, "capture.json");
@@ -973,14 +973,14 @@ describe("codex execute", () => {
           env: {
             PARTYCLIP_TEST_CAPTURE_PATH: capturePath,
           },
-          promptTemplate: "Follow the paperclip heartbeat.",
+          promptTemplate: "Follow the partyclip heartbeat.",
         },
         context: {
           issueId: "issue-1",
           taskId: "issue-1",
           wakeReason: "issue_commented",
           wakeCommentId: "comment-2",
-          paperclipWake: {
+          partyclipWake: {
             reason: "issue_commented",
             issue: {
               id: "issue-1",
@@ -1027,7 +1027,7 @@ describe("codex execute", () => {
       expect(capture.prompt).toContain("## Paperclip Resume Delta");
       expect(capture.prompt).toContain("Do not switch to another issue until you have handled this wake.");
       expect(capture.prompt).toContain("Second comment");
-      expect(capture.prompt).not.toContain("Follow the paperclip heartbeat.");
+      expect(capture.prompt).not.toContain("Follow the partyclip heartbeat.");
       expect(capture.prompt).not.toContain("You are managed instructions.");
       expect(invocationPrompt).toContain("## Paperclip Resume Delta");
       expect(invocationNotes).toContain(
@@ -1042,21 +1042,21 @@ describe("codex execute", () => {
     }
   });
   it("uses a worktree-isolated CODEX_HOME while preserving shared auth and config", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-codex-execute-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-codex-execute-"));
     const workspace = path.join(root, "workspace");
     const commandPath = path.join(root, "codex");
     const capturePath = path.join(root, "capture.json");
     const sharedCodexHome = path.join(root, "shared-codex-home");
-    const paperclipHome = path.join(root, "paperclip-home");
+    const partyclipHome = path.join(root, "partyclip-home");
     const isolatedCodexHome = path.join(
-      paperclipHome,
+      partyclipHome,
       "instances",
       "worktree-1",
       "companies",
       "company-1",
       "codex-home",
     );
-    const homeSkill = path.join(isolatedCodexHome, "skills", "paperclip");
+    const homeSkill = path.join(isolatedCodexHome, "skills", "partyclip");
     await fs.mkdir(workspace, { recursive: true });
     await fs.mkdir(sharedCodexHome, { recursive: true });
     await fs.writeFile(path.join(sharedCodexHome, "auth.json"), '{"token":"shared"}\n', "utf8");
@@ -1069,7 +1069,7 @@ describe("codex execute", () => {
     const previousPaperclipInWorktree = process.env.PARTYCLIP_IN_WORKTREE;
     const previousCodexHome = process.env.CODEX_HOME;
     process.env.HOME = root;
-    process.env.PARTYCLIP_HOME = paperclipHome;
+    process.env.PARTYCLIP_HOME = partyclipHome;
     process.env.PARTYCLIP_INSTANCE_ID = "worktree-1";
     process.env.PARTYCLIP_IN_WORKTREE = "true";
     process.env.CODEX_HOME = sharedCodexHome;
@@ -1097,7 +1097,7 @@ describe("codex execute", () => {
           env: {
             PARTYCLIP_TEST_CAPTURE_PATH: capturePath,
           },
-          promptTemplate: "Follow the paperclip heartbeat.",
+          promptTemplate: "Follow the partyclip heartbeat.",
         },
         context: {},
         authToken: "run-jwt-token",
@@ -1112,8 +1112,8 @@ describe("codex execute", () => {
       const capture = JSON.parse(await fs.readFile(capturePath, "utf8")) as CapturePayload;
       expect(capture.codexHome).toBe(isolatedCodexHome);
       expect(capture.argv).toEqual(expect.arrayContaining(["exec", "--json", "-"]));
-      expect(capture.prompt).toContain("Follow the paperclip heartbeat.");
-      expect(capture.paperclipEnvKeys).toEqual(
+      expect(capture.prompt).toContain("Follow the partyclip heartbeat.");
+      expect(capture.partyclipEnvKeys).toEqual(
         expect.arrayContaining([
           "PARTYCLIP_AGENT_ID",
           "PARTYCLIP_API_KEY",
@@ -1140,7 +1140,7 @@ describe("codex execute", () => {
       expect(logs).toContainEqual(
         expect.objectContaining({
           stream: "stdout",
-          chunk: expect.stringContaining('Injected Codex skill "paperclip"'),
+          chunk: expect.stringContaining('Injected Codex skill "partyclip"'),
         }),
       );
     } finally {
@@ -1159,13 +1159,13 @@ describe("codex execute", () => {
   });
 
   it("respects an explicit CODEX_HOME config override even in worktree mode", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-codex-execute-explicit-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-codex-execute-explicit-"));
     const workspace = path.join(root, "workspace");
     const commandPath = path.join(root, "codex");
     const capturePath = path.join(root, "capture.json");
     const sharedCodexHome = path.join(root, "shared-codex-home");
     const explicitCodexHome = path.join(root, "explicit-codex-home");
-    const paperclipHome = path.join(root, "paperclip-home");
+    const partyclipHome = path.join(root, "partyclip-home");
     await fs.mkdir(workspace, { recursive: true });
     await fs.mkdir(sharedCodexHome, { recursive: true });
     await fs.writeFile(path.join(sharedCodexHome, "auth.json"), '{"token":"shared"}\n', "utf8");
@@ -1177,7 +1177,7 @@ describe("codex execute", () => {
     const previousPaperclipInWorktree = process.env.PARTYCLIP_IN_WORKTREE;
     const previousCodexHome = process.env.CODEX_HOME;
     process.env.HOME = root;
-    process.env.PARTYCLIP_HOME = paperclipHome;
+    process.env.PARTYCLIP_HOME = partyclipHome;
     process.env.PARTYCLIP_INSTANCE_ID = "worktree-1";
     process.env.PARTYCLIP_IN_WORKTREE = "true";
     process.env.CODEX_HOME = sharedCodexHome;
@@ -1205,7 +1205,7 @@ describe("codex execute", () => {
             PARTYCLIP_TEST_CAPTURE_PATH: capturePath,
             CODEX_HOME: explicitCodexHome,
           },
-          promptTemplate: "Follow the paperclip heartbeat.",
+          promptTemplate: "Follow the partyclip heartbeat.",
         },
         context: {},
         authToken: "run-jwt-token",
@@ -1217,8 +1217,8 @@ describe("codex execute", () => {
 
       const capture = JSON.parse(await fs.readFile(capturePath, "utf8")) as CapturePayload;
       expect(capture.codexHome).toBe(explicitCodexHome);
-      expect((await fs.lstat(path.join(explicitCodexHome, "skills", "paperclip"))).isSymbolicLink()).toBe(true);
-      await expect(fs.lstat(path.join(paperclipHome, "instances", "worktree-1", "codex-home"))).rejects.toThrow();
+      expect((await fs.lstat(path.join(explicitCodexHome, "skills", "partyclip"))).isSymbolicLink()).toBe(true);
+      await expect(fs.lstat(path.join(partyclipHome, "instances", "worktree-1", "codex-home"))).rejects.toThrow();
     } finally {
       if (previousHome === undefined) delete process.env.HOME;
       else process.env.HOME = previousHome;

@@ -25,10 +25,10 @@ function resolveManagedClaudePromptCacheRoot(
   env: NodeJS.ProcessEnv,
   companyId: string,
 ): string {
-  const paperclipHome = nonEmpty(env.PARTYCLIP_HOME) ?? path.resolve(os.homedir(), ".paperclip");
+  const partyclipHome = nonEmpty(env.PARTYCLIP_HOME) ?? path.resolve(os.homedir(), ".partyclip");
   const instanceId = nonEmpty(env.PARTYCLIP_INSTANCE_ID) ?? DEFAULT_PARTYCLIP_INSTANCE_ID;
   return path.resolve(
-    paperclipHome,
+    partyclipHome,
     "instances",
     instanceId,
     "companies",
@@ -88,7 +88,7 @@ async function buildClaudePromptBundleKey(input: {
   instructionsContents: string | null;
 }): Promise<string> {
   const hash = createHash("sha256");
-  hash.update("paperclip-claude-prompt-bundle:v1\n");
+  hash.update("partyclip-claude-prompt-bundle:v1\n");
   if (input.instructionsContents) {
     hash.update("instructions\n");
     hash.update(input.instructionsContents);
@@ -151,7 +151,7 @@ export async function prepareClaudePromptBundle(input: {
     } catch (err) {
       await onLog(
         "stderr",
-        `[paperclip] Failed to materialize Claude skill "${entry.key}" into ${skillsHome}: ${err instanceof Error ? err.message : String(err)}\n`,
+        `[partyclip] Failed to materialize Claude skill "${entry.key}" into ${skillsHome}: ${err instanceof Error ? err.message : String(err)}\n`,
       );
     }
   }

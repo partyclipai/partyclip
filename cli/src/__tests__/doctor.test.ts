@@ -9,8 +9,8 @@ import type { PaperclipConfig } from "../config/schema.js";
 const ORIGINAL_ENV = { ...process.env };
 
 function createTempConfig(): string {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), "paperclip-doctor-"));
-  const configPath = path.join(root, ".paperclip", "config.json");
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "partyclip-doctor-"));
+  const configPath = path.join(root, ".partyclip", "config.json");
   const runtimeRoot = path.join(root, "runtime");
 
   const config: PaperclipConfig = {
@@ -55,7 +55,7 @@ function createTempConfig(): string {
         baseDir: path.join(runtimeRoot, "storage"),
       },
       s3: {
-        bucket: "paperclip",
+        bucket: "partyclip",
         region: "us-east-1",
         prefix: "",
         forcePathStyle: false,

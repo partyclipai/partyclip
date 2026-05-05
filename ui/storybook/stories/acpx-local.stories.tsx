@@ -439,10 +439,10 @@ const SKILLS_COMPANY_ID = "company-storybook";
 
 const acpxSkillsCompanyLibrary: CompanySkillListItem[] = [
   {
-    id: "skill-paperclip",
+    id: "skill-partyclip",
     companyId: SKILLS_COMPANY_ID,
-    key: "paperclip",
-    slug: "paperclip",
+    key: "partyclip",
+    slug: "partyclip",
     name: "Paperclip",
     description:
       "Coordination skill: heartbeats, checkout, comments, and routine API patterns for Paperclip agents.",
@@ -458,7 +458,7 @@ const acpxSkillsCompanyLibrary: CompanySkillListItem[] = [
     editable: false,
     editableReason: "Required by Paperclip",
     sourceLabel: "Paperclip",
-    sourceBadge: "paperclip",
+    sourceBadge: "partyclip",
     sourcePath: "skills/partyclip",
   },
   {
@@ -534,7 +534,7 @@ function buildAcpxAgent({
       agent: acpAgent,
       mode: "persistent",
       permissionMode: "approve-all",
-      paperclipSkillSync: {
+      partyclipSkillSync: {
         desiredSkills,
       },
     },
@@ -556,18 +556,18 @@ function buildAcpxClaudeSnapshot(): AgentSkillSnapshot {
     adapterType: "acpx_local",
     supported: true,
     mode: "ephemeral",
-    desiredSkills: ["paperclip", "design-guide"],
+    desiredSkills: ["partyclip", "design-guide"],
     warnings: [],
     entries: [
       {
-        key: "paperclip",
-        runtimeName: "paperclip",
+        key: "partyclip",
+        runtimeName: "partyclip",
         desired: true,
         managed: true,
         required: true,
         requiredReason: "Paperclip coordination skill is mandatory for control-plane agents.",
         state: "configured",
-        origin: "paperclip_required",
+        origin: "partyclip_required",
         originLabel: "Required by Paperclip",
         readOnly: false,
         sourcePath: "skills/partyclip",
@@ -611,18 +611,18 @@ function buildAcpxCodexSnapshot(): AgentSkillSnapshot {
     adapterType: "acpx_local",
     supported: true,
     mode: "ephemeral",
-    desiredSkills: ["paperclip"],
+    desiredSkills: ["partyclip"],
     warnings: [],
     entries: [
       {
-        key: "paperclip",
-        runtimeName: "paperclip",
+        key: "partyclip",
+        runtimeName: "partyclip",
         desired: true,
         managed: true,
         required: true,
         requiredReason: "Paperclip coordination skill is mandatory for control-plane agents.",
         state: "configured",
-        origin: "paperclip_required",
+        origin: "partyclip_required",
         originLabel: "Required by Paperclip",
         readOnly: false,
         sourcePath: "skills/partyclip",
@@ -672,14 +672,14 @@ function buildAcpxCustomSnapshot(): AgentSkillSnapshot {
     ],
     entries: [
       {
-        key: "paperclip",
-        runtimeName: "paperclip",
+        key: "partyclip",
+        runtimeName: "partyclip",
         desired: false,
         managed: true,
         required: true,
         requiredReason: "Paperclip coordination skill is mandatory for control-plane agents.",
         state: "available",
-        origin: "paperclip_required",
+        origin: "partyclip_required",
         originLabel: "Required by Paperclip",
         readOnly: false,
         sourcePath: "skills/partyclip",
@@ -767,7 +767,7 @@ function AcpxClaudeSkillsStory() {
   const agent = buildAcpxAgent({
     agentId: "agent-acpx-claude",
     acpAgent: "claude",
-    desiredSkills: ["paperclip", "design-guide"],
+    desiredSkills: ["partyclip", "design-guide"],
   });
   return (
     <StoryFrame
@@ -783,7 +783,7 @@ function AcpxCodexSkillsStory() {
   const agent = buildAcpxAgent({
     agentId: "agent-acpx-codex",
     acpAgent: "codex",
-    desiredSkills: ["paperclip"],
+    desiredSkills: ["partyclip"],
   });
   return (
     <StoryFrame

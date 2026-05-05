@@ -7,7 +7,7 @@ import { createAcpxLocalExecutor } from "./execute.js";
 const tempRoots: string[] = [];
 
 async function makeTempRoot() {
-  const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-acpx-skills-"));
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-acpx-skills-"));
   tempRoots.push(root);
   return root;
 }
@@ -103,8 +103,8 @@ describe("acpx_local runtime skill isolation", () => {
     const { meta } = await runExecutor({
       agent: "claude",
       stateDir,
-      paperclipRuntimeSkills: [skill],
-      paperclipSkillSync: { desiredSkills: [skill.key] },
+      partyclipRuntimeSkills: [skill],
+      partyclipSkillSync: { desiredSkills: [skill.key] },
     });
 
     const mountedRoot = await onlyChildDir(path.join(stateDir, "runtime-skills", "claude"));
@@ -132,18 +132,18 @@ describe("acpx_local runtime skill isolation", () => {
       agent: "codex",
       stateDir: path.join(root, "state"),
       env: { CODEX_HOME: codexHome },
-      paperclipRuntimeSkills: [keep, remove],
+      partyclipRuntimeSkills: [keep, remove],
     };
 
     await runExecutor({
       ...baseConfig,
-      paperclipSkillSync: { desiredSkills: [keep.key, remove.key] },
+      partyclipSkillSync: { desiredSkills: [keep.key, remove.key] },
     });
     expect(await pathExists(path.join(codexHome, "skills", remove.runtimeName, "SKILL.md"))).toBe(true);
 
     await runExecutor({
       ...baseConfig,
-      paperclipSkillSync: { desiredSkills: [keep.key] },
+      partyclipSkillSync: { desiredSkills: [keep.key] },
     });
 
     expect(await pathExists(path.join(codexHome, "skills", keep.runtimeName, "SKILL.md"))).toBe(true);
@@ -165,8 +165,8 @@ describe("acpx_local runtime skill isolation", () => {
       agent: "codex",
       stateDir: path.join(root, "state"),
       env: { CODEX_HOME: codexHome },
-      paperclipRuntimeSkills: [legacy],
-      paperclipSkillSync: { desiredSkills: [] },
+      partyclipRuntimeSkills: [legacy],
+      partyclipSkillSync: { desiredSkills: [] },
     });
 
     expect(await pathExists(path.join(skillsHome, legacy.runtimeName))).toBe(false);
@@ -175,12 +175,12 @@ describe("acpx_local runtime skill isolation", () => {
   it.skipIf(process.platform === "win32")("replaces stale managed Codex auth files with source symlinks", async () => {
     const root = await makeTempRoot();
     const sourceCodexHome = path.join(root, "source-codex-home");
-    const paperclipHome = path.join(root, "paperclip-home");
-    const paperclipInstanceId = "test-instance";
+    const partyclipHome = path.join(root, "partyclip-home");
+    const partyclipInstanceId = "test-instance";
     const managedCodexHome = path.join(
-      paperclipHome,
+      partyclipHome,
       "instances",
-      paperclipInstanceId,
+      partyclipInstanceId,
       "companies",
       "company-1",
       "codex-home",
@@ -197,13 +197,13 @@ describe("acpx_local runtime skill isolation", () => {
     const previousPaperclipInstanceId = process.env.PARTYCLIP_INSTANCE_ID;
     try {
       process.env.CODEX_HOME = sourceCodexHome;
-      process.env.PARTYCLIP_HOME = paperclipHome;
-      process.env.PARTYCLIP_INSTANCE_ID = paperclipInstanceId;
+      process.env.PARTYCLIP_HOME = partyclipHome;
+      process.env.PARTYCLIP_INSTANCE_ID = partyclipInstanceId;
       await runExecutor({
         agent: "codex",
         stateDir: path.join(root, "state"),
-        paperclipRuntimeSkills: [],
-        paperclipSkillSync: { desiredSkills: [] },
+        partyclipRuntimeSkills: [],
+        partyclipSkillSync: { desiredSkills: [] },
       });
     } finally {
       if (previousCodexHome === undefined) delete process.env.CODEX_HOME;

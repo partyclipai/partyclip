@@ -24,7 +24,7 @@ OPENCLAW_METHOD="${OPENCLAW_METHOD:-POST}"
 OPENCLAW_AUTH_HEADER="${OPENCLAW_AUTH_HEADER:-}"
 OPENCLAW_TIMEOUT_SEC="${OPENCLAW_TIMEOUT_SEC:-180}"
 OPENCLAW_MODEL="${OPENCLAW_MODEL:-openclaw}"
-OPENCLAW_USER="${OPENCLAW_USER:-paperclip-smoke}"
+OPENCLAW_USER="${OPENCLAW_USER:-partyclip-smoke}"
 
 PARTYCLIP_RUN_ID="${PARTYCLIP_RUN_ID:-smoke-run-$(date +%s)}"
 PARTYCLIP_AGENT_ID="${PARTYCLIP_AGENT_ID:-openclaw-smoke-agent}"
@@ -87,7 +87,7 @@ PAYLOAD="$(jq -nc \
       PARTYCLIP_APPROVAL_ID: $approvalId,
       PARTYCLIP_APPROVAL_STATUS: $approvalStatus,
       PARTYCLIP_LINKED_ISSUE_IDS: $linkedIssueIds,
-      paperclip_session_key: ("paperclip:run:" + $runId)
+      partyclip_session_key: ("partyclip:run:" + $runId)
     }
   }')"
 
@@ -105,7 +105,7 @@ args=(
   -X "$OPENCLAW_METHOD"
   -H "content-type: application/json"
   -H "accept: text/event-stream"
-  -H "x-openclaw-session-key: paperclip:run:${PARTYCLIP_RUN_ID}"
+  -H "x-openclaw-session-key: partyclip:run:${PARTYCLIP_RUN_ID}"
   -D "$headers_file"
   -o "$body_file"
   --data "$PAYLOAD"

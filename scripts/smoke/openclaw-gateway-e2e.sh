@@ -35,7 +35,7 @@ OPENCLAW_GATEWAY_TOKEN="${OPENCLAW_GATEWAY_TOKEN:-}"
 OPENCLAW_TMP_DIR="${OPENCLAW_TMP_DIR:-${TMPDIR:-/tmp}}"
 OPENCLAW_TMP_DIR="${OPENCLAW_TMP_DIR%/}"
 OPENCLAW_TMP_DIR="${OPENCLAW_TMP_DIR:-/tmp}"
-OPENCLAW_CONFIG_DIR="${OPENCLAW_CONFIG_DIR:-${OPENCLAW_TMP_DIR}/openclaw-paperclip-smoke}"
+OPENCLAW_CONFIG_DIR="${OPENCLAW_CONFIG_DIR:-${OPENCLAW_TMP_DIR}/openclaw-partyclip-smoke}"
 OPENCLAW_WORKSPACE_DIR="${OPENCLAW_WORKSPACE_DIR:-${OPENCLAW_CONFIG_DIR}/workspace}"
 OPENCLAW_CONTAINER_NAME="${OPENCLAW_CONTAINER_NAME:-openclaw-docker-openclaw-gateway-1}"
 OPENCLAW_IMAGE="${OPENCLAW_IMAGE:-openclaw:local}"
@@ -406,7 +406,7 @@ create_and_approve_gateway_join() {
     --arg name "$OPENCLAW_AGENT_NAME" \
     --arg url "$OPENCLAW_GATEWAY_URL" \
     --arg token "$gateway_token" \
-    --arg paperclipApiUrl "$PARTYCLIP_API_URL_FOR_OPENCLAW" \
+    --arg partyclipApiUrl "$PARTYCLIP_API_URL_FOR_OPENCLAW" \
     --argjson timeoutSec "$OPENCLAW_ADAPTER_TIMEOUT_SEC" \
     --argjson waitTimeoutMs "$OPENCLAW_ADAPTER_WAIT_TIMEOUT_MS" \
     '{
@@ -420,10 +420,10 @@ create_and_approve_gateway_join() {
         role: "operator",
         scopes: ["operator.admin"],
         sessionKeyStrategy: "fixed",
-        sessionKey: "paperclip",
+        sessionKey: "partyclip",
         timeoutSec: $timeoutSec,
         waitTimeoutMs: $waitTimeoutMs,
-        paperclipApiUrl: $paperclipApiUrl
+        partyclipApiUrl: $partyclipApiUrl
       }
     }')"
 
@@ -887,7 +887,7 @@ main() {
   wait_http_ready "${PARTYCLIP_API_URL%/}/api/health" 15 || fail "Paperclip API health endpoint not reachable"
   api_request "GET" "/health"
   assert_status "200"
-  log "paperclip health deploymentMode=$(jq -r '.deploymentMode // "unknown"' <<<"$RESPONSE_BODY") exposure=$(jq -r '.deploymentExposure // "unknown"' <<<"$RESPONSE_BODY")"
+  log "partyclip health deploymentMode=$(jq -r '.deploymentMode // "unknown"' <<<"$RESPONSE_BODY") exposure=$(jq -r '.deploymentExposure // "unknown"' <<<"$RESPONSE_BODY")"
 
   require_board_auth
   resolve_company_id

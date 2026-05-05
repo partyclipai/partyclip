@@ -8,7 +8,7 @@
     "partyclipai": "./dist/index.js"
   },
   "keywords": [
-    "paperclip",
+    "partyclip",
     "ai",
     "agents",
     "orchestration",

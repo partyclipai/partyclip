@@ -67,9 +67,9 @@ async function runPnpm(cwd: string, args: string[]) {
 }
 
 async function createTempRepo(defaultBranch = "main") {
-  const repoRoot = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-worktree-repo-"));
+  const repoRoot = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-worktree-repo-"));
   await runGit(repoRoot, ["init"]);
-  await runGit(repoRoot, ["config", "user.email", "paperclip@example.com"]);
+  await runGit(repoRoot, ["config", "user.email", "partyclip@example.com"]);
   await runGit(repoRoot, ["config", "user.name", "Paperclip Test"]);
   await fs.writeFile(path.join(repoRoot, "README.md"), "hello\n", "utf8");
   await runGit(repoRoot, ["add", "README.md"]);
@@ -195,8 +195,8 @@ describe("sanitizeRuntimeServiceBaseEnv", () => {
 
 describe("ensureServerWorkspaceLinksCurrent", () => {
   it("relinks stale server workspace dependencies inside the current repo root", async () => {
-    const repoRoot = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-runtime-links-"));
-    const staleRoot = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-runtime-links-stale-"));
+    const repoRoot = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-runtime-links-"));
+    const staleRoot = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-runtime-links-stale-"));
     const serverNodeModulesScopeDir = path.join(repoRoot, "server", "node_modules", "@partyclipai");
     const expectedPackageDir = path.join(repoRoot, "packages", "db");
     const stalePackageDir = path.join(staleRoot, "db");
@@ -234,7 +234,7 @@ describe("ensureServerWorkspaceLinksCurrent", () => {
   });
 
   it("skips relinking when server workspace dependencies already point at the repo", async () => {
-    const repoRoot = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-runtime-links-current-"));
+    const repoRoot = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-runtime-links-current-"));
     const serverNodeModulesScopeDir = path.join(repoRoot, "server", "node_modules", "@partyclipai");
     const expectedPackageDir = path.join(repoRoot, "packages", "db");
 
@@ -264,8 +264,8 @@ describe("ensureServerWorkspaceLinksCurrent", () => {
   });
 
   it("skips relinking outside linked git worktrees", async () => {
-    const repoRoot = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-runtime-links-non-worktree-"));
-    const staleRoot = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-runtime-links-non-worktree-stale-"));
+    const repoRoot = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-runtime-links-non-worktree-"));
+    const staleRoot = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-runtime-links-non-worktree-stale-"));
     const serverNodeModulesScopeDir = path.join(repoRoot, "server", "node_modules", "@partyclipai");
     const expectedPackageDir = path.join(repoRoot, "packages", "db");
     const stalePackageDir = path.join(staleRoot, "db");
@@ -337,7 +337,7 @@ describe("realizeExecutionWorkspace", () => {
     expect(first.strategy).toBe("git_worktree");
     expect(first.created).toBe(true);
     expect(first.branchName).toBe("PAP-447-add-worktree-support");
-    expect(first.cwd).toContain(path.join(".paperclip", "worktrees"));
+    expect(first.cwd).toContain(path.join(".partyclip", "worktrees"));
     await expect(fs.stat(path.join(first.cwd, ".git"))).resolves.toBeTruthy();
 
     const second = await realizeExecutionWorkspace({
@@ -375,7 +375,7 @@ describe("realizeExecutionWorkspace", () => {
   it("rejects reusing an empty directory that only looks like a worktree because it sits inside the repo", async () => {
     const repoRoot = await createTempRepo();
     const branchName = "PAP-447-add-worktree-support";
-    const poisonedPath = path.join(repoRoot, ".paperclip", "worktrees", branchName);
+    const poisonedPath = path.join(repoRoot, ".partyclip", "worktrees", branchName);
     await fs.mkdir(poisonedPath, { recursive: true });
 
     await expect(
@@ -411,7 +411,7 @@ describe("realizeExecutionWorkspace", () => {
   it("reuses the current linked worktree instead of nesting another worktree inside it", async () => {
     const repoRoot = await createTempRepo();
     const branchName = "PAP-1355-worktree-reuse";
-    const currentWorktree = path.join(repoRoot, ".paperclip", "worktrees", branchName);
+    const currentWorktree = path.join(repoRoot, ".partyclip", "worktrees", branchName);
 
     await fs.mkdir(path.dirname(currentWorktree), { recursive: true });
     await execFileAsync("git", ["worktree", "add", "-b", branchName, currentWorktree, "HEAD"], { cwd: repoRoot });
@@ -514,7 +514,7 @@ describe("realizeExecutionWorkspace", () => {
   it("reuses an already checked out branch from git worktree metadata even when the target path differs", async () => {
     const repoRoot = await createTempRepo();
     const branchName = "PAP-1355-worktree-reuse";
-    const existingWorktree = path.join(repoRoot, ".paperclip", "worktrees", branchName);
+    const existingWorktree = path.join(repoRoot, ".partyclip", "worktrees", branchName);
     const { recorder, operations } = createWorkspaceOperationRecorderDouble();
 
     await fs.mkdir(path.dirname(existingWorktree), { recursive: true });
@@ -533,7 +533,7 @@ describe("realizeExecutionWorkspace", () => {
         workspaceStrategy: {
           type: "git_worktree",
           branchTemplate: "{{issue.identifier}}-{{slug}}",
-          worktreeParentDir: ".paperclip/other-worktrees",
+          worktreeParentDir: ".partyclip/other-worktrees",
         },
       },
       issue: {
@@ -642,9 +642,9 @@ describe("realizeExecutionWorkspace", () => {
       [
         "#!/usr/bin/env bash",
         "set -euo pipefail",
-        "printf '%s\\n' \"$PARTYCLIP_WORKSPACE_BRANCH\" > .paperclip-provision-branch",
-        "printf '%s\\n' \"$PARTYCLIP_WORKSPACE_BASE_CWD\" > .paperclip-provision-base",
-        "printf '%s\\n' \"$PARTYCLIP_WORKSPACE_CREATED\" > .paperclip-provision-created",
+        "printf '%s\\n' \"$PARTYCLIP_WORKSPACE_BRANCH\" > .partyclip-provision-branch",
+        "printf '%s\\n' \"$PARTYCLIP_WORKSPACE_BASE_CWD\" > .partyclip-provision-base",
+        "printf '%s\\n' \"$PARTYCLIP_WORKSPACE_CREATED\" > .partyclip-provision-created",
       ].join("\n"),
       "utf8",
     );
@@ -679,13 +679,13 @@ describe("realizeExecutionWorkspace", () => {
       },
     });
 
-    await expect(fs.readFile(path.join(workspace.cwd, ".paperclip-provision-branch"), "utf8")).resolves.toBe(
+    await expect(fs.readFile(path.join(workspace.cwd, ".partyclip-provision-branch"), "utf8")).resolves.toBe(
       "PAP-448-run-provision-command\n",
     );
-    await expect(fs.readFile(path.join(workspace.cwd, ".paperclip-provision-base"), "utf8")).resolves.toBe(
+    await expect(fs.readFile(path.join(workspace.cwd, ".partyclip-provision-base"), "utf8")).resolves.toBe(
       `${repoRoot}\n`,
     );
-    await expect(fs.readFile(path.join(workspace.cwd, ".paperclip-provision-created"), "utf8")).resolves.toBe(
+    await expect(fs.readFile(path.join(workspace.cwd, ".partyclip-provision-created"), "utf8")).resolves.toBe(
       "true\n",
     );
 
@@ -717,7 +717,7 @@ describe("realizeExecutionWorkspace", () => {
       },
     });
 
-    await expect(fs.readFile(path.join(reused.cwd, ".paperclip-provision-created"), "utf8")).resolves.toBe("false\n");
+    await expect(fs.readFile(path.join(reused.cwd, ".partyclip-provision-created"), "utf8")).resolves.toBe("false\n");
   });
 
   it("uses the latest repo-managed provision script when reusing an existing worktree", async () => {
@@ -728,7 +728,7 @@ describe("realizeExecutionWorkspace", () => {
       [
         "#!/usr/bin/env bash",
         "set -euo pipefail",
-        "printf 'v1\\n' > .paperclip-provision-version",
+        "printf 'v1\\n' > .partyclip-provision-version",
       ].join("\n"),
       "utf8",
     );
@@ -763,14 +763,14 @@ describe("realizeExecutionWorkspace", () => {
       },
     });
 
-    await expect(fs.readFile(path.join(initial.cwd, ".paperclip-provision-version"), "utf8")).resolves.toBe("v1\n");
+    await expect(fs.readFile(path.join(initial.cwd, ".partyclip-provision-version"), "utf8")).resolves.toBe("v1\n");
 
     await fs.writeFile(
       path.join(repoRoot, "scripts", "provision.sh"),
       [
         "#!/usr/bin/env bash",
         "set -euo pipefail",
-        "printf 'v2\\n' > .paperclip-provision-version",
+        "printf 'v2\\n' > .partyclip-provision-version",
       ].join("\n"),
       "utf8",
     );
@@ -807,22 +807,22 @@ describe("realizeExecutionWorkspace", () => {
       },
     });
 
-    await expect(fs.readFile(path.join(reused.cwd, ".paperclip-provision-version"), "utf8")).resolves.toBe("v2\n");
+    await expect(fs.readFile(path.join(reused.cwd, ".partyclip-provision-version"), "utf8")).resolves.toBe("v2\n");
   }, 30_000);
 
   it("writes an isolated repo-local Paperclip config and worktree branding when provisioning", async () => {
     const repoRoot = await createTempRepo();
     const previousCwd = process.cwd();
     const previousPath = process.env.PATH;
-    const paperclipHome = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-worktree-home-"));
-    const isolatedWorktreeHome = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-worktrees-"));
-    const isolatedBin = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-worktree-bin-"));
+    const partyclipHome = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-worktree-home-"));
+    const isolatedWorktreeHome = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-worktrees-"));
+    const isolatedBin = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-worktree-bin-"));
     const instanceId = "worktree-base";
-    const sharedConfigDir = path.join(paperclipHome, "instances", instanceId);
+    const sharedConfigDir = path.join(partyclipHome, "instances", instanceId);
     const sharedConfigPath = path.join(sharedConfigDir, "config.json");
     const sharedEnvPath = path.join(sharedConfigDir, ".env");
 
-    process.env.PARTYCLIP_HOME = paperclipHome;
+    process.env.PARTYCLIP_HOME = partyclipHome;
     process.env.PARTYCLIP_INSTANCE_ID = instanceId;
     process.env.PARTYCLIP_WORKTREES_DIR = isolatedWorktreeHome;
     // Keep this server-side fixture on provision-worktree.sh's config writer path;
@@ -873,7 +873,7 @@ describe("realizeExecutionWorkspace", () => {
               baseDir: path.join(sharedConfigDir, "storage"),
             },
             s3: {
-              bucket: "paperclip",
+              bucket: "partyclip",
               region: "us-east-1",
               prefix: "",
               forcePathStyle: false,
@@ -932,8 +932,8 @@ describe("realizeExecutionWorkspace", () => {
       } satisfies Parameters<typeof realizeExecutionWorkspace>[0];
       const workspace = await realizeExecutionWorkspace(workspaceInput);
 
-      const configPath = path.join(workspace.cwd, ".paperclip", "config.json");
-      const envPath = path.join(workspace.cwd, ".paperclip", ".env");
+      const configPath = path.join(workspace.cwd, ".partyclip", "config.json");
+      const envPath = path.join(workspace.cwd, ".partyclip", ".env");
       const envContents = await fs.readFile(envPath, "utf8");
       const configContents = JSON.parse(await fs.readFile(configPath, "utf8"));
       const configStats = await fs.lstat(configPath);
@@ -1171,13 +1171,13 @@ describe("realizeExecutionWorkspace", () => {
       },
     });
 
-    await expect(fs.readFile(path.join(workspace.cwd, ".paperclip", "config.json"), "utf8")).resolves.toContain(
+    await expect(fs.readFile(path.join(workspace.cwd, ".partyclip", "config.json"), "utf8")).resolves.toContain(
       "\"database\"",
     );
   }, 30_000);
 
   it("fails instead of writing an unseeded fallback config when worktree init errors after CLI detection succeeds", async () => {
-    const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-worktree-provision-fail-"));
+    const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-worktree-provision-fail-"));
     const baseRoot = path.join(tempRoot, "base");
     const worktreeRoot = path.join(tempRoot, "worktree");
     const fakeBin = path.join(tempRoot, "bin");
@@ -1225,15 +1225,15 @@ describe("realizeExecutionWorkspace", () => {
 
       expect(caught).toBeTruthy();
       expect(String(caught)).toContain("simulated init failure");
-      await expect(fs.stat(path.join(worktreeRoot, ".paperclip", "config.json"))).rejects.toThrow();
-      await expect(fs.stat(path.join(worktreeRoot, ".paperclip", ".env"))).rejects.toThrow();
+      await expect(fs.stat(path.join(worktreeRoot, ".partyclip", "config.json"))).rejects.toThrow();
+      await expect(fs.stat(path.join(worktreeRoot, ".partyclip", ".env"))).rejects.toThrow();
     } finally {
       await fs.rm(tempRoot, { recursive: true, force: true });
     }
   });
 
   it("retries worktree-local pnpm install without a frozen lockfile when the lockfile is outdated", async () => {
-    const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-worktree-outdated-lockfile-"));
+    const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-worktree-outdated-lockfile-"));
     const baseRoot = path.join(tempRoot, "base");
     const worktreeRoot = path.join(tempRoot, "worktree");
     const fakeBin = path.join(tempRoot, "bin");
@@ -1299,7 +1299,7 @@ describe("realizeExecutionWorkspace", () => {
 
       expect(result.stderr).toContain("retrying install without --frozen-lockfile");
       await expect(fs.readFile(path.join(worktreeRoot, "node_modules", ".retry-success"), "utf8")).resolves.toBe("");
-      await expect(fs.readFile(path.join(worktreeRoot, ".paperclip", "config.json"), "utf8")).resolves.toContain(
+      await expect(fs.readFile(path.join(worktreeRoot, ".partyclip", "config.json"), "utf8")).resolves.toContain(
         "\"database\"",
       );
     } finally {
@@ -1573,7 +1573,7 @@ describe("realizeExecutionWorkspace", () => {
       [
         "#!/usr/bin/env bash",
         "set -euo pipefail",
-        "printf '%s\\n' \"$PARTYCLIP_WORKSPACE_BRANCH\" > .paperclip-restored-branch",
+        "printf '%s\\n' \"$PARTYCLIP_WORKSPACE_BRANCH\" > .partyclip-restored-branch",
       ].join("\n"),
       "utf8",
     );
@@ -1656,7 +1656,7 @@ describe("realizeExecutionWorkspace", () => {
     expect(restored).not.toBeNull();
     expect(restored?.cwd).toBe(initial.cwd);
     await expect(fs.readFile(path.join(initial.cwd, "feature.txt"), "utf8")).resolves.toBe("persisted\n");
-    await expect(fs.readFile(path.join(initial.cwd, ".paperclip-restored-branch"), "utf8")).resolves.toBe(`${branchName}\n`);
+    await expect(fs.readFile(path.join(initial.cwd, ".partyclip-restored-branch"), "utf8")).resolves.toBe(`${branchName}\n`);
     const actualHead = (await execFileAsync("git", ["rev-parse", "HEAD"], { cwd: initial.cwd })).stdout.trim();
     expect(actualHead).toBe(expectedHead);
   }, 15_000);
@@ -1669,7 +1669,7 @@ describe("realizeExecutionWorkspace", () => {
       [
         "#!/usr/bin/env bash",
         "set -euo pipefail",
-        "printf 'reprovisioned\\n' > .paperclip-restored-state",
+        "printf 'reprovisioned\\n' > .partyclip-restored-state",
       ].join("\n"),
       "utf8",
     );
@@ -1705,7 +1705,7 @@ describe("realizeExecutionWorkspace", () => {
       },
     });
 
-    await fs.rm(path.join(initial.cwd, ".paperclip-restored-state"), { force: true });
+    await fs.rm(path.join(initial.cwd, ".partyclip-restored-state"), { force: true });
 
     await ensurePersistedExecutionWorkspaceAvailable({
       base: {
@@ -1742,7 +1742,7 @@ describe("realizeExecutionWorkspace", () => {
       },
     });
 
-    await expect(fs.readFile(path.join(initial.cwd, ".paperclip-restored-state"), "utf8")).resolves.toBe("reprovisioned\n");
+    await expect(fs.readFile(path.join(initial.cwd, ".partyclip-restored-state"), "utf8")).resolves.toBe("reprovisioned\n");
   }, 15_000);
 
   it("auto-detects the default branch when baseRef is not configured", async () => {
@@ -1753,7 +1753,7 @@ describe("realizeExecutionWorkspace", () => {
     // exists locally. Note: refs/remotes/origin/HEAD is NOT set by a manual
     // fetch — that requires git clone or git remote set-head. This test
     // exercises the heuristic fallback path in detectDefaultBranch.
-    const bareRemote = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-worktree-bare-"));
+    const bareRemote = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-worktree-bare-"));
     await runGit(bareRemote, ["init", "--bare"]);
     await runGit(repoRoot, ["remote", "add", "origin", bareRemote]);
     await runGit(repoRoot, ["push", "-u", "origin", "master"]);
@@ -1802,7 +1802,7 @@ describe("realizeExecutionWorkspace", () => {
     const repoRoot = await createTempRepo("master");
 
     // Set up a bare remote and push
-    const bareRemote = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-worktree-bare-symref-"));
+    const bareRemote = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-worktree-bare-symref-"));
     await runGit(bareRemote, ["init", "--bare"]);
     await runGit(repoRoot, ["remote", "add", "origin", bareRemote]);
     await runGit(repoRoot, ["push", "-u", "origin", "master"]);
@@ -2047,7 +2047,7 @@ describe("realizeExecutionWorkspace", () => {
 
 describe("ensureRuntimeServicesForRun", () => {
   it("leaves manual runtime services untouched during agent runs", async () => {
-    const workspaceRoot = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-runtime-manual-"));
+    const workspaceRoot = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-runtime-manual-"));
     const workspace = buildWorkspace(workspaceRoot);
 
     const services = await ensureRuntimeServicesForRun({
@@ -2078,7 +2078,7 @@ describe("ensureRuntimeServicesForRun", () => {
   });
 
   it("reuses shared runtime services across runs and starts a new service after release", async () => {
-    const workspaceRoot = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-runtime-workspace-"));
+    const workspaceRoot = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-runtime-workspace-"));
     const workspace = buildWorkspace(workspaceRoot);
     const serviceCommand =
       "node -e \"require('node:http').createServer((req,res)=>res.end('ok')).listen(Number(process.env.PORT), '127.0.0.1')\"";
@@ -2177,8 +2177,8 @@ describe("ensureRuntimeServicesForRun", () => {
   }, 10_000);
 
   it("does not reuse project-scoped shared services across different workspace launch contexts", async () => {
-    const primaryWorkspaceRoot = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-runtime-primary-"));
-    const worktreeWorkspaceRoot = path.join(primaryWorkspaceRoot, ".paperclip", "worktrees", "PAP-874-chat-speed-issues");
+    const primaryWorkspaceRoot = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-runtime-primary-"));
+    const worktreeWorkspaceRoot = path.join(primaryWorkspaceRoot, ".partyclip", "worktrees", "PAP-874-chat-speed-issues");
     await fs.mkdir(worktreeWorkspaceRoot, { recursive: true });
 
     const primaryWorkspace = buildWorkspace(primaryWorkspaceRoot);
@@ -2196,11 +2196,11 @@ describe("ensureRuntimeServicesForRun", () => {
       workspaceRuntime: {
         services: [
           {
-            name: "paperclip-dev",
+            name: "partyclip-dev",
             command: serviceCommand,
             cwd: ".",
             env: {
-              PARTYCLIP_HOME: "{{workspace.cwd}}/.paperclip/runtime-services",
+              PARTYCLIP_HOME: "{{workspace.cwd}}/.partyclip/runtime-services",
             },
             port: { type: "auto" },
             readiness: {
@@ -2265,14 +2265,14 @@ describe("ensureRuntimeServicesForRun", () => {
     expect(executionServices[0]?.url).not.toBe(primaryServices[0]?.url);
 
     const primaryResponse = await fetch(primaryServices[0]!.url!);
-    expect(await primaryResponse.text()).toBe(path.join(primaryWorkspaceRoot, ".paperclip", "runtime-services"));
+    expect(await primaryResponse.text()).toBe(path.join(primaryWorkspaceRoot, ".partyclip", "runtime-services"));
 
     const executionResponse = await fetch(executionServices[0]!.url!);
-    expect(await executionResponse.text()).toBe(path.join(worktreeWorkspaceRoot, ".paperclip", "runtime-services"));
+    expect(await executionResponse.text()).toBe(path.join(worktreeWorkspaceRoot, ".partyclip", "runtime-services"));
   });
 
   it("does not leak parent Paperclip instance env into runtime service commands", async () => {
-    const workspaceRoot = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-runtime-env-"));
+    const workspaceRoot = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-runtime-env-"));
     const workspace = buildWorkspace(workspaceRoot);
     const envCapturePath = path.join(workspaceRoot, "captured-env.json");
     const serviceCommand = [
@@ -2281,9 +2281,9 @@ describe("ensureRuntimeServicesForRun", () => {
         [
           "const fs = require('node:fs');",
           `fs.writeFileSync(${JSON.stringify(envCapturePath)}, JSON.stringify({`,
-          "paperclipConfig: process.env.PARTYCLIP_CONFIG ?? null,",
-          "paperclipHome: process.env.PARTYCLIP_HOME ?? null,",
-          "paperclipInstanceId: process.env.PARTYCLIP_INSTANCE_ID ?? null,",
+          "partyclipConfig: process.env.PARTYCLIP_CONFIG ?? null,",
+          "partyclipHome: process.env.PARTYCLIP_HOME ?? null,",
+          "partyclipInstanceId: process.env.PARTYCLIP_INSTANCE_ID ?? null,",
           "databaseUrl: process.env.DATABASE_URL ?? null,",
           "customEnv: process.env.RUNTIME_CUSTOM_ENV ?? null,",
           "port: process.env.PORT ?? null,",
@@ -2293,8 +2293,8 @@ describe("ensureRuntimeServicesForRun", () => {
       ),
     ].join(" ");
 
-    process.env.PARTYCLIP_CONFIG = "/tmp/base-paperclip-config.json";
-    process.env.PARTYCLIP_HOME = "/tmp/base-paperclip-home";
+    process.env.PARTYCLIP_CONFIG = "/tmp/base-partyclip-config.json";
+    process.env.PARTYCLIP_HOME = "/tmp/base-partyclip-home";
     process.env.PARTYCLIP_INSTANCE_ID = "base-instance";
     process.env.DATABASE_URL = "postgres://shared-db.example.com/partyclip";
 
@@ -2340,9 +2340,9 @@ describe("ensureRuntimeServicesForRun", () => {
 
     expect(services).toHaveLength(1);
     const captured = JSON.parse(await fs.readFile(envCapturePath, "utf8")) as Record<string, string | null>;
-    expect(captured.paperclipConfig).toBeNull();
-    expect(captured.paperclipHome).toBeNull();
-    expect(captured.paperclipInstanceId).toBeNull();
+    expect(captured.partyclipConfig).toBeNull();
+    expect(captured.partyclipHome).toBeNull();
+    expect(captured.partyclipInstanceId).toBeNull();
     expect(captured.databaseUrl).toBeNull();
     expect(captured.customEnv).toBe("from-adapter");
     expect(captured.port).toMatch(/^\d+$/);
@@ -2352,7 +2352,7 @@ describe("ensureRuntimeServicesForRun", () => {
   });
 
   it("stops execution workspace runtime services by executionWorkspaceId", async () => {
-    const workspaceRoot = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-runtime-stop-"));
+    const workspaceRoot = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-runtime-stop-"));
     const workspace = buildWorkspace(workspaceRoot);
     const runId = "run-stop";
     leasedRunIds.add(runId);
@@ -2406,7 +2406,7 @@ describe("ensureRuntimeServicesForRun", () => {
   });
 
   it("does not stop services in sibling directories when matching by workspace cwd", async () => {
-    const workspaceParent = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-runtime-sibling-"));
+    const workspaceParent = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-runtime-sibling-"));
     const targetWorkspaceRoot = path.join(workspaceParent, "project");
     const siblingWorkspaceRoot = path.join(workspaceParent, "project-extended", "service");
     await fs.mkdir(targetWorkspaceRoot, { recursive: true });
@@ -2465,7 +2465,7 @@ describe("ensureRuntimeServicesForRun", () => {
   });
 
   it("starts only the selected workspace-controlled runtime service", async () => {
-    const workspaceRoot = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-runtime-control-start-"));
+    const workspaceRoot = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-runtime-control-start-"));
     const workspace = buildWorkspace(workspaceRoot);
 
     const services = await startRuntimeServicesForWorkspaceControl({
@@ -2526,7 +2526,7 @@ describe("ensureRuntimeServicesForRun", () => {
   });
 
   it("stops only the selected execution workspace runtime service", async () => {
-    const workspaceRoot = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-runtime-control-stop-"));
+    const workspaceRoot = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-runtime-control-stop-"));
     const workspace = buildWorkspace(workspaceRoot);
 
     const services = await startRuntimeServicesForWorkspaceControl({
@@ -2798,7 +2798,7 @@ describeEmbeddedPostgres("workspace runtime startup reconciliation", () => {
   let tempDb: Awaited<ReturnType<typeof startEmbeddedPostgresTestDatabase>> | null = null;
 
   beforeAll(async () => {
-    tempDb = await startEmbeddedPostgresTestDatabase("paperclip-workspace-runtime-");
+    tempDb = await startEmbeddedPostgresTestDatabase("partyclip-workspace-runtime-");
     db = createDb(tempDb.connectionString);
   }, 20_000);
 
@@ -2817,9 +2817,9 @@ describeEmbeddedPostgres("workspace runtime startup reconciliation", () => {
   });
 
   it("adopts a live auto-port shared service after runtime state is reset", async () => {
-    const workspaceRoot = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-runtime-reconcile-"));
-    const paperclipHome = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-runtime-home-"));
-    process.env.PARTYCLIP_HOME = paperclipHome;
+    const workspaceRoot = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-runtime-reconcile-"));
+    const partyclipHome = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-runtime-home-"));
+    process.env.PARTYCLIP_HOME = partyclipHome;
     process.env.PARTYCLIP_INSTANCE_ID = `runtime-reconcile-${randomUUID()}`;
 
     const companyId = randomUUID();
@@ -2962,10 +2962,10 @@ describeEmbeddedPostgres("workspace runtime startup reconciliation", () => {
       issueId: null,
       scopeType: "project_workspace",
       scopeId: projectWorkspaceId,
-      serviceName: "paperclip-dev",
+      serviceName: "partyclip-dev",
       status: "running",
       lifecycle: "shared",
-      reuseKey: `project_workspace:${projectWorkspaceId}:paperclip-dev`,
+      reuseKey: `project_workspace:${projectWorkspaceId}:partyclip-dev`,
       command: "pnpm dev",
       cwd: "/tmp/partyclip-primary",
       port: 49195,
@@ -2984,9 +2984,9 @@ describeEmbeddedPostgres("workspace runtime startup reconciliation", () => {
     });
     await writeLocalServiceRegistryRecord({
       version: 1,
-      serviceKey: "workspace-runtime-paperclip-dev-stale",
+      serviceKey: "workspace-runtime-partyclip-dev-stale",
       profileKind: "workspace-runtime",
-      serviceName: "paperclip-dev",
+      serviceName: "partyclip-dev",
       command: "pnpm dev",
       cwd: "/tmp/partyclip-primary",
       envFingerprint: "fingerprint",
@@ -2996,7 +2996,7 @@ describeEmbeddedPostgres("workspace runtime startup reconciliation", () => {
       processGroupId: 999999,
       provider: "local_process",
       runtimeServiceId,
-      reuseKey: `project_workspace:${projectWorkspaceId}:paperclip-dev`,
+      reuseKey: `project_workspace:${projectWorkspaceId}:partyclip-dev`,
       startedAt: startedAt.toISOString(),
       lastSeenAt: updatedAt.toISOString(),
       metadata: null,
@@ -3015,7 +3015,7 @@ describeEmbeddedPostgres("workspace runtime startup reconciliation", () => {
   });
 
   it("persists controlled execution workspace stops as stopped", async () => {
-    const workspaceRoot = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-runtime-stop-persisted-"));
+    const workspaceRoot = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-runtime-stop-persisted-"));
     const companyId = randomUUID();
     const agentId = randomUUID();
     const projectId = randomUUID();

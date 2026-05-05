@@ -52,7 +52,7 @@ type DocumentConflictState = {
 
 const DOCUMENT_AUTOSAVE_DEBOUNCE_MS = 900;
 const DOCUMENT_KEY_PATTERN = /^[a-z0-9][a-z0-9_-]*$/;
-const getFoldedDocumentsStorageKey = (issueId: string) => `paperclip:issue-document-folds:${issueId}`;
+const getFoldedDocumentsStorageKey = (issueId: string) => `partyclip:issue-document-folds:${issueId}`;
 
 function loadFoldedDocumentKeys(issueId: string) {
   if (typeof window === "undefined") return [];
@@ -678,7 +678,7 @@ export function IssueDocumentsSection({
   }, [autosaveState, commitDraft, documentConflict, draft, markDocumentDirty, resetAutosaveState, sortedDocuments]);
 
   const documentBodyShellClassName = "mt-3";
-  const documentBodyContentClassName = "paperclip-edit-in-place-content min-h-[220px] text-[15px] leading-7";
+  const documentBodyContentClassName = "partyclip-edit-in-place-content min-h-[220px] text-[15px] leading-7";
   const toggleFoldedDocument = (key: string) => {
     setFoldedDocumentKeys((current) =>
       current.includes(key)

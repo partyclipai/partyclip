@@ -43,7 +43,7 @@ describe("acpx_local environment credential diagnostics", () => {
   });
 
   it("emits an info-level Claude missing credential hint without changing diagnostic health", async () => {
-    const root = path.join(os.tmpdir(), `paperclip-acpx-claude-noauth-${Date.now()}-${Math.random().toString(16).slice(2)}`);
+    const root = path.join(os.tmpdir(), `partyclip-acpx-claude-noauth-${Date.now()}-${Math.random().toString(16).slice(2)}`);
     const claudeConfigDir = path.join(root, ".claude");
 
     try {
@@ -71,7 +71,7 @@ describe("acpx_local environment credential diagnostics", () => {
   });
 
   it("emits an info-level Codex credential hint when native auth is present", async () => {
-    const root = path.join(os.tmpdir(), `paperclip-acpx-codex-auth-${Date.now()}-${Math.random().toString(16).slice(2)}`);
+    const root = path.join(os.tmpdir(), `partyclip-acpx-codex-auth-${Date.now()}-${Math.random().toString(16).slice(2)}`);
     const codexHome = path.join(root, ".codex");
 
     try {
@@ -100,7 +100,7 @@ describe("acpx_local environment credential diagnostics", () => {
   });
 
   it("emits an info-level Codex missing credential hint without changing diagnostic health", async () => {
-    const root = path.join(os.tmpdir(), `paperclip-acpx-codex-noauth-${Date.now()}-${Math.random().toString(16).slice(2)}`);
+    const root = path.join(os.tmpdir(), `partyclip-acpx-codex-noauth-${Date.now()}-${Math.random().toString(16).slice(2)}`);
     const codexHome = path.join(root, ".codex");
 
     try {

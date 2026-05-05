@@ -5,10 +5,10 @@ import { test, expect, type Browser, type Page } from "@playwright/test";
 
 const BASE = process.env.PARTYCLIP_E2E_BASE_URL ?? "http://127.0.0.1:3105";
 const DATA_DIR = process.env.PARTYCLIP_E2E_DATA_DIR ?? process.env.PARTYCLIP_HOME;
-const CONFIG_PATH = process.env.PARTYCLIP_E2E_CONFIG_PATH ?? path.resolve(process.cwd(), ".paperclip/config.json");
+const CONFIG_PATH = process.env.PARTYCLIP_E2E_CONFIG_PATH ?? path.resolve(process.cwd(), ".partyclip/config.json");
 const BOOTSTRAP_SCRIPT_PATH = path.resolve(process.cwd(), "packages/db/scripts/create-auth-bootstrap-invite.ts");
-const OWNER_PASSWORD = "paperclip-owner-password";
-const INVITED_PASSWORD = "paperclip-invited-password";
+const OWNER_PASSWORD = "partyclip-owner-password";
+const INVITED_PASSWORD = "partyclip-invited-password";
 
 type HumanUser = {
   name: string;
@@ -40,12 +40,12 @@ const runId = Date.now();
 const companyName = `MU-Auth-${runId}`;
 const ownerUser: HumanUser = {
   name: "Owner User",
-  email: `owner-${runId}@paperclip.local`,
+  email: `owner-${runId}@partyclip.local`,
   password: OWNER_PASSWORD,
 };
 const invitedUser: HumanUser = {
   name: "Invited User",
-  email: `invitee-${runId}@paperclip.local`,
+  email: `invitee-${runId}@partyclip.local`,
   password: INVITED_PASSWORD,
 };
 

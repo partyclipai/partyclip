@@ -35,7 +35,7 @@ Also use when the user hands you an existing top-level loop issue and asks for t
 
 ## When NOT to use
 
-- The assignment is to build or change `paperclip-bench` itself (Harbor adapter, wrapper, telemetry). Use normal engineering flow on that repo.
+- The assignment is to build or change `partyclip-bench` itself (Harbor adapter, wrapper, telemetry). Use normal engineering flow on that repo.
 - The assignment is to submit a benchmark result for ranking. This skill produces smoke/non-comparable runs by design — escalate full-suite or comparable runs to BenchmarkQualityManager.
 - The assignment is a normal Paperclip product bug not surfaced by a Terminal-Bench loop. Use normal investigation.
 - You have not been granted permission to install or assign company skills, and the asker actually wants library mutation. Hand that step to an authorized skill-library owner.
@@ -58,9 +58,9 @@ Collect these on the top-level loop issue before iteration 1. Any input that can
 - **Terminal-Bench task name.** Single-task identifier (e.g. `terminal-bench/fix-git`). Multi-task suites are out of scope for this skill.
 - **Iteration budget.** Maximum number of iterations before the loop must stop without further fixes (typical: 3–5). Also record a per-iteration wall-clock cap.
 - **Paperclip App worktree issue.** The implementation-side issue under the Paperclip App project whose execution workspace owns the isolated worktree. First iteration creates it; later iterations reuse it via `inheritExecutionWorkspaceFromIssueId` or equivalent.
-- **Benchmark command.** The exact `paperclip-bench` invocation, including the `PARTYCLIPAI_CMD` (or equivalent) binding pinned to the Paperclip App worktree under test. Record verbatim on the loop issue.
+- **Benchmark command.** The exact `partyclip-bench` invocation, including the `PARTYCLIPAI_CMD` (or equivalent) binding pinned to the Paperclip App worktree under test. Record verbatim on the loop issue.
 - **Dispatch runner config.** The exact Harbor/Paperclip runner dispatch config required for the smoke to actually start a Paperclip heartbeat. For the current Harbor wrapper, record the `PARTYCLIP_HARBOR_RUNNER_CONFIG` JSON (or equivalent config file) verbatim enough to preserve: `assignee`, `heartbeat_strategy`, `agent_adapter` / `agent_adapters`, `reuse_host_home` when local credentials are intentionally needed, and the stop budget. A bare Harbor command that creates `BEN-1` as unassigned `todo` with zero heartbeat-enabled agents is a harness/setup failure, not a valid product diagnosis.
-- **Latest artifact root.** Filesystem or storage path under which `paperclip-bench` writes run artifacts (manifest, `results.jsonl`, Harbor raw job folders, redacted telemetry). Each iteration appends; nothing is overwritten.
+- **Latest artifact root.** Filesystem or storage path under which `partyclip-bench` writes run artifacts (manifest, `results.jsonl`, Harbor raw job folders, redacted telemetry). Each iteration appends; nothing is overwritten.
 - **Approval policy.** Who must accept a proposed product fix before implementation (default: board via `request_confirmation`; CTO if delegated; never the loop driver alone).
 
 Record each input on the top-level loop issue (description or a dedicated `inputs` document). If any input changes mid-loop, note the change and the iteration it took effect.
@@ -143,7 +143,7 @@ When the iteration ends in **product fix proposed**:
 
 ### 7. Rerun against the same worktree
 
-After implementation and QA complete (or immediately, in the **non-product failure with retry** case), the rerun child runs the same `paperclip-bench` invocation with `PARTYCLIPAI_CMD` still pinned to the Paperclip App worktree under test.
+After implementation and QA complete (or immediately, in the **non-product failure with retry** case), the rerun child runs the same `partyclip-bench` invocation with `PARTYCLIPAI_CMD` still pinned to the Paperclip App worktree under test.
 
 - The rerun must use the same worktree the fix landed in. If the workspace was reset between iterations, the loop is invalid — open a blocker on the loop issue and stop.
 - On completion, the rerun child becomes the next iteration's run record. If the smoke now passes, jump to Step 8. Otherwise return to Step 4 with a new iteration child (subject to the iteration budget).

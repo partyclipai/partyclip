@@ -5,7 +5,7 @@ import {
 } from "@partyclipai/adapter-acpx-local/server";
 
 describe("acpx local skill sync", () => {
-  const paperclipKey = "partyclipai/partyclip/partyclip";
+  const partyclipKey = "partyclipai/partyclip/partyclip";
   const createAgentKey = "partyclipai/partyclip/partyclip-create-agent";
 
   it("reports ACPX Claude skills as supported runtime-mounted state", async () => {
@@ -15,8 +15,8 @@ describe("acpx local skill sync", () => {
       adapterType: "acpx_local",
       config: {
         agent: "claude",
-        paperclipSkillSync: {
-          desiredSkills: [paperclipKey],
+        partyclipSkillSync: {
+          desiredSkills: [partyclipKey],
         },
       },
     });
@@ -24,10 +24,10 @@ describe("acpx local skill sync", () => {
     expect(snapshot.adapterType).toBe("acpx_local");
     expect(snapshot.supported).toBe(true);
     expect(snapshot.mode).toBe("ephemeral");
-    expect(snapshot.desiredSkills).toContain(paperclipKey);
+    expect(snapshot.desiredSkills).toContain(partyclipKey);
     expect(snapshot.desiredSkills).toContain(createAgentKey);
-    expect(snapshot.entries.find((entry) => entry.key === paperclipKey)?.state).toBe("configured");
-    expect(snapshot.entries.find((entry) => entry.key === paperclipKey)?.detail).toContain("ACPX Claude session");
+    expect(snapshot.entries.find((entry) => entry.key === partyclipKey)?.state).toBe("configured");
+    expect(snapshot.entries.find((entry) => entry.key === partyclipKey)?.detail).toContain("ACPX Claude session");
     expect(snapshot.warnings).toEqual([]);
   });
 
@@ -38,18 +38,18 @@ describe("acpx local skill sync", () => {
       adapterType: "acpx_local",
       config: {
         agent: "codex",
-        paperclipSkillSync: {
-          desiredSkills: ["paperclip"],
+        partyclipSkillSync: {
+          desiredSkills: ["partyclip"],
         },
       },
-    }, ["paperclip"]);
+    }, ["partyclip"]);
 
     expect(snapshot.supported).toBe(true);
     expect(snapshot.mode).toBe("ephemeral");
-    expect(snapshot.desiredSkills).toContain(paperclipKey);
-    expect(snapshot.desiredSkills).not.toContain("paperclip");
-    expect(snapshot.entries.find((entry) => entry.key === paperclipKey)?.state).toBe("configured");
-    expect(snapshot.entries.find((entry) => entry.key === paperclipKey)?.detail).toContain("CODEX_HOME/skills/");
+    expect(snapshot.desiredSkills).toContain(partyclipKey);
+    expect(snapshot.desiredSkills).not.toContain("partyclip");
+    expect(snapshot.entries.find((entry) => entry.key === partyclipKey)?.state).toBe("configured");
+    expect(snapshot.entries.find((entry) => entry.key === partyclipKey)?.detail).toContain("CODEX_HOME/skills/");
     expect(snapshot.warnings).toEqual([]);
   });
 
@@ -60,17 +60,17 @@ describe("acpx local skill sync", () => {
       adapterType: "acpx_local",
       config: {
         agent: "custom",
-        paperclipSkillSync: {
-          desiredSkills: [paperclipKey],
+        partyclipSkillSync: {
+          desiredSkills: [partyclipKey],
         },
       },
     });
 
     expect(snapshot.supported).toBe(false);
     expect(snapshot.mode).toBe("unsupported");
-    expect(snapshot.desiredSkills).toContain(paperclipKey);
-    expect(snapshot.entries.find((entry) => entry.key === paperclipKey)?.desired).toBe(true);
-    expect(snapshot.entries.find((entry) => entry.key === paperclipKey)?.detail).toContain("stored in Paperclip only");
+    expect(snapshot.desiredSkills).toContain(partyclipKey);
+    expect(snapshot.entries.find((entry) => entry.key === partyclipKey)?.desired).toBe(true);
+    expect(snapshot.entries.find((entry) => entry.key === partyclipKey)?.detail).toContain("stored in Paperclip only");
     expect(snapshot.warnings).toContain(
       "Custom ACP commands do not expose a Paperclip skill integration contract yet; selected skills are tracked only.",
     );

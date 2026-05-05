@@ -53,7 +53,7 @@ async function createSandbox(config: E2bDriverConfig): Promise<Sandbox> {
     apiKey: resolveApiKey(config),
     timeoutMs: config.timeoutMs,
     metadata: {
-      paperclipProvider: "e2b",
+      partyclipProvider: "e2b",
     },
   };
   return await Sandbox.create(config.template, options);
@@ -98,7 +98,7 @@ async function ensureSandboxWorkspace(sandbox: Sandbox, remoteCwd: string): Prom
 async function resolveSandboxWorkingDirectory(sandbox: Sandbox): Promise<string> {
   const result = await sandbox.commands.run("pwd");
   const cwd = result.stdout.trim();
-  const remoteCwd = path.posix.join(cwd.length > 0 ? cwd : "/", "paperclip-workspace");
+  const remoteCwd = path.posix.join(cwd.length > 0 ? cwd : "/", "partyclip-workspace");
   await ensureSandboxWorkspace(sandbox, remoteCwd);
   return remoteCwd;
 }

@@ -25,7 +25,7 @@ describe("applyDataDirOverride", () => {
       context: undefined,
     }, { hasConfigOption: true, hasContextOption: true });
 
-    const expectedHome = path.resolve(os.homedir(), "paperclip-data");
+    const expectedHome = path.resolve(os.homedir(), "partyclip-data");
     expect(home).toBe(expectedHome);
     expect(process.env.PARTYCLIP_HOME).toBe(expectedHome);
     expect(process.env.PARTYCLIP_CONFIG).toBe(

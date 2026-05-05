@@ -110,7 +110,7 @@ describe("ProjectWorkspaceSummaryCard", () => {
     act(() => {
       root.render(
         <ProjectWorkspaceSummaryCard
-          projectRef="paperclip-app"
+          projectRef="partyclip-app"
           summary={createSummary()}
           runtimeActionKey={null}
           runtimeActionPending={false}
@@ -148,7 +148,7 @@ describe("ProjectWorkspaceSummaryCard", () => {
     act(() => {
       root.render(
         <ProjectWorkspaceSummaryCard
-          projectRef="paperclip-app"
+          projectRef="partyclip-app"
           summary={createSummary({
             key: "project:workspace-2",
             kind: "project_workspace",
@@ -181,7 +181,7 @@ describe("ProjectWorkspaceSummaryCard", () => {
     act(() => {
       root.render(
         <ProjectWorkspaceSummaryCard
-          projectRef="paperclip-app"
+          projectRef="partyclip-app"
           summary={createSummary({
             executionWorkspaceStatus: "cleanup_failed" as ExecutionWorkspace["status"],
           })}
@@ -210,7 +210,7 @@ describe("ProjectWorkspaceSummaryCard", () => {
     await act(async () => {
       root.render(
         <ProjectWorkspaceSummaryCard
-          projectRef="paperclip-app"
+          projectRef="partyclip-app"
           summary={summary}
           runtimeActionKey={null}
           runtimeActionPending={false}
@@ -260,7 +260,7 @@ describe("ProjectWorkspaceSummaryCard", () => {
     act(() => {
       root.render(
         <ProjectWorkspaceSummaryCard
-          projectRef="paperclip-app"
+          projectRef="partyclip-app"
           summary={createSummary({
             primaryServiceUrl: "http://127.0.0.1:62475",
             primaryServiceUrlRunning: true,

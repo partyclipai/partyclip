@@ -38,7 +38,7 @@ Paperclip is a monorepo with four main layers.
 ## Repository Structure
 
 ```
-paperclip/
+partyclip/
 ├── ui/                          # React frontend
 │   ├── src/pages/              # Route pages
 │   ├── src/components/         # React components
@@ -60,7 +60,7 @@ paperclip/
 │       └── codex-local/         # OpenAI Codex adapter
 │
 ├── skills/                      # Agent skills
-│   └── paperclip/               # Core Paperclip skill (heartbeat protocol)
+│   └── partyclip/               # Core Paperclip skill (heartbeat protocol)
 │
 ├── cli/                         # CLI client
 │   └── src/                     # Setup and control-plane commands

@@ -73,7 +73,7 @@ interface CompanyImportOptions extends BaseClientOptions {
   agents?: string;
   collision?: CompanyCollisionMode;
   ref?: string;
-  paperclipUrl?: string;
+  partyclipUrl?: string;
   yes?: boolean;
   dryRun?: boolean;
 }
@@ -201,15 +201,15 @@ function normalizePortablePath(filePath: string): string {
 function shouldIncludePortableFile(filePath: string): boolean {
   const baseName = path.basename(filePath);
   const isMarkdown = baseName.endsWith(".md");
-  const isPaperclipYaml = baseName === ".paperclip.yaml" || baseName === ".paperclip.yml";
+  const isPaperclipYaml = baseName === ".partyclip.yaml" || baseName === ".partyclip.yml";
   const contentType = binaryContentTypeByExtension[path.extname(baseName).toLowerCase()];
   return isMarkdown || isPaperclipYaml || Boolean(contentType);
 }
 
 function findPortableExtensionPath(files: Record<string, CompanyPortabilityFileEntry>): string | null {
-  if (files[".paperclip.yaml"] !== undefined) return ".paperclip.yaml";
-  if (files[".paperclip.yml"] !== undefined) return ".paperclip.yml";
-  return Object.keys(files).find((entry) => entry.endsWith("/.paperclip.yaml") || entry.endsWith("/.paperclip.yml")) ?? null;
+  if (files[".partyclip.yaml"] !== undefined) return ".partyclip.yaml";
+  if (files[".partyclip.yml"] !== undefined) return ".partyclip.yml";
+  return Object.keys(files).find((entry) => entry.endsWith("/.partyclip.yaml") || entry.endsWith("/.partyclip.yml")) ?? null;
 }
 
 function collectFilesUnderDirectory(
@@ -1247,7 +1247,7 @@ export function registerCompanyCommands(program: Command): void {
               out: path.resolve(opts.out!),
               rootPath: exported.rootPath,
               filesWritten: Object.keys(exported.files).length,
-              paperclipExtensionPath: exported.paperclipExtensionPath,
+              partyclipExtensionPath: exported.partyclipExtensionPath,
               warningCount: exported.warnings.length,
             },
             { json: ctx.json },
@@ -1275,13 +1275,13 @@ export function registerCompanyCommands(program: Command): void {
       .option("--agents <list>", "Comma-separated agent slugs to import, or all", "all")
       .option("--collision <mode>", "Collision strategy: rename | skip | replace", "rename")
       .option("--ref <value>", "Git ref to use for GitHub imports (branch, tag, or commit)")
-      .option("--paperclip-url <url>", "Alias for --api-base on this command")
+      .option("--partyclip-url <url>", "Alias for --api-base on this command")
       .option("--yes", "Accept default selection and skip the pre-import confirmation prompt", false)
       .option("--dry-run", "Run preview only without applying", false)
       .action(async (fromPathOrUrl: string, opts: CompanyImportOptions) => {
         try {
-          if (!opts.apiBase?.trim() && opts.paperclipUrl?.trim()) {
-            opts.apiBase = opts.paperclipUrl.trim();
+          if (!opts.apiBase?.trim() && opts.partyclipUrl?.trim()) {
+            opts.apiBase = opts.partyclipUrl.trim();
           }
           const ctx = resolveCommandContext(opts);
           const interactiveView = isInteractiveTerminal() && !ctx.json;

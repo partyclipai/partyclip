@@ -103,11 +103,11 @@ pnpm partyclipai allowed-hostname my-tailscale-host
 
 | Data | Default Path |
 |------|-------------|
-| Config | `~/.paperclip/instances/default/config.json` |
-| Database | `~/.paperclip/instances/default/db` |
-| Logs | `~/.paperclip/instances/default/logs` |
-| Storage | `~/.paperclip/instances/default/data/storage` |
-| Secrets key | `~/.paperclip/instances/default/secrets/master.key` |
+| Config | `~/.partyclip/instances/default/config.json` |
+| Database | `~/.partyclip/instances/default/db` |
+| Logs | `~/.partyclip/instances/default/logs` |
+| Storage | `~/.partyclip/instances/default/data/storage` |
+| Secrets key | `~/.partyclip/instances/default/secrets/master.key` |
 
 Override with:
 

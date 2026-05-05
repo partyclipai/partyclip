@@ -13,7 +13,7 @@ const DEFAULT_BRIDGE_STOP_TIMEOUT_MS = 2_000;
 const DEFAULT_BRIDGE_MAX_QUEUE_DEPTH = 64;
 const DEFAULT_BRIDGE_MAX_BODY_BYTES = 256 * 1024;
 const REMOTE_WRITE_BASE64_CHUNK_SIZE = 32 * 1024;
-const SANDBOX_CALLBACK_BRIDGE_ENTRYPOINT = "paperclip-bridge-server.mjs";
+const SANDBOX_CALLBACK_BRIDGE_ENTRYPOINT = "partyclip-bridge-server.mjs";
 
 export const DEFAULT_SANDBOX_CALLBACK_BRIDGE_MAX_BODY_BYTES = DEFAULT_BRIDGE_MAX_BODY_BYTES;
 
@@ -223,7 +223,7 @@ export function buildSandboxCallbackBridgeEnv(input: {
 }
 
 export async function createSandboxCallbackBridgeAsset(): Promise<SandboxCallbackBridgeAsset> {
-  const localDir = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-bridge-asset-"));
+  const localDir = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-bridge-asset-"));
   const entrypoint = path.join(localDir, SANDBOX_CALLBACK_BRIDGE_ENTRYPOINT);
   await fs.writeFile(entrypoint, getSandboxCallbackBridgeServerSource(), "utf8");
   return {
@@ -302,7 +302,7 @@ export function createCommandManagedSandboxCallbackBridgeQueueClient(input: {
     },
     writeTextFile: async (remotePath, body) => {
       const remoteDir = path.posix.dirname(remotePath);
-      const tempPath = `${remotePath}.paperclip-upload.b64`;
+      const tempPath = `${remotePath}.partyclip-upload.b64`;
       await runChecked(
         `prepare upload ${remotePath}`,
         `mkdir -p ${shellQuote(remoteDir)} && rm -f ${shellQuote(tempPath)} && : > ${shellQuote(tempPath)}`,
@@ -420,7 +420,7 @@ export async function startSandboxCallbackBridgeWorker(input: {
       });
     } catch (error) {
       console.warn(
-        `[paperclip] sandbox callback bridge handler failed for ${request.id}: ${error instanceof Error ? error.message : String(error)}`,
+        `[partyclip] sandbox callback bridge handler failed for ${request.id}: ${error instanceof Error ? error.message : String(error)}`,
       );
       await writeBridgeResponse(input.client, responsePath, {
         id: request.id,
@@ -454,7 +454,7 @@ export async function startSandboxCallbackBridgeWorker(input: {
         });
       } catch (error) {
         console.warn(
-          `[paperclip] sandbox callback bridge failed to abort pending request ${requestId}: ${error instanceof Error ? error.message : String(error)}`,
+          `[partyclip] sandbox callback bridge failed to abort pending request ${requestId}: ${error instanceof Error ? error.message : String(error)}`,
         );
       } finally {
         await input.client.remove(requestPath).catch(() => undefined);

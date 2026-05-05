@@ -41,9 +41,9 @@ const payload = {
   claudeConfigEntries: process.env.CLAUDE_CONFIG_DIR && fs.existsSync(process.env.CLAUDE_CONFIG_DIR)
     ? fs.readdirSync(process.env.CLAUDE_CONFIG_DIR).sort()
     : [],
-  paperclipApiUrl: process.env.PARTYCLIP_API_URL || null,
-  paperclipApiKey: process.env.PARTYCLIP_API_KEY || null,
-  paperclipApiBridgeMode: process.env.PARTYCLIP_API_BRIDGE_MODE || null,
+  partyclipApiUrl: process.env.PARTYCLIP_API_URL || null,
+  partyclipApiKey: process.env.PARTYCLIP_API_KEY || null,
+  partyclipApiBridgeMode: process.env.PARTYCLIP_API_BRIDGE_MODE || null,
 };
 if (capturePath) {
   fs.writeFileSync(capturePath, JSON.stringify(payload), "utf8");
@@ -65,9 +65,9 @@ type CapturePayload = {
   skillEntries: string[];
   claudeConfigDir: string | null;
   claudeConfigEntries?: string[];
-  paperclipApiUrl?: string | null;
-  paperclipApiKey?: string | null;
-  paperclipApiBridgeMode?: string | null;
+  partyclipApiUrl?: string | null;
+  partyclipApiKey?: string | null;
+  partyclipApiBridgeMode?: string | null;
   appendedSystemPromptFilePath?: string | null;
   appendedSystemPromptFileContents?: string | null;
 };
@@ -183,7 +183,7 @@ describe("claude execute", () => {
    * re-injecting them wastes tokens and may be rejected by the CLI.
    */
   it("passes --append-system-prompt-file on a fresh session when instructionsFile is set", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-claude-exec-fresh-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-claude-exec-fresh-"));
     const { workspace, commandPath, capturePath, restore } = await setupExecuteEnv(root);
     const instructionsFile = path.join(root, "instructions.md");
     await fs.writeFile(instructionsFile, "# Agent instructions", "utf-8");
@@ -213,7 +213,7 @@ describe("claude execute", () => {
   });
 
   it("omits --append-system-prompt-file on a resumed session even when instructionsFile is set", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-claude-exec-resume-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-claude-exec-resume-"));
     const { workspace, commandPath, capturePath, restore } = await setupExecuteEnv(root);
     const instructionsFile = path.join(root, "instructions.md");
     await fs.writeFile(instructionsFile, "# Agent instructions", "utf-8");
@@ -250,7 +250,7 @@ describe("claude execute", () => {
    * was actually passed — i.e. on fresh sessions, not resumed ones.
    */
   it("commandNotes reports injection on a fresh session with instructionsFile", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-claude-exec-notes-fresh-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-claude-exec-notes-fresh-"));
     const { workspace, commandPath, restore } = await setupExecuteEnv(root);
     const instructionsFile = path.join(root, "instructions.md");
     await fs.writeFile(instructionsFile, "# Agent instructions", "utf-8");
@@ -280,7 +280,7 @@ describe("claude execute", () => {
   });
 
   it("commandNotes is empty on a resumed session even when instructionsFile is set", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-claude-exec-notes-resume-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-claude-exec-notes-resume-"));
     const { workspace, commandPath, restore } = await setupExecuteEnv(root);
     const instructionsFile = path.join(root, "instructions.md");
     await fs.writeFile(instructionsFile, "# Agent instructions", "utf-8");
@@ -310,7 +310,7 @@ describe("claude execute", () => {
   });
 
   it("rebuilds the combined instructions file when an unknown resumed session falls back to fresh", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-claude-exec-resume-fallback-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-claude-exec-resume-fallback-"));
     const { workspace, commandPath, capturePath, statePath, restore } = await setupExecuteEnv(root, {
       commandWriter: writeRetryThenSucceedClaudeCommand,
     });
@@ -373,7 +373,7 @@ describe("claude execute", () => {
   });
 
   it("logs HOME, CLAUDE_CONFIG_DIR, and the resolved executable path in invocation metadata", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-claude-execute-meta-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-claude-execute-meta-"));
     const workspace = path.join(root, "workspace");
     const binDir = path.join(root, "bin");
     const commandPath = path.join(binDir, "claude");
@@ -415,7 +415,7 @@ describe("claude execute", () => {
           env: {
             PARTYCLIP_TEST_CAPTURE_PATH: capturePath,
           },
-          promptTemplate: "Follow the paperclip heartbeat.",
+          promptTemplate: "Follow the partyclip heartbeat.",
         },
         context: {},
         authToken: "run-jwt-token",
@@ -444,7 +444,7 @@ describe("claude execute", () => {
   });
 
   it("injects bridge env into sandbox-managed remote runs", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-claude-execute-sandbox-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-claude-execute-sandbox-"));
     const localWorkspace = path.join(root, "workspace");
     const remoteWorkspace = path.join(root, "sandbox-$HOME");
     const binDir = path.join(root, "bin");
@@ -486,7 +486,7 @@ describe("claude execute", () => {
           env: {
             PARTYCLIP_TEST_CAPTURE_PATH: capturePath,
           },
-          promptTemplate: "Follow the paperclip heartbeat.",
+          promptTemplate: "Follow the partyclip heartbeat.",
         },
         context: {},
         executionTarget: {
@@ -505,11 +505,11 @@ describe("claude execute", () => {
 
       expect(result.exitCode).toBe(0);
       const capture = JSON.parse(await fs.readFile(capturePath, "utf8")) as CapturePayload;
-      expect(capture.claudeConfigDir).toBe(path.join(remoteWorkspace, ".paperclip-runtime", "claude", "config"));
+      expect(capture.claudeConfigDir).toBe(path.join(remoteWorkspace, ".partyclip-runtime", "claude", "config"));
       expect(capture.claudeConfigEntries).toContain("settings.json");
-      expect(capture.paperclipApiUrl).toMatch(/^http:\/\/127\.0\.0\.1:\d+$/);
-      expect(capture.paperclipApiKey).not.toBe("run-jwt-token");
-      expect(capture.paperclipApiBridgeMode).toBe("queue_v1");
+      expect(capture.partyclipApiUrl).toMatch(/^http:\/\/127\.0\.0\.1:\d+$/);
+      expect(capture.partyclipApiKey).not.toBe("run-jwt-token");
+      expect(capture.partyclipApiBridgeMode).toBe("queue_v1");
     } finally {
       if (previousHome === undefined) delete process.env.HOME;
       else process.env.HOME = previousHome;
@@ -520,13 +520,13 @@ describe("claude execute", () => {
   });
 
   it("reuses a stable Paperclip-managed Claude prompt bundle across equivalent runs", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-claude-execute-bundle-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-claude-execute-bundle-"));
     const workspace = path.join(root, "workspace");
     const commandPath = path.join(root, "claude");
     const capturePath1 = path.join(root, "capture-1.json");
     const capturePath2 = path.join(root, "capture-2.json");
     const instructionsPath = path.join(root, "AGENTS.md");
-    const paperclipHome = path.join(root, "paperclip-home");
+    const partyclipHome = path.join(root, "partyclip-home");
     await fs.mkdir(workspace, { recursive: true });
     await fs.writeFile(instructionsPath, "You are managed instructions.\n", "utf8");
     await writeFakeClaudeCommand(commandPath);
@@ -535,7 +535,7 @@ describe("claude execute", () => {
     const previousPaperclipHome = process.env.PARTYCLIP_HOME;
     const previousPaperclipInstanceId = process.env.PARTYCLIP_INSTANCE_ID;
     process.env.HOME = root;
-    process.env.PARTYCLIP_HOME = paperclipHome;
+    process.env.PARTYCLIP_HOME = partyclipHome;
     delete process.env.PARTYCLIP_INSTANCE_ID;
 
     try {
@@ -561,7 +561,7 @@ describe("claude execute", () => {
           env: {
             PARTYCLIP_TEST_CAPTURE_PATH: capturePath1,
           },
-          promptTemplate: "Follow the paperclip heartbeat.",
+          promptTemplate: "Follow the partyclip heartbeat.",
         },
         context: {},
         authToken: "run-jwt-token",
@@ -598,14 +598,14 @@ describe("claude execute", () => {
           env: {
             PARTYCLIP_TEST_CAPTURE_PATH: capturePath2,
           },
-          promptTemplate: "Follow the paperclip heartbeat.",
+          promptTemplate: "Follow the partyclip heartbeat.",
         },
         context: {
           issueId: "issue-1",
           taskId: "issue-1",
           wakeReason: "issue_commented",
           wakeCommentId: "comment-2",
-          paperclipWake: {
+          partyclipWake: {
             reason: "issue_commented",
             issue: {
               id: "issue-1",
@@ -645,7 +645,7 @@ describe("claude execute", () => {
       const capture1 = JSON.parse(await fs.readFile(capturePath1, "utf8")) as CapturePayload;
       const capture2 = JSON.parse(await fs.readFile(capturePath2, "utf8")) as CapturePayload;
       const expectedRoot = path.join(
-        paperclipHome,
+        partyclipHome,
         "instances",
         "default",
         "companies",
@@ -661,11 +661,11 @@ describe("claude execute", () => {
       expect(capture1.instructionsFilePath?.startsWith(expectedRoot)).toBe(true);
       expect(capture1.instructionsContents).toContain("You are managed instructions.");
       expect(capture1.instructionsContents).toContain(`The above agent instructions were loaded from ${instructionsPath}.`);
-      expect(capture1.skillEntries).toContain("paperclip");
+      expect(capture1.skillEntries).toContain("partyclip");
       expect(capture2.argv).toContain("--resume");
       expect(capture2.argv).toContain("claude-session-1");
       expect(capture2.prompt).toContain("## Paperclip Resume Delta");
-      expect(capture2.prompt).not.toContain("Follow the paperclip heartbeat.");
+      expect(capture2.prompt).not.toContain("Follow the partyclip heartbeat.");
     } finally {
       if (previousHome === undefined) delete process.env.HOME;
       else process.env.HOME = previousHome;
@@ -678,13 +678,13 @@ describe("claude execute", () => {
   });
 
   it("starts a fresh Claude session when the stable prompt bundle changes", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-claude-execute-reset-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-claude-execute-reset-"));
     const workspace = path.join(root, "workspace");
     const commandPath = path.join(root, "claude");
     const capturePath1 = path.join(root, "capture-before.json");
     const capturePath2 = path.join(root, "capture-after.json");
     const instructionsPath = path.join(root, "AGENTS.md");
-    const paperclipHome = path.join(root, "paperclip-home");
+    const partyclipHome = path.join(root, "partyclip-home");
     const logs: string[] = [];
     await fs.mkdir(workspace, { recursive: true });
     await fs.writeFile(instructionsPath, "Version one instructions.\n", "utf8");
@@ -694,7 +694,7 @@ describe("claude execute", () => {
     const previousPaperclipHome = process.env.PARTYCLIP_HOME;
     const previousPaperclipInstanceId = process.env.PARTYCLIP_INSTANCE_ID;
     process.env.HOME = root;
-    process.env.PARTYCLIP_HOME = paperclipHome;
+    process.env.PARTYCLIP_HOME = partyclipHome;
     delete process.env.PARTYCLIP_INSTANCE_ID;
 
     try {
@@ -720,7 +720,7 @@ describe("claude execute", () => {
           env: {
             PARTYCLIP_TEST_CAPTURE_PATH: capturePath1,
           },
-          promptTemplate: "Follow the paperclip heartbeat.",
+          promptTemplate: "Follow the partyclip heartbeat.",
         },
         context: {},
         authToken: "run-jwt-token",
@@ -751,7 +751,7 @@ describe("claude execute", () => {
           env: {
             PARTYCLIP_TEST_CAPTURE_PATH: capturePath2,
           },
-          promptTemplate: "Follow the paperclip heartbeat.",
+          promptTemplate: "Follow the partyclip heartbeat.",
         },
         context: {},
         authToken: "run-jwt-token",
@@ -769,7 +769,7 @@ describe("claude execute", () => {
 
       expect(before.instructionsFilePath).not.toBe(after.instructionsFilePath);
       expect(after.argv).not.toContain("--resume");
-      expect(after.prompt).toContain("Follow the paperclip heartbeat.");
+      expect(after.prompt).toContain("Follow the partyclip heartbeat.");
       expect(logs.join("")).toContain("will not be resumed with");
     } finally {
       if (previousHome === undefined) delete process.env.HOME;
@@ -783,7 +783,7 @@ describe("claude execute", () => {
   }, 15_000);
 
   it("classifies Claude 'out of extra usage' failures as transient upstream errors", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-claude-execute-transient-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-claude-execute-transient-"));
     const workspace = path.join(root, "workspace");
     const commandPath = path.join(root, "claude");
     await fs.mkdir(workspace, { recursive: true });
@@ -822,7 +822,7 @@ describe("claude execute", () => {
         config: {
           command: commandPath,
           cwd: workspace,
-          promptTemplate: "Follow the paperclip heartbeat.",
+          promptTemplate: "Follow the partyclip heartbeat.",
         },
         context: {},
         authToken: "run-jwt-token",
@@ -848,7 +848,7 @@ describe("claude execute", () => {
   });
 
   it("classifies rate-limit / overloaded failures without reset metadata as transient", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-claude-execute-rate-limit-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-claude-execute-rate-limit-"));
     const workspace = path.join(root, "workspace");
     const commandPath = path.join(root, "claude");
     await fs.mkdir(workspace, { recursive: true });
@@ -885,7 +885,7 @@ describe("claude execute", () => {
         config: {
           command: commandPath,
           cwd: workspace,
-          promptTemplate: "Follow the paperclip heartbeat.",
+          promptTemplate: "Follow the partyclip heartbeat.",
         },
         context: {},
         authToken: "run-jwt-token",
@@ -906,7 +906,7 @@ describe("claude execute", () => {
   });
 
   it("does not reclassify deterministic Claude failures (auth, max turns) as transient", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "paperclip-claude-execute-max-turns-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-claude-execute-max-turns-"));
     const workspace = path.join(root, "workspace");
     const commandPath = path.join(root, "claude");
     await fs.mkdir(workspace, { recursive: true });
@@ -942,7 +942,7 @@ describe("claude execute", () => {
         config: {
           command: commandPath,
           cwd: workspace,
-          promptTemplate: "Follow the paperclip heartbeat.",
+          promptTemplate: "Follow the partyclip heartbeat.",
         },
         context: {},
         authToken: "run-jwt-token",

@@ -50,10 +50,10 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="paperclip-story__frame overflow-hidden">
+    <section className="partyclip-story__frame overflow-hidden">
       <div className="flex flex-wrap items-start justify-between gap-3 border-b border-border px-5 py-4">
         <div>
-          <div className="paperclip-story__label">{eyebrow}</div>
+          <div className="partyclip-story__label">{eyebrow}</div>
           <h2 className="mt-1 text-xl font-semibold">{title}</h2>
         </div>
       </div>
@@ -102,7 +102,7 @@ function createSystemEvent(overrides: Partial<IssueTimelineEvent>): IssueTimelin
     id: "event-default",
     createdAt: new Date("2026-04-20T14:00:00.000Z"),
     actorType: "system",
-    actorId: "paperclip",
+    actorId: "partyclip",
     statusChange: {
       from: "todo",
       to: "in_progress",
@@ -240,7 +240,7 @@ const commentTimelineEvents: IssueTimelineEvent[] = [
     id: "event-system-checkout",
     createdAt: new Date("2026-04-20T13:04:00.000Z"),
     actorType: "system",
-    actorId: "paperclip",
+    actorId: "partyclip",
     statusChange: {
       from: "todo",
       to: "in_progress",
@@ -400,7 +400,7 @@ const issueTimelineEvents: IssueTimelineEvent[] = [
     id: "event-issue-checkout",
     createdAt: new Date("2026-04-20T13:42:00.000Z"),
     actorType: "system",
-    actorId: "paperclip",
+    actorId: "partyclip",
     statusChange: {
       from: "todo",
       to: "in_progress",
@@ -643,10 +643,10 @@ function IssueChatMatrix() {
 
 function ChatCommentsStories() {
   return (
-    <div className="paperclip-story">
-      <main className="paperclip-story__inner space-y-6">
-        <section className="paperclip-story__frame p-6">
-          <div className="paperclip-story__label">Chat & Comments</div>
+    <div className="partyclip-story">
+      <main className="partyclip-story__inner space-y-6">
+        <section className="partyclip-story__frame p-6">
+          <div className="partyclip-story__label">Chat & Comments</div>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight">Threaded work conversations</h1>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-muted-foreground">
             Fixture-backed coverage for classic issue comments, embedded run chat, and the assistant-style issue chat
@@ -684,8 +684,8 @@ export const FullSurfaceMatrix: Story = {};
 
 export const CommentThreads: Story = {
   render: () => (
-    <div className="paperclip-story">
-      <main className="paperclip-story__inner">
+    <div className="partyclip-story">
+      <main className="partyclip-story__inner">
         <CommentThreadMatrix />
       </main>
     </div>
@@ -694,8 +694,8 @@ export const CommentThreads: Story = {
 
 export const LiveRunChat: Story = {
   render: () => (
-    <div className="paperclip-story">
-      <main className="paperclip-story__inner">
+    <div className="partyclip-story">
+      <main className="partyclip-story__inner">
         <RunChatMatrix />
       </main>
     </div>
@@ -704,8 +704,8 @@ export const LiveRunChat: Story = {
 
 export const IssueChatWithTimeline: Story = {
   render: () => (
-    <div className="paperclip-story">
-      <main className="paperclip-story__inner">
+    <div className="partyclip-story">
+      <main className="partyclip-story__inner">
         <IssueChatMatrix />
       </main>
     </div>

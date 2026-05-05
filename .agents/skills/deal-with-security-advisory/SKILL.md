@@ -162,7 +162,7 @@ gh api --method PATCH \
     {
       "package": {
         "ecosystem": "npm",
-        "name": "paperclip"
+        "name": "partyclip"
       },
       "vulnerable_version_range": "< {{patchedVersion}}",
       "patched_versions": "{{patchedVersion}}"

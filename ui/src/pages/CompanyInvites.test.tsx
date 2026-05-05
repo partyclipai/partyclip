@@ -74,7 +74,7 @@ describe("CompanyInvites", () => {
       invitedByUser: {
         id: "user-1",
         name: `Board User ${inviteNumber}`,
-        email: `board${inviteNumber}@paperclip.local`,
+        email: `board${inviteNumber}@partyclip.local`,
         image: null,
       },
       relatedJoinRequestId: isActive ? "join-1" : null,

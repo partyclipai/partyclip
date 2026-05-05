@@ -311,13 +311,13 @@ function readCanonicalSkillKey(frontmatter: Record<string, unknown>, metadata: R
     ?? asString(frontmatter.skillKey)
     ?? asString(metadata?.skillKey)
     ?? asString(metadata?.canonicalKey)
-    ?? asString(metadata?.paperclipSkillKey),
+    ?? asString(metadata?.partyclipSkillKey),
   );
   if (direct) return direct;
-  const paperclip = isPlainRecord(metadata?.paperclip) ? metadata?.paperclip as Record<string, unknown> : null;
+  const partyclip = isPlainRecord(metadata?.partyclip) ? metadata?.partyclip as Record<string, unknown> : null;
   return normalizeSkillKey(
-    asString(paperclip?.skillKey)
-    ?? asString(paperclip?.key),
+    asString(partyclip?.skillKey)
+    ?? asString(partyclip?.key),
   );
 }
 
@@ -331,7 +331,7 @@ function deriveCanonicalSkillKey(
   if (explicitKey) return explicitKey;
 
   const sourceKind = asString(metadata?.sourceKind);
-  if (sourceKind === "paperclip_bundled") {
+  if (sourceKind === "partyclip_bundled") {
     return `partyclipai/partyclip/${slug}`;
   }
 
@@ -1429,12 +1429,12 @@ function deriveSkillSourceInfo(skill: SkillSourceInfoTarget): {
 } {
   const metadata = getSkillMeta(skill);
   const localSkillDir = normalizeSkillDirectory(skill);
-  if (metadata.sourceKind === "paperclip_bundled") {
+  if (metadata.sourceKind === "partyclip_bundled") {
     return {
       editable: false,
       editableReason: "Bundled Paperclip skills are read-only.",
       sourceLabel: "Paperclip bundled",
-      sourceBadge: "paperclip",
+      sourceBadge: "partyclip",
       sourcePath: null,
     };
   }
@@ -1483,7 +1483,7 @@ function deriveSkillSourceInfo(skill: SkillSourceInfoTarget): {
         editable: true,
         editableReason: null,
         sourceLabel: "Paperclip workspace",
-        sourceBadge: "paperclip",
+        sourceBadge: "partyclip",
         sourcePath: managedRoot,
       };
     }
@@ -1560,12 +1560,12 @@ export function companySkillService(db: Db) {
             ...skill,
             metadata: {
               ...(skill.metadata ?? {}),
-              sourceKind: "paperclip_bundled",
+              sourceKind: "partyclip_bundled",
             },
           }),
           metadata: {
             ...(skill.metadata ?? {}),
-            sourceKind: "paperclip_bundled",
+            sourceKind: "partyclip_bundled",
           },
         })))
         .catch(() => [] as ImportedSkill[]);
@@ -2180,7 +2180,7 @@ export function companySkillService(db: Db) {
       }
       if (!source) continue;
 
-      const required = sourceKind === "paperclip_bundled";
+      const required = sourceKind === "partyclip_bundled";
       out.push({
         key: skill.key,
         runtimeName: buildSkillRuntimeName(skill.key, skill.slug),
@@ -2328,10 +2328,10 @@ export function companySkillService(db: Db) {
       const incomingKind = asString(incomingMeta.sourceKind);
       if (
         existing
-        && existingMeta.sourceKind === "paperclip_bundled"
+        && existingMeta.sourceKind === "partyclip_bundled"
         && incomingKind === "github"
         && incomingOwner === "partyclipai"
-        && incomingRepo === "paperclip"
+        && incomingRepo === "partyclip"
       ) {
         out.push(existing);
         continue;

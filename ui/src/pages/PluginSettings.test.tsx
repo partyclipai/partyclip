@@ -67,7 +67,7 @@ describe("PluginSettings", () => {
 
     mockPluginsApi.get.mockResolvedValue({
       id: "plugin-1",
-      pluginKey: "paperclip.e2b-sandbox-provider",
+      pluginKey: "partyclip.e2b-sandbox-provider",
       packageName: "@partyclipai/plugin-e2b",
       version: "0.1.0",
       status: "error",

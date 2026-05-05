@@ -89,7 +89,7 @@ const PROTOCOL_VERSION = 3;
 const DEFAULT_SCOPES = ["operator.admin"];
 const DEFAULT_CLIENT_ID = "gateway-client";
 const DEFAULT_CLIENT_MODE = "backend";
-const DEFAULT_CLIENT_VERSION = "paperclip";
+const DEFAULT_CLIENT_VERSION = "partyclip";
 const DEFAULT_ROLE = "operator";
 
 const SENSITIVE_LOG_KEY_PATTERN =
@@ -145,12 +145,12 @@ export function resolveSessionKey(input: {
   runId: string;
   issueId: string | null;
 }): string {
-  const fallback = input.configuredSessionKey ?? "paperclip";
+  const fallback = input.configuredSessionKey ?? "partyclip";
   if (input.strategy === "run") {
-    return prefixSessionKeyForAgent(`paperclip:run:${input.runId}`, input.agentId);
+    return prefixSessionKeyForAgent(`partyclip:run:${input.runId}`, input.agentId);
   }
   if (input.strategy === "issue" && input.issueId) {
-    return prefixSessionKeyForAgent(`paperclip:issue:${input.issueId}`, input.agentId);
+    return prefixSessionKeyForAgent(`partyclip:issue:${input.issueId}`, input.agentId);
   }
   return prefixSessionKeyForAgent(fallback, input.agentId);
 }
@@ -337,30 +337,30 @@ function resolveClaimedApiKeyPath(value: unknown): string {
 }
 
 function buildPaperclipEnvForWake(ctx: AdapterExecutionContext, wakePayload: WakePayload): Record<string, string> {
-  const paperclipApiUrlOverride = resolvePaperclipApiUrlOverride(ctx.config.paperclipApiUrl);
-  const paperclipEnv: Record<string, string> = {
+  const partyclipApiUrlOverride = resolvePaperclipApiUrlOverride(ctx.config.partyclipApiUrl);
+  const partyclipEnv: Record<string, string> = {
     ...buildPaperclipEnv(ctx.agent),
     PARTYCLIP_RUN_ID: ctx.runId,
   };
 
-  if (paperclipApiUrlOverride) {
-    paperclipEnv.PARTYCLIP_API_URL = paperclipApiUrlOverride;
+  if (partyclipApiUrlOverride) {
+    partyclipEnv.PARTYCLIP_API_URL = partyclipApiUrlOverride;
   }
-  if (wakePayload.taskId) paperclipEnv.PARTYCLIP_TASK_ID = wakePayload.taskId;
-  if (wakePayload.wakeReason) paperclipEnv.PARTYCLIP_WAKE_REASON = wakePayload.wakeReason;
-  if (wakePayload.wakeCommentId) paperclipEnv.PARTYCLIP_WAKE_COMMENT_ID = wakePayload.wakeCommentId;
-  if (wakePayload.approvalId) paperclipEnv.PARTYCLIP_APPROVAL_ID = wakePayload.approvalId;
-  if (wakePayload.approvalStatus) paperclipEnv.PARTYCLIP_APPROVAL_STATUS = wakePayload.approvalStatus;
+  if (wakePayload.taskId) partyclipEnv.PARTYCLIP_TASK_ID = wakePayload.taskId;
+  if (wakePayload.wakeReason) partyclipEnv.PARTYCLIP_WAKE_REASON = wakePayload.wakeReason;
+  if (wakePayload.wakeCommentId) partyclipEnv.PARTYCLIP_WAKE_COMMENT_ID = wakePayload.wakeCommentId;
+  if (wakePayload.approvalId) partyclipEnv.PARTYCLIP_APPROVAL_ID = wakePayload.approvalId;
+  if (wakePayload.approvalStatus) partyclipEnv.PARTYCLIP_APPROVAL_STATUS = wakePayload.approvalStatus;
   if (wakePayload.issueIds.length > 0) {
-    paperclipEnv.PARTYCLIP_LINKED_ISSUE_IDS = wakePayload.issueIds.join(",");
+    partyclipEnv.PARTYCLIP_LINKED_ISSUE_IDS = wakePayload.issueIds.join(",");
   }
 
-  return paperclipEnv;
+  return partyclipEnv;
 }
 
 function buildWakeText(
   payload: WakePayload,
-  paperclipEnv: Record<string, string>,
+  partyclipEnv: Record<string, string>,
   structuredWakePrompt: string,
 ): string {
   const claimedApiKeyPath = "~/.openclaw/workspace/partyclip-claimed-api-key.json";
@@ -379,13 +379,13 @@ function buildWakeText(
 
   const envLines: string[] = [];
   for (const key of orderedKeys) {
-    const value = paperclipEnv[key];
+    const value = partyclipEnv[key];
     if (!value) continue;
     envLines.push(`${key}=${value}`);
   }
 
   const issueIdHint = payload.taskId ?? payload.issueId ?? "";
-  const apiBaseHint = paperclipEnv.PARTYCLIP_API_URL ?? "<set PARTYCLIP_API_URL>";
+  const apiBaseHint = partyclipEnv.PARTYCLIP_API_URL ?? "<set PARTYCLIP_API_URL>";
 
   const lines = [
     "Paperclip wake event for a cloud adapter.",
@@ -466,17 +466,17 @@ function joinWakePayloadSections(structuredWakePrompt: string, structuredWakeJso
 function buildStandardPaperclipPayload(
   ctx: AdapterExecutionContext,
   wakePayload: WakePayload,
-  paperclipEnv: Record<string, string>,
+  partyclipEnv: Record<string, string>,
   payloadTemplate: Record<string, unknown>,
 ): Record<string, unknown> {
-  const templatePaperclip = parseObject(payloadTemplate.paperclip);
-  const workspace = asRecord(ctx.context.paperclipWorkspace);
-  const workspaces = Array.isArray(ctx.context.paperclipWorkspaces)
-    ? ctx.context.paperclipWorkspaces.filter((entry): entry is Record<string, unknown> => Boolean(asRecord(entry)))
+  const templatePaperclip = parseObject(payloadTemplate.partyclip);
+  const workspace = asRecord(ctx.context.partyclipWorkspace);
+  const workspaces = Array.isArray(ctx.context.partyclipWorkspaces)
+    ? ctx.context.partyclipWorkspaces.filter((entry): entry is Record<string, unknown> => Boolean(asRecord(entry)))
     : [];
   const configuredWorkspaceRuntime = parseObject(ctx.config.workspaceRuntime);
-  const runtimeServiceIntents = Array.isArray(ctx.context.paperclipRuntimeServiceIntents)
-    ? ctx.context.paperclipRuntimeServiceIntents.filter(
+  const runtimeServiceIntents = Array.isArray(ctx.context.partyclipRuntimeServiceIntents)
+    ? ctx.context.partyclipRuntimeServiceIntents.filter(
         (entry): entry is Record<string, unknown> => Boolean(asRecord(entry)),
       )
     : [];
@@ -493,9 +493,9 @@ function buildStandardPaperclipPayload(
     wakeCommentId: wakePayload.wakeCommentId,
     approvalId: wakePayload.approvalId,
     approvalStatus: wakePayload.approvalStatus,
-    apiUrl: paperclipEnv.PARTYCLIP_API_URL ?? null,
+    apiUrl: partyclipEnv.PARTYCLIP_API_URL ?? null,
   };
-  const structuredWake = parseObject(ctx.context.paperclipWake);
+  const structuredWake = parseObject(ctx.context.partyclipWake);
   if (Object.keys(structuredWake).length > 0) {
     standardPaperclip.wake = structuredWake;
   }
@@ -765,7 +765,7 @@ class GatewayWsClient {
 
   close() {
     if (!this.ws) return;
-    this.ws.close(1000, "paperclip-complete");
+    this.ws.close(1000, "partyclip-complete");
     this.ws = null;
   }
 
@@ -1104,12 +1104,12 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
   const disableDeviceAuth = parseBoolean(ctx.config.disableDeviceAuth, false);
 
   const wakePayload = buildWakePayload(ctx);
-  const paperclipEnv = buildPaperclipEnvForWake(ctx, wakePayload);
-  const structuredWakePrompt = renderPaperclipWakePrompt(ctx.context.paperclipWake);
-  const structuredWakeJson = stringifyPaperclipWakePayload(ctx.context.paperclipWake);
+  const partyclipEnv = buildPaperclipEnvForWake(ctx, wakePayload);
+  const structuredWakePrompt = renderPaperclipWakePrompt(ctx.context.partyclipWake);
+  const structuredWakeJson = stringifyPaperclipWakePayload(ctx.context.partyclipWake);
   const wakeText = buildWakeText(
     wakePayload,
-    paperclipEnv,
+    partyclipEnv,
     structuredWakeJson
       ? joinWakePayloadSections(structuredWakePrompt, structuredWakeJson)
       : structuredWakePrompt,
@@ -1127,7 +1127,7 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
 
   const templateMessage = nonEmpty(payloadTemplate.message) ?? nonEmpty(payloadTemplate.text);
   const message = templateMessage ? appendWakeText(templateMessage, wakeText) : wakeText;
-  const paperclipPayload = buildStandardPaperclipPayload(ctx, wakePayload, paperclipEnv, payloadTemplate);
+  const partyclipPayload = buildStandardPaperclipPayload(ctx, wakePayload, partyclipEnv, payloadTemplate);
 
   const agentParams: Record<string, unknown> = {
     ...payloadTemplate,
@@ -1136,7 +1136,7 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
     idempotencyKey: ctx.runId,
   };
   delete agentParams.text;
-  agentParams.paperclip = paperclipPayload;
+  agentParams.partyclip = partyclipPayload;
 
   const configuredAgentId = nonEmpty(ctx.config.agentId);
   if (configuredAgentId && !nonEmpty(agentParams.agentId)) {

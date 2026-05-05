@@ -19,7 +19,7 @@ async function createSkillDir(root: string, name: string) {
 }
 
 describe("claude local skill sync", () => {
-  const paperclipKey = "partyclipai/partyclip/partyclip";
+  const partyclipKey = "partyclipai/partyclip/partyclip";
   const createAgentKey = "partyclipai/partyclip/partyclip-create-agent";
   const cleanupDirs = new Set<string>();
 
@@ -38,9 +38,9 @@ describe("claude local skill sync", () => {
 
     expect(snapshot.mode).toBe("ephemeral");
     expect(snapshot.supported).toBe(true);
-    expect(snapshot.desiredSkills).toContain(paperclipKey);
-    expect(snapshot.entries.find((entry) => entry.key === paperclipKey)?.required).toBe(true);
-    expect(snapshot.entries.find((entry) => entry.key === paperclipKey)?.state).toBe("configured");
+    expect(snapshot.desiredSkills).toContain(partyclipKey);
+    expect(snapshot.entries.find((entry) => entry.key === partyclipKey)?.required).toBe(true);
+    expect(snapshot.entries.find((entry) => entry.key === partyclipKey)?.state).toBe("configured");
   });
 
   it("respects an explicit desired skill list without mutating a persistent home", async () => {
@@ -49,14 +49,14 @@ describe("claude local skill sync", () => {
       companyId: "company-1",
       adapterType: "claude_local",
       config: {
-        paperclipSkillSync: {
-          desiredSkills: [paperclipKey],
+        partyclipSkillSync: {
+          desiredSkills: [partyclipKey],
         },
       },
-    }, [paperclipKey]);
+    }, [partyclipKey]);
 
-    expect(snapshot.desiredSkills).toContain(paperclipKey);
-    expect(snapshot.entries.find((entry) => entry.key === paperclipKey)?.state).toBe("configured");
+    expect(snapshot.desiredSkills).toContain(partyclipKey);
+    expect(snapshot.entries.find((entry) => entry.key === partyclipKey)?.state).toBe("configured");
     expect(snapshot.entries.find((entry) => entry.key === createAgentKey)?.state).toBe("configured");
   });
 
@@ -66,21 +66,21 @@ describe("claude local skill sync", () => {
       companyId: "company-1",
       adapterType: "claude_local",
       config: {
-        paperclipSkillSync: {
-          desiredSkills: ["paperclip"],
+        partyclipSkillSync: {
+          desiredSkills: ["partyclip"],
         },
       },
     });
 
     expect(snapshot.warnings).toEqual([]);
-    expect(snapshot.desiredSkills).toContain(paperclipKey);
-    expect(snapshot.desiredSkills).not.toContain("paperclip");
-    expect(snapshot.entries.find((entry) => entry.key === paperclipKey)?.state).toBe("configured");
-    expect(snapshot.entries.find((entry) => entry.key === "paperclip")).toBeUndefined();
+    expect(snapshot.desiredSkills).toContain(partyclipKey);
+    expect(snapshot.desiredSkills).not.toContain("partyclip");
+    expect(snapshot.entries.find((entry) => entry.key === partyclipKey)?.state).toBe("configured");
+    expect(snapshot.entries.find((entry) => entry.key === "partyclip")).toBeUndefined();
   });
 
   it("shows host-level user-installed Claude skills as read-only external entries", async () => {
-    const home = await makeTempDir("paperclip-claude-user-skills-");
+    const home = await makeTempDir("partyclip-claude-user-skills-");
     cleanupDirs.add(home);
     await createSkillDir(path.join(home, ".claude", "skills"), "crack-python");
 

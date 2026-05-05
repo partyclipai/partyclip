@@ -24,7 +24,7 @@ function expandHomePrefix(value: string): string {
 function resolvePaperclipHomeDir(): string {
   const envHome = process.env.PARTYCLIP_HOME?.trim();
   if (envHome) return path.resolve(expandHomePrefix(envHome));
-  return path.resolve(os.homedir(), ".paperclip");
+  return path.resolve(os.homedir(), ".partyclip");
 }
 
 function resolvePaperclipInstanceId(): string {
@@ -104,7 +104,7 @@ async function main() {
       connectionString,
       backupDir,
       retention: { dailyDays: retentionDays, weeklyWeeks: 4, monthlyMonths: 1 },
-      filenamePrefix: "paperclip",
+      filenamePrefix: "partyclip",
     });
 
     console.log(`Backup saved: ${formatDatabaseBackupResult(result)}`);

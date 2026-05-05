@@ -103,7 +103,7 @@ describe("sandbox adapter execution targets", () => {
       environmentId: "env-1",
       leaseId: "lease-1",
       remoteCwd: "/workspace",
-      paperclipTransport: "bridge",
+      partyclipTransport: "bridge",
     });
   });
 
@@ -141,10 +141,10 @@ describe("sandbox adapter execution targets", () => {
   });
 
   it("starts a localhost Paperclip bridge for sandbox targets in bridge mode", async () => {
-    const rootDir = await mkdtemp(path.join(os.tmpdir(), "paperclip-execution-target-bridge-"));
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "partyclip-execution-target-bridge-"));
     cleanupDirs.push(rootDir);
     const remoteCwd = path.join(rootDir, "workspace");
-    const runtimeRootDir = path.join(remoteCwd, ".paperclip-runtime", "codex");
+    const runtimeRootDir = path.join(remoteCwd, ".partyclip-runtime", "codex");
     await mkdir(runtimeRootDir, { recursive: true });
 
     const requests: Array<{ method: string; url: string; auth: string | null; runId: string | null }> = [];
@@ -174,7 +174,7 @@ describe("sandbox adapter execution targets", () => {
       environmentId: "env-1",
       leaseId: "lease-1",
       remoteCwd,
-      paperclipTransport: "bridge",
+      partyclipTransport: "bridge",
       runner: createLocalSandboxRunner(),
       timeoutMs: 30_000,
     };
@@ -215,10 +215,10 @@ describe("sandbox adapter execution targets", () => {
   });
 
   it("fails oversized host responses with a 502 before returning them to the sandbox client", async () => {
-    const rootDir = await mkdtemp(path.join(os.tmpdir(), "paperclip-execution-target-bridge-limit-"));
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "partyclip-execution-target-bridge-limit-"));
     cleanupDirs.push(rootDir);
     const remoteCwd = path.join(rootDir, "workspace");
-    const runtimeRootDir = path.join(remoteCwd, ".paperclip-runtime", "codex");
+    const runtimeRootDir = path.join(remoteCwd, ".partyclip-runtime", "codex");
     await mkdir(runtimeRootDir, { recursive: true });
 
     const requests: Array<{ method: string; url: string; auth: string | null; runId: string | null }> = [];
@@ -252,7 +252,7 @@ describe("sandbox adapter execution targets", () => {
       environmentId: "env-1",
       leaseId: "lease-1",
       remoteCwd,
-      paperclipTransport: "bridge",
+      partyclipTransport: "bridge",
       runner: createLocalSandboxRunner(),
       timeoutMs: 30_000,
     };

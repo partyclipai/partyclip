@@ -70,7 +70,7 @@ describe("claude remote execution", () => {
   });
 
   it("prepares the workspace, syncs Claude runtime assets, and restores workspace changes for remote SSH execution", async () => {
-    const rootDir = await mkdtemp(path.join(os.tmpdir(), "paperclip-claude-remote-"));
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "partyclip-claude-remote-"));
     cleanupDirs.push(rootDir);
     const workspaceDir = path.join(rootDir, "workspace");
     const instructionsPath = path.join(rootDir, "instructions.md");
@@ -97,7 +97,7 @@ describe("claude remote execution", () => {
         instructionsFilePath: instructionsPath,
       },
       context: {
-        paperclipWorkspace: {
+        partyclipWorkspace: {
           cwd: workspaceDir,
           source: "project_primary",
         },
@@ -112,7 +112,7 @@ describe("claude remote execution", () => {
           privateKey: "PRIVATE KEY",
           knownHosts: "[127.0.0.1]:2222 ssh-ed25519 AAAA",
           strictHostKeyChecking: true,
-          paperclipApiUrl: "http://198.51.100.10:3102",
+          partyclipApiUrl: "http://198.51.100.10:3102",
         },
       },
       onLog: async () => {},
@@ -125,7 +125,7 @@ describe("claude remote execution", () => {
     }));
     expect(syncDirectoryToSsh).toHaveBeenCalledTimes(1);
     expect(syncDirectoryToSsh).toHaveBeenCalledWith(expect.objectContaining({
-      remoteDir: "/remote/workspace/.paperclip-runtime/claude/skills",
+      remoteDir: "/remote/workspace/.partyclip-runtime/claude/skills",
       followSymlinks: true,
     }));
     expect(runChildProcess).toHaveBeenCalledTimes(1);
@@ -133,9 +133,9 @@ describe("claude remote execution", () => {
       | [string, string, string[], { env: Record<string, string>; remoteExecution?: { remoteCwd: string } | null }]
       | undefined;
     expect(call?.[2]).toContain("--append-system-prompt-file");
-    expect(call?.[2]).toContain("/remote/workspace/.paperclip-runtime/claude/skills/agent-instructions.md");
+    expect(call?.[2]).toContain("/remote/workspace/.partyclip-runtime/claude/skills/agent-instructions.md");
     expect(call?.[2]).toContain("--add-dir");
-    expect(call?.[2]).toContain("/remote/workspace/.paperclip-runtime/claude/skills");
+    expect(call?.[2]).toContain("/remote/workspace/.partyclip-runtime/claude/skills");
     expect(call?.[3].env.PARTYCLIP_API_URL).toBe("http://198.51.100.10:3102");
     expect(call?.[3].remoteExecution?.remoteCwd).toBe("/remote/workspace");
     expect(restoreWorkspaceFromSshExecution).toHaveBeenCalledTimes(1);
@@ -146,7 +146,7 @@ describe("claude remote execution", () => {
   });
 
   it("does not resume saved Claude sessions for remote SSH execution without a matching remote identity", async () => {
-    const rootDir = await mkdtemp(path.join(os.tmpdir(), "paperclip-claude-remote-resume-"));
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "partyclip-claude-remote-resume-"));
     cleanupDirs.push(rootDir);
     const workspaceDir = path.join(rootDir, "workspace");
     await mkdir(workspaceDir, { recursive: true });
@@ -173,7 +173,7 @@ describe("claude remote execution", () => {
         command: "claude",
       },
       context: {
-        paperclipWorkspace: {
+        partyclipWorkspace: {
           cwd: workspaceDir,
           source: "project_primary",
         },
@@ -199,7 +199,7 @@ describe("claude remote execution", () => {
   });
 
   it("resumes saved Claude sessions for remote SSH execution when the remote identity matches", async () => {
-    const rootDir = await mkdtemp(path.join(os.tmpdir(), "paperclip-claude-remote-resume-match-"));
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "partyclip-claude-remote-resume-match-"));
     cleanupDirs.push(rootDir);
     const workspaceDir = path.join(rootDir, "workspace");
     await mkdir(workspaceDir, { recursive: true });
@@ -233,7 +233,7 @@ describe("claude remote execution", () => {
         command: "claude",
       },
       context: {
-        paperclipWorkspace: {
+        partyclipWorkspace: {
           cwd: workspaceDir,
           source: "project_primary",
         },

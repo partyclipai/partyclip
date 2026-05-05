@@ -90,7 +90,7 @@ describeEmbeddedPostgres("routine routes end-to-end", () => {
   let tempDb: Awaited<ReturnType<typeof startEmbeddedPostgresTestDatabase>> | null = null;
 
   beforeAll(async () => {
-    tempDb = await startEmbeddedPostgresTestDatabase("paperclip-routines-e2e-");
+    tempDb = await startEmbeddedPostgresTestDatabase("partyclip-routines-e2e-");
     db = createDb(tempDb.connectionString);
   }, 20_000);
 
@@ -354,13 +354,13 @@ describeEmbeddedPostgres("routine routes end-to-end", () => {
 
     const runRes = await postRoutineRun(app, createRes.body.id, {
       source: "manual",
-      variables: { repo: "paperclip" },
+      variables: { repo: "partyclip" },
     });
 
     expect(runRes.status).toBe(202);
     expect(runRes.body.triggerPayload).toEqual({
       variables: {
-        repo: "paperclip",
+        repo: "partyclip",
         priority: "high",
       },
     });
@@ -370,7 +370,7 @@ describeEmbeddedPostgres("routine routes end-to-end", () => {
       .from(issues)
       .where(eq(issues.id, runRes.body.linkedIssueId));
 
-    expect(issue?.description).toBe("Review paperclip for high bugs");
+    expect(issue?.description).toBe("Review partyclip for high bugs");
   });
 
   it("allows drafting a routine without defaults and running it with one-off overrides", async () => {

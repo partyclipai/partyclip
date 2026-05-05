@@ -16,8 +16,8 @@ afterEach(() => {
 
 describe("Better Auth cookie scoping", () => {
   it("derives an instance-scoped cookie prefix", () => {
-    expect(deriveAuthCookiePrefix("default")).toBe("paperclip-default");
-    expect(deriveAuthCookiePrefix("PAP-1601-worktree")).toBe("paperclip-PAP-1601-worktree");
+    expect(deriveAuthCookiePrefix("default")).toBe("partyclip-default");
+    expect(deriveAuthCookiePrefix("PAP-1601-worktree")).toBe("partyclip-PAP-1601-worktree");
   });
 
   it("uses PARTYCLIP_INSTANCE_ID for the Better Auth cookie prefix", () => {
@@ -26,10 +26,10 @@ describe("Better Auth cookie scoping", () => {
     const advanced = buildBetterAuthAdvancedOptions({ disableSecureCookies: false });
 
     expect(advanced).toEqual({
-      cookiePrefix: "paperclip-sat-worktree",
+      cookiePrefix: "partyclip-sat-worktree",
     });
     expect(getCookies({ advanced } as BetterAuthOptions).sessionToken.name).toBe(
-      "paperclip-sat-worktree.session_token",
+      "partyclip-sat-worktree.session_token",
     );
   });
 
@@ -37,7 +37,7 @@ describe("Better Auth cookie scoping", () => {
     process.env.PARTYCLIP_INSTANCE_ID = "pap-worktree";
 
     expect(buildBetterAuthAdvancedOptions({ disableSecureCookies: true })).toEqual({
-      cookiePrefix: "paperclip-pap-worktree",
+      cookiePrefix: "partyclip-pap-worktree",
       useSecureCookies: false,
     });
   });

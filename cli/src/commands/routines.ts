@@ -131,8 +131,8 @@ async function ensureEmbeddedPostgres(dataDir: string, preferredPort: number): P
   const logBuffer = createEmbeddedPostgresLogBuffer();
   const instance = new EmbeddedPostgres({
     databaseDir: dataDir,
-    user: "paperclip",
-    password: "paperclip",
+    user: "partyclip",
+    password: "partyclip",
     port,
     persistent: true,
     initdbFlags: ["--encoding=UTF8", "--locale=C", "--lc-messages=C"],
@@ -194,7 +194,7 @@ async function openConfiguredDb(configPath: string): Promise<{
         config.database.embeddedPostgresPort,
       );
       const adminConnectionString = `postgres://partyclip:partyclip@127.0.0.1:${embeddedHandle.port}/postgres`;
-      await ensurePostgresDatabase(adminConnectionString, "paperclip");
+      await ensurePostgresDatabase(adminConnectionString, "partyclip");
       const connectionString = `postgres://partyclip:partyclip@127.0.0.1:${embeddedHandle.port}/partyclip`;
       await applyPendingMigrations(connectionString);
       const db = createDb(connectionString) as ClosableDb;
@@ -257,7 +257,7 @@ export async function disableAllRoutinesInConfig(
         config.database.embeddedPostgresPort,
       );
       const adminConnectionString = `postgres://partyclip:partyclip@127.0.0.1:${embeddedHandle.port}/postgres`;
-      await ensurePostgresDatabase(adminConnectionString, "paperclip");
+      await ensurePostgresDatabase(adminConnectionString, "partyclip");
       const connectionString = `postgres://partyclip:partyclip@127.0.0.1:${embeddedHandle.port}/partyclip`;
       await applyPendingMigrations(connectionString);
       db = createDb(connectionString) as ClosableDb;
@@ -337,7 +337,7 @@ export function registerRoutineCommands(program: Command): void {
     .command("disable-all")
     .description("Pause all non-archived routines in the configured local instance for one company")
     .option("-c, --config <path>", "Path to config file")
-    .option("-d, --data-dir <path>", "Paperclip data directory root (isolates state from ~/.paperclip)")
+    .option("-d, --data-dir <path>", "Paperclip data directory root (isolates state from ~/.partyclip)")
     .option("-C, --company-id <id>", "Company ID")
     .option("--json", "Output raw JSON")
     .action(async (opts: RoutinesDisableAllOptions) => {

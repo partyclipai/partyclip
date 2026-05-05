@@ -9,7 +9,7 @@ Paperclip supports external adapter plugins that can be installed from npm packa
 
 | | Built-in | External |
 |---|---|---|
-| Source location | Inside `paperclip-fork/packages/adapters/` | Separate npm package or local directory |
+| Source location | Inside `partyclip-fork/packages/adapters/` | Separate npm package or local directory |
 | Registration | Hardcoded in three registries | Loaded at startup via plugin system |
 | UI parser | Static import at build time | Dynamically loaded from API (see [UI Parser](/adapters/adapter-ui-parser)) |
 | Distribution | Ships with Paperclip | Published to npm or linked via `file:` |
@@ -37,11 +37,11 @@ my-adapter/
 
 ```json
 {
-  "name": "my-paperclip-adapter",
+  "name": "my-partyclip-adapter",
   "version": "1.0.0",
   "type": "module",
   "license": "MIT",
-  "paperclip": {
+  "partyclip": {
     "adapterUiParser": "1.0.0"
   },
   "exports": {
@@ -70,7 +70,7 @@ Key fields:
 |-------|---------|
 | `exports["."]` | Entry point — must export `createServerAdapter` |
 | `exports["./ui-parser"]` | Self-contained UI parser module (optional but recommended) |
-| `paperclip.adapterUiParser` | Contract version for the UI parser (`"1.0.0"`) |
+| `partyclip.adapterUiParser` | Contract version for the UI parser (`"1.0.0"`) |
 | `files` | Limits what gets published — only `dist/` |
 
 ### tsconfig.json
@@ -261,13 +261,13 @@ Check levels:
 
 ```sh
 # Via the Paperclip UI
-# Settings → Adapters → Install from npm → "my-paperclip-adapter"
+# Settings → Adapters → Install from npm → "my-partyclip-adapter"
 
 # Or via API
 curl -X POST http://localhost:3102/api/adapters \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
-  -d '{"packageName": "my-paperclip-adapter"}'
+  -d '{"packageName": "my-partyclip-adapter"}'
 ```
 
 ### From local directory
@@ -283,12 +283,12 @@ Local adapters are symlinked into Paperclip's adapter directory. Changes to the 
 
 ### Via adapter-plugins.json
 
-For development, you can also edit `~/.paperclip/adapter-plugins.json` directly:
+For development, you can also edit `~/.partyclip/adapter-plugins.json` directly:
 
 ```json
 [
   {
-    "packageName": "my-paperclip-adapter",
+    "packageName": "my-partyclip-adapter",
     "localPath": "/home/user/my-adapter",
     "type": "my_adapter",
     "installedAt": "2026-03-30T12:00:00.000Z"

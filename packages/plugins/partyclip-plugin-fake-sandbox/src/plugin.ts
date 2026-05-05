@@ -51,7 +51,7 @@ async function createLeaseState(input: {
   image: string;
   reuseLease: boolean;
 }): Promise<FakeLeaseState> {
-  const rootDir = await mkdtemp(path.join(os.tmpdir(), "paperclip-fake-sandbox-"));
+  const rootDir = await mkdtemp(path.join(os.tmpdir(), "partyclip-fake-sandbox-"));
   const remoteCwd = path.join(rootDir, "workspace");
   await mkdir(remoteCwd, { recursive: true });
   const state = {
@@ -258,7 +258,7 @@ const plugin = definePlugin({
       (typeof params.lease.metadata?.remoteCwd === "string" ? params.lease.metadata.remoteCwd : null) ??
       params.workspace.remotePath ??
       params.workspace.localPath ??
-      path.join(os.tmpdir(), "paperclip-fake-sandbox-workspace");
+      path.join(os.tmpdir(), "partyclip-fake-sandbox-workspace");
 
     await mkdir(remoteCwd, { recursive: true });
 

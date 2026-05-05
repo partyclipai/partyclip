@@ -8,9 +8,9 @@ import type { PaperclipConfig } from "../config/schema.js";
 const ORIGINAL_ENV = { ...process.env };
 
 function createExistingConfigFixture() {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), "paperclip-onboard-"));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "partyclip-onboard-"));
   const runtimeRoot = path.join(root, "runtime");
-  const configPath = path.join(root, ".paperclip", "config.json");
+  const configPath = path.join(root, ".partyclip", "config.json");
   const config: PaperclipConfig = {
     $meta: {
       version: 1,
@@ -53,7 +53,7 @@ function createExistingConfigFixture() {
         baseDir: path.join(runtimeRoot, "storage"),
       },
       s3: {
-        bucket: "paperclip",
+        bucket: "partyclip",
         region: "us-east-1",
         prefix: "",
         forcePathStyle: false,
@@ -75,8 +75,8 @@ function createExistingConfigFixture() {
 }
 
 function createFreshConfigPath() {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), "paperclip-onboard-fresh-"));
-  return path.join(root, ".paperclip", "config.json");
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "partyclip-onboard-fresh-"));
+  return path.join(root, ".partyclip", "config.json");
 }
 
 describe("onboard", () => {

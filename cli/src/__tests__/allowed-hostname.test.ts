@@ -6,7 +6,7 @@ import type { PaperclipConfig } from "../config/schema.js";
 import { addAllowedHostname } from "../commands/allowed-hostname.js";
 
 function createTempConfigPath() {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "paperclip-allowed-hostname-"));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "partyclip-allowed-hostname-"));
   return path.join(dir, "config.json");
 }
 
@@ -51,7 +51,7 @@ function writeBaseConfig(configPath: string) {
       provider: "local_disk",
       localDisk: { baseDir: "/tmp/partyclip-storage" },
       s3: {
-        bucket: "paperclip",
+        bucket: "partyclip",
         region: "us-east-1",
         prefix: "",
         forcePathStyle: false,

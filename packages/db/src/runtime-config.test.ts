@@ -41,17 +41,17 @@ describe("resolveDatabaseTarget", () => {
     });
   });
 
-  it("uses DATABASE_URL from repo-local .paperclip/.env", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "paperclip-db-runtime-"));
+  it("uses DATABASE_URL from repo-local .partyclip/.env", () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "partyclip-db-runtime-"));
     const projectDir = path.join(tempDir, "repo");
     fs.mkdirSync(projectDir, { recursive: true });
     process.chdir(projectDir);
     delete process.env.PARTYCLIP_CONFIG;
-    writeJson(path.join(projectDir, ".paperclip", "config.json"), {
+    writeJson(path.join(projectDir, ".partyclip", "config.json"), {
       database: { mode: "embedded-postgres", embeddedPostgresPort: 54329 },
     });
     writeText(
-      path.join(projectDir, ".paperclip", ".env"),
+      path.join(projectDir, ".partyclip", ".env"),
       'DATABASE_URL="postgres://file-user:file-pass@db.example.com:6543/partyclip"\n',
     );
 
@@ -60,12 +60,12 @@ describe("resolveDatabaseTarget", () => {
     expect(target).toMatchObject({
       mode: "postgres",
       connectionString: "postgres://file-user:file-pass@db.example.com:6543/partyclip",
-      source: "paperclip-env",
+      source: "partyclip-env",
     });
   });
 
   it("uses config postgres connection string when configured", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "paperclip-db-runtime-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "partyclip-db-runtime-"));
     const configPath = path.join(tempDir, "instance", "config.json");
     process.env.PARTYCLIP_CONFIG = configPath;
     writeJson(configPath, {
@@ -85,7 +85,7 @@ describe("resolveDatabaseTarget", () => {
   });
 
   it("falls back to embedded postgres settings from config", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "paperclip-db-runtime-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "partyclip-db-runtime-"));
     const configPath = path.join(tempDir, "instance", "config.json");
     process.env.PARTYCLIP_CONFIG = configPath;
     writeJson(configPath, {
@@ -100,7 +100,7 @@ describe("resolveDatabaseTarget", () => {
 
     expect(target).toMatchObject({
       mode: "embedded-postgres",
-      dataDir: path.resolve(os.homedir(), "paperclip-test-db"),
+      dataDir: path.resolve(os.homedir(), "partyclip-test-db"),
       port: 55444,
       source: "embedded-postgres@55444",
     });

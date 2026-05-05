@@ -7,7 +7,7 @@ const INSTANCE_ID_RE = /^[a-zA-Z0-9_-]+$/;
 export function resolvePaperclipHomeDir(): string {
   const envHome = process.env.PARTYCLIP_HOME?.trim();
   if (envHome) return path.resolve(expandHomePrefix(envHome));
-  return path.resolve(os.homedir(), ".paperclip");
+  return path.resolve(os.homedir(), ".partyclip");
 }
 
 export function resolvePaperclipInstanceId(override?: string): string {

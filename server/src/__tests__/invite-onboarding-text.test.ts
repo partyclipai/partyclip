@@ -47,11 +47,11 @@ describe("buildInviteOnboardingTextDocument", () => {
     expect(text).toContain("Suggested Paperclip base URLs to try");
     expect(text).toContain("http://localhost:3100");
     expect(text).toContain("host.docker.internal");
-    expect(text).toContain("paperclipApiUrl");
+    expect(text).toContain("partyclipApiUrl");
     expect(text).toContain("adapterType \"openclaw_gateway\"");
     expect(text).toContain("headers.x-openclaw-token");
     expect(text).toContain("Do NOT use /v1/responses or /hooks/*");
-    expect(text).toContain("set the first reachable candidate as agentDefaultsPayload.paperclipApiUrl");
+    expect(text).toContain("set the first reachable candidate as agentDefaultsPayload.partyclipApiUrl");
     expect(text).toContain("~/.openclaw/workspace/partyclip-claimed-api-key.json");
     expect(text).toContain("PARTYCLIP_API_KEY");
     expect(text).toContain("saved token field");
@@ -151,7 +151,7 @@ describe("buildInviteOnboardingTextDocument", () => {
     });
 
     try {
-      const req = buildReq("paperclip.example.test:3103");
+      const req = buildReq("partyclip.example.test:3103");
       const invite = {
         id: "invite-4",
         companyId: "company-1",
@@ -171,7 +171,7 @@ describe("buildInviteOnboardingTextDocument", () => {
         deploymentMode: "authenticated",
         deploymentExposure: "private",
         bindHost: "0.0.0.0",
-        allowedHostnames: ["paperclip.example.test", "203.0.113.42"],
+        allowedHostnames: ["partyclip.example.test", "203.0.113.42"],
       });
 
       expect(text).toContain("http://192.168.6.178:3103");

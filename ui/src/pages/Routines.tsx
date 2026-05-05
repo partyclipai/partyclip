@@ -369,8 +369,8 @@ export function Routines() {
     variables: [],
   });
   const routineViewStateKey = selectedCompanyId
-    ? `paperclip:routines-view:${selectedCompanyId}`
-    : "paperclip:routines-view";
+    ? `partyclip:routines-view:${selectedCompanyId}`
+    : "partyclip:routines-view";
   const [routineViewState, setRoutineViewState] = useState<RoutineViewState>(() => getRoutineViewState(routineViewStateKey));
 
   useEffect(() => {
@@ -734,7 +734,7 @@ export function Routines() {
             agents={agents}
             projects={projects}
             liveIssueIds={liveIssueIds}
-            viewStateKey="paperclip:routine-recent-runs-view"
+            viewStateKey="partyclip:routine-recent-runs-view"
             issueLinkState={recentRunsIssueLinkState}
             onUpdateIssue={(id, data) => updateIssue.mutate({ id, data })}
           />

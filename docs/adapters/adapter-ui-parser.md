@@ -59,11 +59,11 @@ With a parser, the UI renders:
 
 ## Contract: package.json
 
-### 1. `paperclip.adapterUiParser` — contract version
+### 1. `partyclip.adapterUiParser` — contract version
 
 ```json
 {
-  "paperclip": {
+  "partyclip": {
     "adapterUiParser": "1.0.0"
   }
 }

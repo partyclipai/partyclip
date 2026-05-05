@@ -49,7 +49,7 @@ import {
 const __moduleDir = path.dirname(fileURLToPath(import.meta.url));
 const DEFAULT_WARM_HANDLE_IDLE_MS = 15 * 60 * 1000;
 const WRAPPER_CLEANUP_RETENTION_MS = 15 * 60 * 1000;
-const PARTYCLIP_MANAGED_CODEX_SKILLS_MANIFEST = ".paperclip-managed-skills.json";
+const PARTYCLIP_MANAGED_CODEX_SKILLS_MANIFEST = ".partyclip-managed-skills.json";
 
 type AcpxRuntimeFactory = (options: AcpRuntimeOptions) => AcpRuntime;
 
@@ -106,7 +106,7 @@ function shortHash(value: unknown): string {
 }
 
 function defaultPaperclipInstanceDir(): string {
-  const home = process.env.PARTYCLIP_HOME?.trim() || path.join(os.homedir(), ".paperclip");
+  const home = process.env.PARTYCLIP_HOME?.trim() || path.join(os.homedir(), ".partyclip");
   const instanceId = process.env.PARTYCLIP_INSTANCE_ID?.trim() || "default";
   return path.join(home, "instances", instanceId);
 }
@@ -219,7 +219,7 @@ async function prepareManagedCodexHome(input: {
 
   await onLog(
     "stdout",
-    `[paperclip] Using Paperclip-managed ACPX Codex home "${targetHome}" (seeded from "${sourceHome}").\n`,
+    `[partyclip] Using Paperclip-managed ACPX Codex home "${targetHome}" (seeded from "${sourceHome}").\n`,
   );
   return targetHome;
 }
@@ -269,7 +269,7 @@ async function buildSkillSetKey(input: {
   label: string;
 }): Promise<string> {
   const hash = createHash("sha256");
-  hash.update(`paperclip-acpx-${input.label}-skills:v1\n`);
+  hash.update(`partyclip-acpx-${input.label}-skills:v1\n`);
   const sorted = [...input.skills].sort((left, right) => left.runtimeName.localeCompare(right.runtimeName));
   for (const entry of sorted) {
     hash.update(`skill:${entry.key}:${entry.runtimeName}\n`);
@@ -313,13 +313,13 @@ async function prepareClaudeSkillRuntime(input: {
       if (result.skippedSymlinks.length > 0) {
         await input.onLog(
           "stdout",
-          `[paperclip] Materialized ACPX Claude skill "${entry.runtimeName}" into ${skillsHome} and skipped ${result.skippedSymlinks.length} symlink(s).\n`,
+          `[partyclip] Materialized ACPX Claude skill "${entry.runtimeName}" into ${skillsHome} and skipped ${result.skippedSymlinks.length} symlink(s).\n`,
         );
       }
     } catch (err) {
       await input.onLog(
         "stderr",
-        `[paperclip] Failed to materialize ACPX Claude skill "${entry.key}" into ${skillsHome}: ${err instanceof Error ? err.message : String(err)}\n`,
+        `[partyclip] Failed to materialize ACPX Claude skill "${entry.key}" into ${skillsHome}: ${err instanceof Error ? err.message : String(err)}\n`,
       );
     }
   }
@@ -392,7 +392,7 @@ async function reconcileManagedCodexSkills(input: {
   for (const name of managed) {
     if (desired.has(name)) continue;
     if (await removeSkillTarget(path.join(input.skillsHome, name))) {
-      await input.onLog("stdout", `[paperclip] Revoked ACPX Codex skill "${name}" from ${input.skillsHome}\n`);
+      await input.onLog("stdout", `[partyclip] Revoked ACPX Codex skill "${name}" from ${input.skillsHome}\n`);
     }
   }
 
@@ -406,14 +406,14 @@ async function reconcileManagedCodexSkills(input: {
     const resolvedLinkedPath = path.resolve(path.dirname(target), linkedPath);
     if (resolvedLinkedPath !== path.resolve(entry.source)) continue;
     if (await removeSkillTarget(target)) {
-      await input.onLog("stdout", `[paperclip] Revoked legacy ACPX Codex skill "${entry.runtimeName}" from ${input.skillsHome}\n`);
+      await input.onLog("stdout", `[partyclip] Revoked legacy ACPX Codex skill "${entry.runtimeName}" from ${input.skillsHome}\n`);
     }
   }
 
   for (const name of managed) {
     if (desired.has(name) || availableByRuntimeName.has(name)) continue;
     if (await removeSkillTarget(path.join(input.skillsHome, name))) {
-      await input.onLog("stdout", `[paperclip] Revoked unavailable ACPX Codex skill "${name}" from ${input.skillsHome}\n`);
+      await input.onLog("stdout", `[partyclip] Revoked unavailable ACPX Codex skill "${name}" from ${input.skillsHome}\n`);
     }
   }
 }
@@ -459,13 +459,13 @@ async function prepareCodexSkillRuntime(input: {
       if (result.skippedSymlinks.length > 0) {
         await input.onLog(
           "stdout",
-          `[paperclip] Materialized ACPX Codex skill "${entry.runtimeName}" into ${skillsHome} and skipped ${result.skippedSymlinks.length} symlink(s).\n`,
+          `[partyclip] Materialized ACPX Codex skill "${entry.runtimeName}" into ${skillsHome} and skipped ${result.skippedSymlinks.length} symlink(s).\n`,
         );
       }
     } catch (err) {
       await input.onLog(
         "stderr",
-        `[paperclip] Failed to inject ACPX Codex skill "${entry.key}" into ${skillsHome}: ${err instanceof Error ? err.message : String(err)}\n`,
+        `[partyclip] Failed to inject ACPX Codex skill "${entry.key}" into ${skillsHome}: ${err instanceof Error ? err.message : String(err)}\n`,
       );
     }
   }
@@ -608,7 +608,7 @@ async function buildRuntime(input: {
   ctx: AdapterExecutionContext;
 }): Promise<AcpxPreparedRuntime> {
   const { runId, agent, config, context, authToken } = input.ctx;
-  const workspaceContext = parseObject(context.paperclipWorkspace);
+  const workspaceContext = parseObject(context.partyclipWorkspace);
   const workspaceCwd = asString(workspaceContext.cwd, "");
   const workspaceSource = asString(workspaceContext.source, "");
   const workspaceStrategy = asString(workspaceContext.strategy, "");
@@ -650,7 +650,7 @@ async function buildRuntime(input: {
   const linkedIssueIds = Array.isArray(context.issueIds)
     ? context.issueIds.filter((value): value is string => typeof value === "string" && value.trim().length > 0)
     : [];
-  const wakePayloadJson = stringifyPaperclipWakePayload(context.paperclipWake);
+  const wakePayloadJson = stringifyPaperclipWakePayload(context.partyclipWake);
   if (wakeTaskId) env.PARTYCLIP_TASK_ID = wakeTaskId;
   if (wakeReason) env.PARTYCLIP_WAKE_REASON = wakeReason;
   if (wakeCommentId) env.PARTYCLIP_WAKE_COMMENT_ID = wakeCommentId;
@@ -735,7 +735,7 @@ async function buildRuntime(input: {
     skillPromptInstructions,
   });
   const taskKey = asString(input.ctx.runtime.taskKey, "") || wakeTaskId || workspaceId || "default";
-  const sessionKey = `paperclip:${agent.companyId}:${agent.id}:${taskKey}:${fingerprint}`;
+  const sessionKey = `partyclip:${agent.companyId}:${agent.id}:${taskKey}:${fingerprint}`;
   const runtimeEnv = ensurePathInEnv({ ...process.env, ...env });
   const loggedEnv = buildInvocationEnvForLogs(env, {
     runtimeEnv,
@@ -795,7 +795,7 @@ async function buildPrompt(ctx: AdapterExecutionContext, resumedSession: boolean
       const reason = err instanceof Error ? err.message : String(err);
       await onLog(
         "stderr",
-        `[paperclip] Warning: could not read agent instructions file "${instructionsFilePath}": ${reason}\n`,
+        `[partyclip] Warning: could not read agent instructions file "${instructionsFilePath}": ${reason}\n`,
       );
       commandNotes.push(`Configured instructionsFilePath ${instructionsFilePath}, but file could not be read.`);
     }
@@ -815,12 +815,12 @@ async function buildPrompt(ctx: AdapterExecutionContext, resumedSession: boolean
     !resumedSession && bootstrapPromptTemplate.trim().length > 0
       ? renderTemplate(bootstrapPromptTemplate, templateData).trim()
       : "";
-  const wakePrompt = renderPaperclipWakePrompt(context.paperclipWake, { resumedSession });
+  const wakePrompt = renderPaperclipWakePrompt(context.partyclipWake, { resumedSession });
   const shouldUseResumeDeltaPrompt = resumedSession && wakePrompt.length > 0;
   const promptInstructionsPrefix = shouldUseResumeDeltaPrompt ? "" : instructionsPrefix;
   const renderedPrompt = shouldUseResumeDeltaPrompt ? "" : renderTemplate(promptTemplate, templateData);
-  const sessionHandoffNote = asString(context.paperclipSessionHandoffMarkdown, "").trim();
-  const taskContextNote = asString(context.paperclipTaskMarkdown, "").trim();
+  const sessionHandoffNote = asString(context.partyclipSessionHandoffMarkdown, "").trim();
+  const taskContextNote = asString(context.partyclipTaskMarkdown, "").trim();
   const prompt = joinPromptSections([
     promptInstructionsPrefix,
     renderedBootstrapPrompt,
@@ -948,7 +948,7 @@ async function cleanupIdleHandles(input: {
     input.handles.delete(key);
     await entry.runtime.close({
       handle: entry.handle,
-      reason: "paperclip idle cleanup",
+      reason: "partyclip idle cleanup",
       discardPersistentState: false,
     }).catch(() => {});
   }
@@ -988,7 +988,7 @@ export function createAcpxLocalExecutor(deps: ExecuteDeps = {}) {
     if (!canResume && asString(previousParams.runtimeSessionName, "")) {
       await ctx.onLog(
         "stdout",
-        `[paperclip] ACPX session "${asString(previousParams.runtimeSessionName, "")}" does not match the current agent/cwd/mode/runtime identity; starting fresh in "${prepared.cwd}".\n`,
+        `[partyclip] ACPX session "${asString(previousParams.runtimeSessionName, "")}" does not match the current agent/cwd/mode/runtime identity; starting fresh in "${prepared.cwd}".\n`,
       );
     }
 
@@ -1012,7 +1012,7 @@ export function createAcpxLocalExecutor(deps: ExecuteDeps = {}) {
           resumedSession = false;
           await ctx.onLog(
             "stdout",
-            `[paperclip] ACPX resume session "${resumeSessionId}" is unavailable; retrying with a fresh session.\n`,
+            `[partyclip] ACPX resume session "${resumeSessionId}" is unavailable; retrying with a fresh session.\n`,
           );
           handle = await runtime.ensureSession({
             sessionKey: prepared.sessionKey,
@@ -1124,7 +1124,7 @@ export function createAcpxLocalExecutor(deps: ExecuteDeps = {}) {
         }
         await runtime.close({
           handle: sessionHandle,
-          reason: timedOut ? "paperclip timeout cleanup" : `paperclip turn ${terminal.status}`,
+          reason: timedOut ? "partyclip timeout cleanup" : `partyclip turn ${terminal.status}`,
           discardPersistentState: terminal.status === "cancelled" || timedOut,
         }).catch(() => {});
       } else if (prepared.mode === "persistent") {
@@ -1132,7 +1132,7 @@ export function createAcpxLocalExecutor(deps: ExecuteDeps = {}) {
         if (existing && !warmHandleMatches(existing, runtime, sessionHandle)) {
           await runtime.close({
             handle: sessionHandle,
-            reason: "paperclip duplicate warm handle cleanup",
+            reason: "partyclip duplicate warm handle cleanup",
             discardPersistentState: false,
           }).catch(() => {});
         } else {
@@ -1185,7 +1185,7 @@ export function createAcpxLocalExecutor(deps: ExecuteDeps = {}) {
       if (cancel) await cancel(message).catch(() => {});
       await runtime.close({
         handle: sessionHandle,
-        reason: timedOut ? "paperclip timeout cleanup" : "paperclip error cleanup",
+        reason: timedOut ? "partyclip timeout cleanup" : "partyclip error cleanup",
         discardPersistentState: timedOut,
       }).catch(() => {});
       if (warmHandleMatches(warmHandles.get(prepared.sessionKey), runtime, sessionHandle)) {

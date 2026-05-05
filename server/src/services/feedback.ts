@@ -47,10 +47,10 @@ import {
 } from "./feedback-redaction.js";
 import { getRunLogStore } from "./run-log-store.js";
 
-const FEEDBACK_SCHEMA_VERSION = "paperclip-feedback-envelope-v2";
-const FEEDBACK_BUNDLE_VERSION = "paperclip-feedback-bundle-v2";
-const FEEDBACK_PAYLOAD_VERSION = "paperclip-feedback-v1";
-const FEEDBACK_DESTINATION = "paperclip_labs_feedback_v1";
+const FEEDBACK_SCHEMA_VERSION = "partyclip-feedback-envelope-v2";
+const FEEDBACK_BUNDLE_VERSION = "partyclip-feedback-bundle-v2";
+const FEEDBACK_PAYLOAD_VERSION = "partyclip-feedback-v1";
+const FEEDBACK_DESTINATION = "partyclip_labs_feedback_v1";
 const FEEDBACK_CONTEXT_WINDOW = 3;
 const MAX_EXCERPT_CHARS = 200;
 const MAX_PRIMARY_CONTENT_CHARS = 8_000;
@@ -367,9 +367,9 @@ function captureStatusFromFiles(files: FeedbackTraceBundleFile[]): FeedbackTrace
   }
 
   const hasAdapterFiles = files.some((file) =>
-    file.source !== "paperclip_run" &&
-    file.source !== "paperclip_run_events" &&
-    file.source !== "paperclip_run_log",
+    file.source !== "partyclip_run" &&
+    file.source !== "partyclip_run_events" &&
+    file.source !== "partyclip_run_log",
   );
   if (hasAdapterFiles) return "partial";
   return files.length > 0 ? "partial" : "unavailable";
@@ -1293,7 +1293,7 @@ async function buildAgentContext(
         entryBody,
       }
       : null,
-    paperclip: {
+    partyclip: {
       schemaVersion: FEEDBACK_SCHEMA_VERSION,
       bundleVersion: FEEDBACK_BUNDLE_VERSION,
     },
@@ -1351,7 +1351,7 @@ async function buildPayloadArtifacts(
   const basePayload = {
     schemaVersion: FEEDBACK_SCHEMA_VERSION,
     bundleVersion: FEEDBACK_BUNDLE_VERSION,
-    sourceApp: "paperclip",
+    sourceApp: "partyclip",
     capturedAt: input.now.toISOString(),
     consentVersion: input.consentVersion,
     vote: {
@@ -1430,7 +1430,7 @@ async function buildFeedbackTraceBundleFromRow(
   const files: FeedbackTraceBundleFile[] = [];
   const sourceRunId = resolveSourceRunId(payloadSnapshot);
 
-  let paperclipRun: Record<string, unknown> | null = null;
+  let partyclipRun: Record<string, unknown> | null = null;
   let rawAdapterTrace: Record<string, unknown> | null = null;
   let normalizedAdapterTrace: Record<string, unknown> | null = null;
   let adapterType: string | null = null;
@@ -1487,7 +1487,7 @@ async function buildFeedbackTraceBundleFromRow(
         .map((entry) => entry.chunk)
         .join("");
 
-      paperclipRun = sanitizeFeedbackValue(
+      partyclipRun = sanitizeFeedbackValue(
         {
           id: run.id,
           companyId: run.companyId,
@@ -1517,36 +1517,36 @@ async function buildFeedbackTraceBundleFromRow(
           eventCount: events.length,
         },
         state,
-        "bundle.paperclipRun",
+        "bundle.partyclipRun",
         MAX_TRACE_FILE_CHARS,
       ) as Record<string, unknown>;
 
       files.push(makeBundleFile({
-        path: "paperclip/run.json",
+        path: "partyclip/run.json",
         contentType: "application/json",
-        source: "paperclip_run",
-        contents: `${JSON.stringify(paperclipRun, null, 2)}\n`,
+        source: "partyclip_run",
+        contents: `${JSON.stringify(partyclipRun, null, 2)}\n`,
       }));
 
       const sanitizedEvents = sanitizeFeedbackValue(
         events,
         state,
-        "bundle.paperclipRun.events",
+        "bundle.partyclipRun.events",
         MAX_TRACE_FILE_CHARS,
       );
       files.push(makeBundleFile({
-        path: "paperclip/run-events.json",
+        path: "partyclip/run-events.json",
         contentType: "application/json",
-        source: "paperclip_run_events",
+        source: "partyclip_run_events",
         contents: `${JSON.stringify(sanitizedEvents, null, 2)}\n`,
       }));
 
       if (logText) {
         files.push(makeBundleFile({
-          path: "paperclip/run-log.ndjson",
+          path: "partyclip/run-log.ndjson",
           contentType: "application/x-ndjson",
-          source: "paperclip_run_log",
-          contents: `${sanitizeFeedbackText(logText, state, "bundle.paperclipRun.log", MAX_TRACE_FILE_CHARS)}\n`,
+          source: "partyclip_run_log",
+          contents: `${sanitizeFeedbackText(logText, state, "bundle.partyclipRun.log", MAX_TRACE_FILE_CHARS)}\n`,
         }));
       } else {
         appendNote(notes, "run_log_missing");
@@ -1647,7 +1647,7 @@ async function buildFeedbackTraceBundleFromRow(
     notes,
     envelope,
     surface,
-    paperclipRun,
+    partyclipRun,
     rawAdapterTrace,
     normalizedAdapterTrace,
     privacy,

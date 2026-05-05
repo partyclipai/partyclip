@@ -17,7 +17,7 @@ All commands support:
 
 | Flag | Description |
 |------|-------------|
-| `--data-dir <path>` | Local Paperclip data root (isolates from `~/.paperclip`) |
+| `--data-dir <path>` | Local Paperclip data root (isolates from `~/.partyclip`) |
 | `--api-base <url>` | API base URL |
 | `--api-key <token>` | API authentication token |
 | `--context <path>` | Context file path |
@@ -57,7 +57,7 @@ pnpm partyclipai context set --api-key-env-var-name PARTYCLIP_API_KEY
 export PARTYCLIP_API_KEY=...
 ```
 
-Context is stored at `~/.paperclip/context.json`.
+Context is stored at `~/.partyclip/context.json`.
 
 ## Command Categories
 

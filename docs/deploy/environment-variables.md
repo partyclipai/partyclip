@@ -14,7 +14,7 @@ All environment variables that Paperclip uses for server configuration.
 | `PARTYCLIP_BIND_HOST` | (unset) | Required when `PARTYCLIP_BIND=custom` |
 | `HOST` | `127.0.0.1` | Legacy host override; prefer `PARTYCLIP_BIND` for new setups |
 | `DATABASE_URL` | (embedded) | PostgreSQL connection string |
-| `PARTYCLIP_HOME` | `~/.paperclip` | Base directory for all Paperclip data |
+| `PARTYCLIP_HOME` | `~/.partyclip` | Base directory for all Paperclip data |
 | `PARTYCLIP_INSTANCE_ID` | `default` | Instance identifier (for multiple local instances) |
 | `PARTYCLIP_DEPLOYMENT_MODE` | `local_trusted` | Runtime mode override |
 | `PARTYCLIP_DEPLOYMENT_EXPOSURE` | `private` | Exposure policy when deployment mode is `authenticated` |
@@ -25,7 +25,7 @@ All environment variables that Paperclip uses for server configuration.
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `PARTYCLIP_SECRETS_MASTER_KEY` | (from file) | 32-byte encryption key (base64/hex/raw) |
-| `PARTYCLIP_SECRETS_MASTER_KEY_FILE` | `~/.paperclip/.../secrets/master.key` | Path to key file |
+| `PARTYCLIP_SECRETS_MASTER_KEY_FILE` | `~/.partyclip/.../secrets/master.key` | Path to key file |
 | `PARTYCLIP_SECRETS_STRICT_MODE` | `false` | Require secret refs for sensitive env vars |
 
 ## Agent Runtime (Injected into agent processes)

@@ -1,5 +1,5 @@
 ---
-name: paperclip-dev
+name: partyclip-dev
 required: false
 description: >
   Develop and operate a local Paperclip instance — start and stop servers,
@@ -88,7 +88,7 @@ npx partyclipai run
 # 4. Do your work
 
 # 5. When done, merge history back if needed
-npx partyclipai worktree:merge-history --from paperclip-my-feature --to current --apply
+npx partyclipai worktree:merge-history --from partyclip-my-feature --to current --apply
 
 # 6. Clean up
 npx partyclipai worktree:cleanup my-feature
@@ -173,7 +173,7 @@ These rules exist because agents have caused real damage by improvising around C
 1. **CLI is the only interface to worktrees and databases.** All worktree and database operations MUST go through `npx partyclipai` / `pnpm partyclipai` commands. You MUST NOT:
    - Run `pg_dump`, `pg_restore`, `psql`, `createdb`, `dropdb`, or any raw postgres commands
    - Manually set `DATABASE_URL` to point a worktree server at another instance's database
-   - Run `rm -rf` on any `.paperclip/`, `.paperclip-worktrees/`, or `db/` directory
+   - Run `rm -rf` on any `.partyclip/`, `.partyclip-worktrees/`, or `db/` directory
    - Directly manipulate embedded postgres data directories
    - Kill postgres processes by PID
 

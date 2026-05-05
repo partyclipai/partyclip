@@ -45,12 +45,12 @@ describe("codex_local ui stdout parser", () => {
       parseCodexStdoutLine(
         JSON.stringify({
           type: "item.completed",
-          item: { id: "item_1", type: "reasoning", text: "**Preparing to use paperclip skill**" },
+          item: { id: "item_1", type: "reasoning", text: "**Preparing to use partyclip skill**" },
         }),
         ts,
       ),
     ).toEqual([
-      { kind: "thinking", ts, text: "**Preparing to use paperclip skill**" },
+      { kind: "thinking", ts, text: "**Preparing to use partyclip skill**" },
     ]);
   });
 

@@ -66,7 +66,7 @@ describe("codex remote execution", () => {
   });
 
   it("prepares the workspace, syncs CODEX_HOME, and restores workspace changes for remote SSH execution", async () => {
-    const rootDir = await mkdtemp(path.join(os.tmpdir(), "paperclip-codex-remote-"));
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "partyclip-codex-remote-"));
     cleanupDirs.push(rootDir);
     const workspaceDir = path.join(rootDir, "workspace");
     const codexHomeDir = path.join(rootDir, "codex-home");
@@ -97,7 +97,7 @@ describe("codex remote execution", () => {
         },
       },
       context: {
-        paperclipWorkspace: {
+        partyclipWorkspace: {
           cwd: workspaceDir,
           source: "project_primary",
         },
@@ -125,7 +125,7 @@ describe("codex remote execution", () => {
     expect(syncDirectoryToSsh).toHaveBeenCalledTimes(1);
     expect(syncDirectoryToSsh).toHaveBeenCalledWith(expect.objectContaining({
       localDir: codexHomeDir,
-      remoteDir: "/remote/workspace/.paperclip-runtime/codex/home",
+      remoteDir: "/remote/workspace/.partyclip-runtime/codex/home",
       followSymlinks: true,
     }));
 
@@ -133,7 +133,7 @@ describe("codex remote execution", () => {
     const call = runChildProcess.mock.calls[0] as unknown as
       | [string, string, string[], { env: Record<string, string>; remoteExecution?: { remoteCwd: string } | null }]
       | undefined;
-    expect(call?.[3].env.CODEX_HOME).toBe("/remote/workspace/.paperclip-runtime/codex/home");
+    expect(call?.[3].env.CODEX_HOME).toBe("/remote/workspace/.partyclip-runtime/codex/home");
     expect(call?.[3].remoteExecution?.remoteCwd).toBe("/remote/workspace");
     expect(restoreWorkspaceFromSshExecution).toHaveBeenCalledTimes(1);
     expect(restoreWorkspaceFromSshExecution).toHaveBeenCalledWith(expect.objectContaining({
@@ -143,7 +143,7 @@ describe("codex remote execution", () => {
   });
 
   it("does not resume saved Codex sessions for remote SSH execution without a matching remote identity", async () => {
-    const rootDir = await mkdtemp(path.join(os.tmpdir(), "paperclip-codex-remote-resume-"));
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "partyclip-codex-remote-resume-"));
     cleanupDirs.push(rootDir);
     const workspaceDir = path.join(rootDir, "workspace");
     const codexHomeDir = path.join(rootDir, "codex-home");
@@ -176,7 +176,7 @@ describe("codex remote execution", () => {
         },
       },
       context: {
-        paperclipWorkspace: {
+        partyclipWorkspace: {
           cwd: workspaceDir,
           source: "project_primary",
         },
@@ -206,7 +206,7 @@ describe("codex remote execution", () => {
   });
 
   it("resumes saved Codex sessions for remote SSH execution when the remote identity matches", async () => {
-    const rootDir = await mkdtemp(path.join(os.tmpdir(), "paperclip-codex-remote-resume-match-"));
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "partyclip-codex-remote-resume-match-"));
     cleanupDirs.push(rootDir);
     const workspaceDir = path.join(rootDir, "workspace");
     const codexHomeDir = path.join(rootDir, "codex-home");
@@ -246,7 +246,7 @@ describe("codex remote execution", () => {
         },
       },
       context: {
-        paperclipWorkspace: {
+        partyclipWorkspace: {
           cwd: workspaceDir,
           source: "project_primary",
         },
@@ -278,7 +278,7 @@ describe("codex remote execution", () => {
   });
 
   it("uses the provider-neutral execution target contract for remote SSH execution", async () => {
-    const rootDir = await mkdtemp(path.join(os.tmpdir(), "paperclip-codex-target-"));
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "partyclip-codex-target-"));
     cleanupDirs.push(rootDir);
     const workspaceDir = path.join(rootDir, "workspace");
     const codexHomeDir = path.join(rootDir, "codex-home");
@@ -318,7 +318,7 @@ describe("codex remote execution", () => {
         },
       },
       context: {
-        paperclipWorkspace: {
+        partyclipWorkspace: {
           cwd: workspaceDir,
           source: "project_primary",
         },
@@ -353,7 +353,7 @@ describe("codex remote execution", () => {
       "session-123",
       "-",
     ]);
-    expect(call?.[3].env.CODEX_HOME).toBe("/remote/workspace/.paperclip-runtime/codex/home");
+    expect(call?.[3].env.CODEX_HOME).toBe("/remote/workspace/.partyclip-runtime/codex/home");
     expect(call?.[3].remoteExecution?.remoteCwd).toBe("/remote/workspace");
   });
 });

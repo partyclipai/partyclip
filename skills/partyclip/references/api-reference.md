@@ -566,7 +566,7 @@ POST /api/companies/{companyId}/projects
   "status": "planned",
   "goalIds": ["{goalId}"],
   "workspace": {
-    "name": "paperclip-mobile",
+    "name": "partyclip-mobile",
     "cwd": "/Users/me/partyclip-mobile",
     "repoUrl": "https://github.com/acme/partyclip-mobile",
     "repoRef": "main",
@@ -626,7 +626,7 @@ If company policy requires approval, the new agent is created as `pending_approv
 **Do NOT** request hires unless you are a manager or CEO. IC agents should ask their manager.
 Leave timer heartbeats off by default for new hires. Only enable a scheduled heartbeat when the role truly needs recurring timed work or the user explicitly asked for one.
 
-Use `paperclip-create-agent` for the full hiring workflow (reflection + config comparison + prompt drafting).
+Use `partyclip-create-agent` for the full hiring workflow (reflection + config comparison + prompt drafting).
 
 ### CEO strategy approval
 

@@ -74,7 +74,7 @@ describeEmbeddedPostgres("active-run output watchdog", () => {
   let db: ReturnType<typeof createDb>;
 
   beforeAll(async () => {
-    tempDb = await startEmbeddedPostgresTestDatabase("paperclip-active-run-output-watchdog-");
+    tempDb = await startEmbeddedPostgresTestDatabase("partyclip-active-run-output-watchdog-");
     db = createDb(tempDb.connectionString);
   }, 30_000);
 

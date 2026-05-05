@@ -27,7 +27,7 @@
           {
             "group": "Introduction",
             "pages": [
-              "start/what-is-paperclip",
+              "start/what-is-partyclip",
               "start/quickstart",
               "start/core-concepts",
               "start/architecture"

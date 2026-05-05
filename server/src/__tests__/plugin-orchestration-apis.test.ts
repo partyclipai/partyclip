@@ -47,7 +47,7 @@ describeEmbeddedPostgres("plugin orchestration APIs", () => {
   let tempDb: Awaited<ReturnType<typeof startEmbeddedPostgresTestDatabase>> | null = null;
 
   beforeAll(async () => {
-    tempDb = await startEmbeddedPostgresTestDatabase("paperclip-plugin-orchestration-");
+    tempDb = await startEmbeddedPostgresTestDatabase("partyclip-plugin-orchestration-");
     db = createDb(tempDb.connectionString);
   }, 20_000);
 
@@ -110,7 +110,7 @@ describeEmbeddedPostgres("plugin orchestration APIs", () => {
       identifier: `${issuePrefix(companyId)}-blocker`,
     });
 
-    const services = buildHostServices(db, "plugin-record-id", "paperclip.missions", createEventBusStub());
+    const services = buildHostServices(db, "plugin-record-id", "partyclip.missions", createEventBusStub());
     const issue = await services.issues.create({
       companyId,
       title: "Plugin child issue",
@@ -124,7 +124,7 @@ describeEmbeddedPostgres("plugin orchestration APIs", () => {
     });
 
     const [stored] = await db.select().from(issues).where(eq(issues.id, issue.id));
-    expect(stored?.originKind).toBe("plugin:paperclip.missions");
+    expect(stored?.originKind).toBe("plugin:partyclip.missions");
     expect(stored?.originId).toBe("mission-alpha");
     expect(stored?.billingCode).toBe("mission:alpha");
     expect(stored?.assigneeAgentId).toBe(agentId);
@@ -150,7 +150,7 @@ describeEmbeddedPostgres("plugin orchestration APIs", () => {
           agentId,
           details: expect.objectContaining({
             sourcePluginId: "plugin-record-id",
-            sourcePluginKey: "paperclip.missions",
+            sourcePluginKey: "partyclip.missions",
             initiatingActorType: "agent",
             initiatingActorId: agentId,
             initiatingRunId: originRunId,
@@ -162,15 +162,15 @@ describeEmbeddedPostgres("plugin orchestration APIs", () => {
 
   it("enforces plugin origin namespaces", async () => {
     const { companyId } = await seedCompanyAndAgent();
-    const services = buildHostServices(db, "plugin-record-id", "paperclip.missions", createEventBusStub());
+    const services = buildHostServices(db, "plugin-record-id", "partyclip.missions", createEventBusStub());
 
     const featureIssue = await services.issues.create({
       companyId,
       title: "Feature issue",
-      originKind: "plugin:paperclip.missions:feature",
+      originKind: "plugin:partyclip.missions:feature",
       originId: "mission-alpha:feature-1",
     });
-    expect(featureIssue.originKind).toBe("plugin:paperclip.missions:feature");
+    expect(featureIssue.originKind).toBe("plugin:partyclip.missions:feature");
 
     await expect(
       services.issues.create({
@@ -178,7 +178,7 @@ describeEmbeddedPostgres("plugin orchestration APIs", () => {
         title: "Spoofed issue",
         originKind: "plugin:other.plugin:feature",
       }),
-    ).rejects.toThrow("Plugin may only use originKind values under plugin:paperclip.missions");
+    ).rejects.toThrow("Plugin may only use originKind values under plugin:partyclip.missions");
 
     await expect(
       services.issues.update({
@@ -186,7 +186,7 @@ describeEmbeddedPostgres("plugin orchestration APIs", () => {
         companyId,
         patch: { originKind: "plugin:other.plugin:feature" },
       }),
-    ).rejects.toThrow("Plugin may only use originKind values under plugin:paperclip.missions");
+    ).rejects.toThrow("Plugin may only use originKind values under plugin:partyclip.missions");
   });
 
   it("asserts checkout ownership for run-scoped plugin actions", async () => {
@@ -212,7 +212,7 @@ describeEmbeddedPostgres("plugin orchestration APIs", () => {
       executionRunId: runId,
     });
 
-    const services = buildHostServices(db, "plugin-record-id", "paperclip.missions", createEventBusStub());
+    const services = buildHostServices(db, "plugin-record-id", "partyclip.missions", createEventBusStub());
     await expect(
       services.issues.assertCheckoutOwner({
         issueId,
@@ -256,7 +256,7 @@ describeEmbeddedPostgres("plugin orchestration APIs", () => {
       type: "blocks",
     });
 
-    const services = buildHostServices(db, "plugin-record-id", "paperclip.missions", createEventBusStub());
+    const services = buildHostServices(db, "plugin-record-id", "partyclip.missions", createEventBusStub());
     await expect(
       services.issues.requestWakeup({
         issueId: blockedIssueId,
@@ -353,7 +353,7 @@ describeEmbeddedPostgres("plugin orchestration APIs", () => {
       },
     ]);
 
-    const services = buildHostServices(db, "plugin-record-id", "paperclip.missions", createEventBusStub());
+    const services = buildHostServices(db, "plugin-record-id", "partyclip.missions", createEventBusStub());
     const summary = await services.issues.getOrchestrationSummary({
       companyId,
       issueId: rootIssueId,
