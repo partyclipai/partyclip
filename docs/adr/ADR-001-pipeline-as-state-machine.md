@@ -100,3 +100,13 @@ Rejected because it creates two paradigms in one system. Auditors and operators 
 - [`04_PIPELINE.md`](../../../docs/handoff/04_PIPELINE.md) — pipeline state machine and YAML format
 - [`03_DATA_MODEL.md`](../../../docs/handoff/03_DATA_MODEL.md) — `Patch`, `PatchStageRun`, `OperatorAction`
 - [`05_GOVERNANCE.md`](../../../docs/handoff/05_GOVERNANCE.md) — operator sign-off, audit log
+
+## Appendix: `paperclip_required` enum carry-over (Phase 0)
+
+`packages/shared/src/types/adapter-skills.ts` exports `AgentSkillOrigin` with a value `"paperclip_required"`. This is leftover from the upstream Paperclip rename and is not partyclip-shaped. Three options were considered when finalizing this ADR:
+
+1. **Replace** with `partyclip_required` everywhere. Migration burden across schemas/configs; breaks any imported Paperclip plugin manifests still using the old value.
+2. **Fork** the enum: keep both values, mark `paperclip_required` deprecated, accept new values under the partyclip name. Two valid words for the same concept, drifting forever.
+3. **Accept the leak** and document it. The string is internal-only (it never reaches an agent envelope; ADR-003 enforces this). It only shows up in adapter-skill-origin classification, where its meaning is "this skill came from the upstream framework, not the user." The semantic is precise; the *naming* is awkward.
+
+**Decision: accept the leak in Phase 1.** The string is a Paperclip-origin marker and "paperclip" is the right word for that marker. Replacing it just because the wrapper renamed itself would create a nominal partyclip-vs-the-codebase split that makes upstream merges harder for no real gain. Revisit when (a) we go public and the string is reader-facing, or (b) we stop tracking upstream Paperclip altogether.
