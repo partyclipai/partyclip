@@ -57,3 +57,9 @@ export {
   type AnthropicAdapterOptions,
   type ResolveModelAdapterOptions,
 } from "./live-model-adapter.js";
+
+export {
+  createLiveAgentRunner,
+  createLiveAgentRunnerProviders,
+  type LiveAgentRunnerDeps,
+} from "./live-runner.js";
