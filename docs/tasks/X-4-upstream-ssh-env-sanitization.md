@@ -2,12 +2,14 @@
 id: X-4
 title: Cherry-pick upstream SSH/remote-exec env-leak security fixes
 layer: cross-cutting
-status: todo
+status: in_progress
 branch: feature/upstream-ssh-env-sanitization
 target_phase: Phase 1
 codebase: packages
 depends_on: []
 blocks: []
+agent: Umut Tuncer
+started: 2026-06-05
 ---
 
 # X-4 — Cherry-pick upstream SSH/remote-exec env-leak security fixes
