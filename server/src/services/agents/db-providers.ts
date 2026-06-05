@@ -3,6 +3,7 @@ import type { Db } from "@partyclipai/db";
 import { constitutionArticles, pipelineAgents } from "@partyclipai/db";
 import { agentConfigSchema, type AgentConfig } from "@partyclipai/shared/types/agent-config";
 import type { AgentRole } from "@partyclipai/shared/types/agent-role";
+import type { ConstitutionArticleInput } from "@partyclipai/shared/validators/constitution-article";
 import { TerminalPipelineError } from "../pipelines/errors.js";
 import type { ConstitutionArticleRef } from "./envelope.js";
 import type { LoadedRosterAgent } from "./roster-loader.js";
@@ -27,6 +28,30 @@ export async function ingestRoster(
       .onConflictDoUpdate({
         target: [pipelineAgents.companyId, pipelineAgents.role],
         set: { config, persona, updatedAt: new Date() },
+      });
+  }
+}
+
+/** Upsert constitution articles into `constitution_articles` (keyed company+stableId+version). */
+export async function ingestConstitution(
+  db: Db,
+  companyId: string,
+  articles: ReadonlyArray<ConstitutionArticleInput>,
+): Promise<void> {
+  for (const a of articles) {
+    await db
+      .insert(constitutionArticles)
+      .values({
+        companyId,
+        stableId: a.stable_id,
+        version: a.version,
+        mutability: a.mutability,
+        title: a.title,
+        body: a.body,
+      })
+      .onConflictDoUpdate({
+        target: [constitutionArticles.companyId, constitutionArticles.stableId, constitutionArticles.version],
+        set: { mutability: a.mutability, title: a.title, body: a.body, updatedAt: new Date() },
       });
   }
 }

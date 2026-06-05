@@ -1,4 +1,7 @@
 import { randomUUID } from "node:crypto";
+import { promises as fs } from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import { companies, constitutionArticles, createDb, pipelineAgents } from "@partyclipai/db";
 import type { AgentConfig } from "@partyclipai/shared/types/agent-config";
@@ -7,6 +10,7 @@ import {
   startEmbeddedPostgresTestDatabase,
 } from "./helpers/embedded-postgres.js";
 import { createDbRosterProviders, ingestRoster } from "../services/agents/db-providers.js";
+import { loadDeploymentContent } from "../services/agents/content-load.js";
 import type { LoadedRosterAgent } from "../services/agents/roster-loader.js";
 
 const embeddedPostgresSupport = await getEmbeddedPostgresTestSupport();
@@ -125,5 +129,50 @@ describeEmbeddedPostgres("pipeline agent DB providers (L4-E)", () => {
 
     const providersB = createDbRosterProviders(db, companyB);
     await expect(providersB.loadAgent("Architect", companyB)).rejects.toThrow(/No pipeline agent configured/);
+  });
+
+  it("loadDeploymentContent ingests roster + constitution from a content dir end to end", async () => {
+    const companyId = await makeCompany();
+    const contentDir = await fs.mkdtemp(path.join(os.tmpdir(), "partyclip-content-"));
+    try {
+      await fs.mkdir(path.join(contentDir, "personas"), { recursive: true });
+      await fs.writeFile(
+        path.join(contentDir, "regular.yaml"),
+        `
+agents:
+  - id: architect
+    role: Architect
+    activation_mode: TRIGGER_ONLY
+    triggers: ["patch.drafting.requested"]
+    persona_ref: personas/architect.md
+    model: claude-opus-4-8
+`,
+        "utf8",
+      );
+      await fs.writeFile(path.join(contentDir, "personas", "architect.md"), "You design patches.", "utf8");
+      await fs.writeFile(
+        path.join(contentDir, "constitution.yaml"),
+        `
+articles:
+  - stable_id: CONST-K1-A1
+    mutability: IMMUTABLE
+    title: Purpose
+    body: We publish auditable policy.
+`,
+        "utf8",
+      );
+
+      const result = await loadDeploymentContent(db, companyId, contentDir);
+      expect(result).toEqual({ agents: 1, constitutionArticles: 1 });
+
+      const providers = createDbRosterProviders(db, companyId);
+      const agent = await providers.loadAgent("Architect", companyId);
+      expect(agent.id).toBe("architect");
+      expect(await providers.loadPersona(agent)).toBe("You design patches.");
+      const articles = await providers.loadConstitution(companyId);
+      expect(articles.map((a) => a.stableId)).toEqual(["CONST-K1-A1"]);
+    } finally {
+      await fs.rm(contentDir, { recursive: true, force: true });
+    }
   });
 });
