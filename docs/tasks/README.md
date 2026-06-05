@@ -1,6 +1,6 @@
 # Task tracker — Phase 1
 
-Status: ACTIVE | Updated: 2026-05-21
+Status: ACTIVE | Updated: 2026-06-05
 
 This directory is the trackable unit-of-work board for partyclip's Phase 1 cycle. Each `*.md`
 file — except this `README.md` and `TEMPLATE.md` — is one task with frontmatter status.
@@ -60,6 +60,7 @@ Phase 1 is governance-layer work, so every task sits in **L4 — Governance & Au
 | [X-4](./X-4-upstream-ssh-env-sanitization.md) | Cherry-pick upstream SSH/remote-exec env-leak security fixes | done | `feature/upstream-ssh-env-sanitization` | Phase 1 | — |
 | [X-5](./X-5-claude-model-refresh.md) | Claude model refresh — sync claude-local model list with upstream | done | `feature/claude-model-refresh` | Phase 1 | — |
 | [X-6](./X-6-upstream-sync-triage.md) | Upstream-sync triage — evaluate Tier 2/3 candidates for cherry-pick | in_progress | `feature/upstream-sync-triage` | Phase 1 | — |
+| [X-7](./X-7-adapter-sandbox-hardening.md) | Cherry-pick upstream adapter/remote-sandbox hardening fixes | todo | `feature/adapter-sandbox-hardening` | Phase 1 | — |
 
 ## Decisions referenced as `ADR-NNN`
 
