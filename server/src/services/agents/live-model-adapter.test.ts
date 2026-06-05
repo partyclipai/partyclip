@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { AgentEnvelope } from "./envelope.js";
+import { TerminalPipelineError, TransientPipelineError } from "../pipelines/errors.js";
 import { assertValidResponse } from "./model-adapter.js";
 import {
   createAnthropicModelAdapter,
@@ -69,12 +70,29 @@ describe("createAnthropicModelAdapter", () => {
     expect((await sonnet.invoke(invocation("claude-sonnet-4-6"))).cost).toBeCloseTo(0.018, 6);
   });
 
-  it("throws on a non-OK API response", async () => {
+  it("throws a TransientPipelineError on a retryable status (429) so the executor retries", async () => {
     const adapter = createAnthropicModelAdapter({
       apiKey: "k",
       fetchImpl: stubFetch({}, { ok: false, status: 429, body: "rate limited" }),
     });
+    await expect(adapter.invoke(invocation("claude-opus-4-8"))).rejects.toThrow(TransientPipelineError);
     await expect(adapter.invoke(invocation("claude-opus-4-8"))).rejects.toThrow(/returned 429/);
+  });
+
+  it("throws a TerminalPipelineError on a non-retryable status (400)", async () => {
+    const adapter = createAnthropicModelAdapter({
+      apiKey: "k",
+      fetchImpl: stubFetch({}, { ok: false, status: 400, body: "bad request" }),
+    });
+    await expect(adapter.invoke(invocation("claude-opus-4-8"))).rejects.toThrow(TerminalPipelineError);
+  });
+
+  it("throws a TransientPipelineError on a 529 overloaded response", async () => {
+    const adapter = createAnthropicModelAdapter({
+      apiKey: "k",
+      fetchImpl: stubFetch({}, { ok: false, status: 529, body: "overloaded" }),
+    });
+    await expect(adapter.invoke(invocation("claude-opus-4-8"))).rejects.toThrow(TransientPipelineError);
   });
 });
 

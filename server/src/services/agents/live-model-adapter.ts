@@ -1,3 +1,4 @@
+import { TerminalPipelineError, TransientPipelineError } from "../pipelines/errors.js";
 import type { ModelAdapter, ModelInvocation, ModelResponse } from "./model-adapter.js";
 
 /**
@@ -24,6 +25,10 @@ export interface AnthropicAdapterOptions {
 }
 
 const ANTHROPIC_VERSION = "2023-06-01";
+
+// HTTP statuses worth retrying (rate limit / overloaded / transient server errors). Anything else
+// (400/401/403/404/422/…) is a terminal misconfiguration. 529 is Anthropic's "overloaded".
+const RETRYABLE_STATUSES = new Set([408, 429, 500, 502, 503, 504, 529]);
 
 // Best-effort USD-per-million-token rates by model family, for the ModelResponse.cost field.
 // Authoritative cost production + persistence is L4-B's job; this is a static estimate so the
@@ -70,7 +75,12 @@ export function createAnthropicModelAdapter(opts: AnthropicAdapterOptions): Mode
         }),
       });
       if (!res.ok) {
-        throw new Error(`Anthropic Messages API returned ${res.status}: ${await res.text()}`);
+        const detail = (await res.text()).slice(0, 500);
+        const message = `Anthropic Messages API returned ${res.status}: ${detail}`;
+        if (RETRYABLE_STATUSES.has(res.status)) {
+          throw new TransientPipelineError(message, "MODEL_API_TRANSIENT");
+        }
+        throw new TerminalPipelineError(message, "MODEL_API_ERROR");
       }
       const data = (await res.json()) as AnthropicMessagesResponse;
       const text = (data.content ?? [])
