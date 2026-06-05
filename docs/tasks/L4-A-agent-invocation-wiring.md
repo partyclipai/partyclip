@@ -6,7 +6,7 @@ status: blocked
 branch: feature/agent-invocation-wiring
 target_phase: Phase 1
 codebase: server
-depends_on: []
+depends_on: [L4-E, X-3]
 blocks: [L4-B, L4-D]
 agent: Umut Tuncer
 started: 2026-06-05
@@ -127,6 +127,9 @@ Phase-1 completion needs both designed/unblocked first. The full implementation 
 backing per loader, ADR-005 evidence, the orchestrator seam) was produced during this task
 and is available in the session record for whoever resumes it.
 
-**Unblock condition:** (a) design + build a partyclip agent-config persistence/loading model
-(a new architectural task + ADR — DB table vs content-pack `regular.yaml` loader vs hybrid),
-and (b) land the X-3 content pack. Then L4-A's blocked slice + L4-B/L4-D become actionable.
+**Unblock condition (now concrete):** (a) **`L4-E`** — content-load + the pipeline-agent DB
+representation, per **`ADR-005`** (agent roster/personas/constitution authored in the content
+repo, loaded into the DB, read from the DB at runtime); and (b) the **`X-3`** content pack
+supplying the real `regular.yaml` roster + personas + constitution. `depends_on` is now
+`[L4-E, X-3]`. Once both land, L4-A's blocked slice + L4-B/L4-D become actionable. The model
+adapter (ADR-005's provider-agnostic factory) remains an independently-landable slice.
