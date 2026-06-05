@@ -2,12 +2,14 @@
 id: X-7
 title: Cherry-pick upstream adapter/remote-sandbox hardening fixes
 layer: cross-cutting
-status: todo
+status: in_progress
 branch: feature/adapter-sandbox-hardening
 target_phase: Phase 1
 codebase: packages
 depends_on: []
 blocks: []
+agent: Umut Tuncer
+started: 2026-06-05
 ---
 
 # X-7 — Cherry-pick upstream adapter/remote-sandbox hardening fixes
