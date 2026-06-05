@@ -2,7 +2,7 @@
 id: X-4
 title: Cherry-pick upstream SSH/remote-exec env-leak security fixes
 layer: cross-cutting
-status: in_progress
+status: review
 branch: feature/upstream-ssh-env-sanitization
 target_phase: Phase 1
 codebase: packages

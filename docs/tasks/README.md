@@ -57,7 +57,7 @@ Phase 1 is governance-layer work, so every task sits in **L4 — Governance & Au
 | [X-1](./X-1-ci-timeout-mitigation.md) | CI timeout mitigation for adapter-utils SSH/sandbox tests | todo | `feature/ci-timeout-mitigation` | Phase 1 | — |
 | [X-2](./X-2-paperclip-required-enum.md) | Revisit `paperclip_required` enum (hermes compat) | todo | `feature/paperclip-required-enum` | Phase 1 | — |
 | [X-3](./X-3-reference-content-pack.md) | Reference content pack (constitution, ministries, `regular.yaml`) | blocked | — | Phase 1 | — |
-| [X-4](./X-4-upstream-ssh-env-sanitization.md) | Cherry-pick upstream SSH/remote-exec env-leak security fixes | in_progress | `feature/upstream-ssh-env-sanitization` | Phase 1 | — |
+| [X-4](./X-4-upstream-ssh-env-sanitization.md) | Cherry-pick upstream SSH/remote-exec env-leak security fixes | review | `feature/upstream-ssh-env-sanitization` | Phase 1 | — |
 | [X-5](./X-5-claude-model-refresh.md) | Claude model refresh — sync claude-local model list with upstream | done | `feature/claude-model-refresh` | Phase 1 | — |
 | [X-6](./X-6-upstream-sync-triage.md) | Upstream-sync triage — evaluate Tier 2/3 candidates for cherry-pick | todo | `feature/upstream-sync-triage` | Phase 1 | — |
 
