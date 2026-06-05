@@ -2,12 +2,14 @@
 id: L4-A
 title: Wire pipeline executor to agent runner + live model adapter
 layer: L4
-status: todo
+status: in_progress
 branch: feature/agent-invocation-wiring
 target_phase: Phase 1
 codebase: server
 depends_on: [L4-E]
 blocks: [L4-B, L4-D]
+agent: Umut Tuncer
+started: 2026-06-06
 ---
 
 # L4-A — Wire pipeline executor to agent runner + live model adapter
