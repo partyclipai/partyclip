@@ -2,7 +2,7 @@
 id: L4-E
 title: Content-load — ingest agent roster, personas, constitution, pipelines into the DB
 layer: L4
-status: review
+status: done
 branch: feature/content-load-agent-config
 target_phase: Phase 1
 codebase: multiple
