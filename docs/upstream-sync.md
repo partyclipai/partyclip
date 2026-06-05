@@ -18,7 +18,7 @@ git remote add upstream git@github.com:paperclipai/paperclip.git
 
 ## What `UPSTREAM_VERSION` is
 
-`UPSTREAM_VERSION` (at the repo root) holds the SHA of the most recent upstream commit that has been merged or cherry-picked into partyclip. It is the baseline for the next sync — `git log $UPSTREAM_VERSION..upstream/main` is what's new since you last looked.
+`UPSTREAM_VERSION` (at the repo root) holds the SHA of the most recent upstream commit that has been merged or cherry-picked into partyclip. It is the baseline for the next sync — `git log $UPSTREAM_VERSION..upstream/master` is what's new since you last looked.
 
 Update it every time you cherry-pick from upstream.
 
@@ -28,12 +28,12 @@ Update it every time you cherry-pick from upstream.
 git fetch upstream
 
 # What's new upstream since the last sync?
-git log $(grep -E '^[a-f0-9]{40}$' UPSTREAM_VERSION)..upstream/main --oneline
+git log $(grep -E '^[a-f0-9]{40}$' UPSTREAM_VERSION)..upstream/master --oneline
 
 # Cherry-pick what you want, fix conflicts (most rename conflicts are mechanical)
 git cherry-pick <sha>
 
-# When done, bump UPSTREAM_VERSION to the latest upstream/main SHA you've absorbed
+# When done, bump UPSTREAM_VERSION to the latest upstream/master SHA you've absorbed
 ```
 
 ## Cherry-pick policy

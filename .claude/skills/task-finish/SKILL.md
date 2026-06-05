@@ -128,6 +128,13 @@ Print:
 - A reminder that on PR merge the next step is to flip the task status to `done` (manual for
   now; could be automated by a CI hook later)
 
+## 8. Sync to the vault
+
+The final step, after everything else has completed. Invoke the `vault-sync` skill
+(via the Skill tool) to record this task’s work — key decisions, non-obvious fixes, and
+the outcome — in the Obsidian vault. If the project has no node under the vault’s
+`10-projects/`, vault-sync no-ops; that is fine.
+
 ## Notes
 
 - Do not auto-merge.
