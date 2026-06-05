@@ -47,3 +47,5 @@ export {
 } from "./db-providers.js";
 
 export { loadDeploymentContent, type ContentLoadResult } from "./content-load.js";
+
+export { createDbPatchProviders, type DbPatchProviders } from "./patch-providers.js";
