@@ -2,26 +2,12 @@
 id: L4-A
 title: Wire pipeline executor to agent runner + live model adapter
 layer: L4
-status: blocked
+status: todo
 branch: feature/agent-invocation-wiring
 target_phase: Phase 1
 codebase: server
-depends_on: [L4-E, X-3]
+depends_on: [L4-E]
 blocks: [L4-B, L4-D]
-agent: Umut Tuncer
-started: 2026-06-05
-blocked_by: >-
-  Two missing prerequisites the task framing assumed were present. (1) There is no
-  partyclip agent-config persistence/loading model: the `AgentConfig` type
-  (persona_ref/tools/model/role-enum) is never produced or loaded by any production
-  server code (only shared types + tests); the DB `agents` table is paperclip's
-  general agent table (role default "general", adapterConfig jsonb) and does not map
-  to partyclip's pipeline-role AgentConfig, and nothing seeds pipeline agents. (2)
-  Personas + constitution content + the agent roster come from the content pack
-  (X-3, blocked, cross-repo in partyclip-content). So loadAgent/loadPersona/
-  resolveToolset and the end-to-end stage invocation cannot be built yet. Only the
-  model adapter (ADR-005) + loadPatch/loadInputArtifacts (and the loadConstitution
-  query, against an empty table) are unblocked. See Resolution.
 ---
 
 # L4-A — Wire pipeline executor to agent runner + live model adapter
@@ -93,7 +79,16 @@ the runner builds the envelope via `buildAgentEnvelope`).
   adapter factory** — Anthropic SDK when `ANTHROPIC_API_KEY` is present, else a fake/no-op
   fallback; `resolveToolset` builds a minimal registry from `agent.tools`.
 
-## Resolution — BLOCKED (Phase 1 critical-path prerequisite surfaced)
+## Investigation (pre-L4-E) — why L4-A was blocked, and how it was unblocked
+
+> **Update (L4-E merged, #6):** the agent-config prerequisite below is now resolved — `L4-E`
+> delivered the `pipeline_agents` representation, the content-load step, and the DB-backed
+> `loadAgent`/`loadPersona`/`loadConstitution`. `X-3` was dropped from `depends_on`: it supplies a
+> real deployment's content, but L4-A's acceptance (a stage invokes the live ModelAdapter) is
+> reachable with a **fixture** content pack + the provider-agnostic adapter's fake fallback, so it
+> is not a wiring dependency. `depends_on` is now `[L4-E]` (done) and L4-A is back to `todo`. The
+> remaining L4-A work is the model adapter + the other providers (loadPatch/loadInputArtifacts/
+> resolveToolset) + composing the runner + the production wiring.
 
 Investigated the seams (Plan + Explore agents) and found L4-A cannot reach its acceptance at
 the current state. The pipeline machinery is built (executor, dispatcher, runner, envelope,
