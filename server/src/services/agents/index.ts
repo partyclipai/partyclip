@@ -23,3 +23,17 @@ export {
   type AgentRunnerProviders,
   type AgentRunnerOptions,
 } from "./runner.js";
+
+export {
+  parseRosterYaml,
+  loadRosterFromDirectory,
+  RosterLoadError,
+  ROSTER_FILENAME,
+  type LoadedRosterAgent,
+} from "./roster-loader.js";
+
+export {
+  ingestRoster,
+  createDbRosterProviders,
+  type DbRosterProviders,
+} from "./db-providers.js";
