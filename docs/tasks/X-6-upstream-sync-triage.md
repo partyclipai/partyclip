@@ -2,7 +2,7 @@
 id: X-6
 title: Upstream-sync triage — evaluate Tier 2/3 candidates for cherry-pick
 layer: cross-cutting
-status: in_progress
+status: review
 branch: feature/upstream-sync-triage
 target_phase: Phase 1
 codebase: multiple
