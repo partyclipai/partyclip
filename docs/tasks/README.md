@@ -45,7 +45,7 @@ Phase 1 is governance-layer work, so every task sits in **L4 — Governance & Au
 
 | ID | Title | Status | Branch | Phase | Depends on |
 |---|---|---|---|---|---|
-| [L4-A](./L4-A-agent-invocation-wiring.md) | Wire pipeline executor to agent runner + live model adapter | todo | `feature/agent-invocation-wiring` | Phase 1 | — |
+| [L4-A](./L4-A-agent-invocation-wiring.md) | Wire pipeline executor to agent runner + live model adapter | in_progress | `feature/agent-invocation-wiring` | Phase 1 | — |
 | [L4-B](./L4-B-cost-production.md) | Cost production from the live model adapter | todo | `feature/pipeline-cost-production` | Phase 1 | L4-A |
 | [L4-C](./L4-C-observability-aggregates.md) | Observability aggregates — cost + rejection-rate dashboard | todo | `feature/observability-aggregates` | Phase 1 | L4-B |
 | [L4-D](./L4-D-pipeline-e2e-test.md) | End-to-end pipeline test (canned issue → PUBLISHED) | todo | `feature/pipeline-e2e-test` | Phase 1 | L4-A, L4-B |
