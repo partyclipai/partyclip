@@ -1,4 +1,20 @@
 # Most recent paperclipai/paperclip commit shared with this fork.
 # Bump after every upstream cherry-pick. See docs/upstream-sync.md.
 # Forked: 2026-05-05
+#
+# The 40-char SHA below is the baseline the routine-sync survey reads
+# (git log $(grep -E '^[a-f0-9]{40}$' UPSTREAM_VERSION)..upstream/master).
+# partyclip is a soft fork doing SELECTIVE cherry-picks, so the baseline only
+# advances on a full "catch up to SHA X, reviewing everything" sync — NOT on an
+# individual security/infra pick. Advancing it for a scattered pick would hide
+# the still-unreviewed commits between the fork and that SHA from the survey
+# (and the X-6 upstream-sync triage). Individually cherry-picked commits are
+# recorded below the baseline instead.
 685ee84e4a9c33d37d3c9900cc810c3a9d2f373c
+#
+# Cherry-picked out-of-band (absorbed, but not folded into the baseline above):
+# - X-4 — SSH/remote-exec env-leak security fixes:
+#     6c090f84 (#5142) strip inherited host shell env from SSH remote execution
+#     028c5aa0 (#5274) stop leaking host process.env into the OpenCode SSH probe
+#     44c365de (#5275) stop leaking host process.env into the Pi SSH probe
+#     f6bad8f6 (#5325) sanitize remote execution envs at the boundary
