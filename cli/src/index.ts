@@ -9,6 +9,7 @@ import { runCommand } from "./commands/run.js";
 import { bootstrapCeoInvite } from "./commands/auth-bootstrap-ceo.js";
 import { dbBackupCommand } from "./commands/db-backup.js";
 import { eventsReplayCommand } from "./commands/events-replay.js";
+import { contentLoadCommand } from "./commands/content-load.js";
 import { registerEnvLabCommands } from "./commands/env-lab.js";
 import { registerContextCommands } from "./commands/client/context.js";
 import { registerCompanyCommands } from "./commands/client/company.js";
@@ -106,6 +107,17 @@ program
   .option("--json", "Emit summary as JSON")
   .action(async (opts) => {
     await eventsReplayCommand(opts);
+  });
+
+program
+  .command("content-load")
+  .description("Load (or re-sync) a deployment's content pack — agent roster, personas, constitution — into the DB")
+  .requiredOption("--company-id <uuid>", "Company to load content for")
+  .requiredOption("--content-dir <path>", "Path to the deployment content directory (partyclip-content checkout)")
+  .option("-c, --config <path>", "Path to config file")
+  .option("--json", "Emit summary as JSON")
+  .action(async (opts) => {
+    await contentLoadCommand(opts);
   });
 
 program

@@ -15,7 +15,8 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./services/projections": "./src/services/projections/index.ts"
+    "./services/projections": "./src/services/projections/index.ts",
+    "./services/agents": "./src/services/agents/index.ts"
   },
   "publishConfig": {
     "access": "public",
@@ -27,6 +28,10 @@
       "./services/projections": {
         "types": "./dist/services/projections/index.d.ts",
         "import": "./dist/services/projections/index.js"
+      },
+      "./services/agents": {
+        "types": "./dist/services/agents/index.d.ts",
+        "import": "./dist/services/agents/index.js"
       }
     },
     "main": "./dist/index.js",
