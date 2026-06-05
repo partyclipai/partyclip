@@ -2,7 +2,7 @@
 id: L4-A
 title: Wire pipeline executor to agent runner + live model adapter
 layer: L4
-status: review
+status: done
 branch: feature/agent-invocation-wiring
 target_phase: Phase 1
 codebase: server
