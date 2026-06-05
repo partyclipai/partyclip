@@ -2,12 +2,14 @@
 id: L4-E
 title: Content-load — ingest agent roster, personas, constitution, pipelines into the DB
 layer: L4
-status: todo
+status: in_progress
 branch: feature/content-load-agent-config
 target_phase: Phase 1
 codebase: multiple
 depends_on: [ADR-005]
 blocks: [L4-A]
+agent: Umut Tuncer
+started: 2026-06-05
 ---
 
 # L4-E — Content-load — ingest agent roster, personas, constitution, pipelines into the DB
