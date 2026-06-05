@@ -58,7 +58,7 @@ Phase 1 is governance-layer work, so every task sits in **L4 — Governance & Au
 | [X-2](./X-2-paperclip-required-enum.md) | Revisit `paperclip_required` enum (hermes compat) | todo | `feature/paperclip-required-enum` | Phase 1 | — |
 | [X-3](./X-3-reference-content-pack.md) | Reference content pack (constitution, ministries, `regular.yaml`) | blocked | — | Phase 1 | — |
 | [X-4](./X-4-upstream-ssh-env-sanitization.md) | Cherry-pick upstream SSH/remote-exec env-leak security fixes | todo | `feature/upstream-ssh-env-sanitization` | Phase 1 | — |
-| [X-5](./X-5-claude-model-refresh.md) | Claude model refresh — sync claude-local model list with upstream | todo | `feature/claude-model-refresh` | Phase 1 | — |
+| [X-5](./X-5-claude-model-refresh.md) | Claude model refresh — sync claude-local model list with upstream | in_progress | `feature/claude-model-refresh` | Phase 1 | — |
 | [X-6](./X-6-upstream-sync-triage.md) | Upstream-sync triage — evaluate Tier 2/3 candidates for cherry-pick | todo | `feature/upstream-sync-triage` | Phase 1 | — |
 
 ## Decisions referenced as `ADR-NNN`

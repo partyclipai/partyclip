@@ -2,12 +2,14 @@
 id: X-5
 title: Claude model refresh — sync claude-local model list with upstream
 layer: cross-cutting
-status: todo
+status: in_progress
 branch: feature/claude-model-refresh
 target_phase: Phase 1
 codebase: packages
 depends_on: []
 blocks: []
+agent: Umut Tuncer
+started: 2026-06-05
 ---
 
 # X-5 — Claude model refresh — sync claude-local model list with upstream
