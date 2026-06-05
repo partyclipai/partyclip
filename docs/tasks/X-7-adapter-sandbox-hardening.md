@@ -2,14 +2,22 @@
 id: X-7
 title: Cherry-pick upstream adapter/remote-sandbox hardening fixes
 layer: cross-cutting
-status: in_progress
+status: blocked
 branch: feature/adapter-sandbox-hardening
-target_phase: Phase 1
+target_phase: Phase 2
 codebase: packages
 depends_on: []
 blocks: []
 agent: Umut Tuncer
 started: 2026-06-05
+blocked_by: >-
+  Deferred to Phase 2. The three hardening commits cannot be cherry-picked in
+  isolation — they depend on un-absorbed intervening upstream adapter-execute
+  refactors, so they require a full adapter-layer catch-up sync to upstream
+  d1a8c873. That sync is gated on faithfully reproducing partyclip's
+  inconsistent, per-identifier paperclip→partyclip rename over ~9k lines of
+  evolved upstream code. Off the Phase-1 critical path (the pipeline, L4-A–D).
+  See Resolution for the full investigation, plan, and proof.
 ---
 
 # X-7 — Cherry-pick upstream adapter/remote-sandbox hardening fixes
@@ -113,3 +121,55 @@ bundled into conflict regions that partyclip does not support and had to be drop
 - None blocking. If a cherry-pick diverges materially from upstream (because partyclip's
   adapter-utils has drifted), record the porting decision in the commit body and this task's
   Resolution; add an `ADR-NNN` in `docs/adr/` only if a non-obvious architectural call is made.
+
+## Resolution — DEFERRED to Phase 2
+
+Investigated and **deferred**. The hardening is real and policy-aligned, but it is not an
+isolated pull at the current fork baseline, and the full catch-up it requires is a Phase-2-sized
+effort off the Phase-1 critical path. Captured here so Phase 2 does not re-discover it.
+
+**Why it is not an isolated cherry-pick.** The oldest target commit `12cb7b40` alone conflicts in
+**17 files / ~1150 lines** across all six adapters' `src/server/execute.ts` + `adapter-utils`. The
+conflicts depend on prerequisite symbols **absent in partyclip** (`shapePaperclipWorkspaceEnvForExecution`,
+`rewriteWorkspaceCwdEnvVarsForExecution`) and a reshaped execute pipeline from intervening upstream
+commits the fork never absorbed. So partyclip's adapter layer must first be brought up to upstream's
+state (~`d1a8c873`).
+
+**Catch-up scope (measured).** 35 upstream commits touch `packages/adapter-utils` + `packages/adapters`
+in `685ee84e..d1a8c873`; the fork↔d1a8c873 delta on those packages is **92 files, +9347 / −734**.
+`packages/shared` is **not** needed (zero new shared imports). `server/` needs only a bounded slice
+(new `session-workspace-cwd.ts` + small hunks of `registry.ts`/`heartbeat.ts`/`plugin-loader.ts`) —
+note `heartbeat.ts` itself has ~2177 lines of partyclip product divergence, so those must be
+**hunk-ported, not file-taken**.
+
+**Chosen strategy (proven on the clean half).** Snapshot-port the upstream adapter tree per file
+(`git checkout d1a8c873 -- <path>`) + re-apply partyclip's rename, NOT a 35-commit sequential
+cherry-pick. **Proof:** porting all of `packages/adapter-utils/src` to `d1a8c873` + prefix-anchored
+rename ⇒ `pnpm --filter @partyclipai/adapter-utils typecheck` **exit 0**, and the whole-repo blast
+radius was only **8 typecheck errors in 4 adapters** (server clean). The snapshot approach works.
+
+**The blocker that makes it Phase-2 work.** partyclip's rename is **inconsistent and per-identifier**,
+not the 3 mechanical prefix rules the plan assumed. It renamed TYPE names and many camelCase vars
+(`PaperclipSkillEntry`→`PartyclipSkillEntry`, `PaperclipWakePayload`→`PartyclipWakePayload`,
+`paperclipApiUrl`/`paperclipBridge`/`paperclipEnv`/`paperclipWorkspace`→`partyclip*`) but **kept**
+function names (`stringifyPaperclipWakePayload`, `shapePaperclipWorkspaceEnvForExecution`,
+`sanitizeSshRemoteEnv`). Worse, a renamed token is a substring of a kept one
+(`PaperclipWakePayload` ⊂ `stringifyPaperclipWakePayload`), so re-rename must be word-boundary,
+per-identifier, derived from partyclip HEAD's exact symbol set — across ~9k lines and six adapters,
+each mistake a silent bug in the agent-execution path.
+
+**Reconciliation notes for the Phase-2 effort.**
+- **X-4 is subsumed** by `d1a8c873` (its env-leak commits are ancestors; `remote-execution-env.ts`
+  HEAD↔d1a8c873 is byte-identical modulo rename). Do not re-apply X-4.
+- **X-5 must be re-added** (`claude-opus-4-8`, upstream `5153b01a`, postdates `d1a8c873` — not in the
+  snapshot; one line in `claude-local/src/index.ts`).
+- **`cursor-cloud`** (new upstream adapter #5664) is out of scope — it pulls Cursor Cloud Agents API
+  server wiring (a feature, not hardening).
+- Staging: Stage 1 = `adapter-utils` + `claude-local` (proof, already validated above); Stages 2–6 =
+  one per remaining adapter (parallelizable, share frozen `adapter-utils`); then bookkeeping —
+  record the absorbed snapshot SHA in `UPSTREAM_VERSION` **without** advancing the survey baseline
+  (soft-fork policy), noting the adapter packages are now current to `d1a8c873`.
+
+**Unblock condition:** schedule as a dedicated Phase-2 "adapter-layer catch-up sync" with the
+per-identifier rename map built first. The full design plan (strategy, cross-package answer, rename
+mechanics, verification gates, rollback) was produced during this task and is reflected above.
