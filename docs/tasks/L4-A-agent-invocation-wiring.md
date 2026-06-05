@@ -2,7 +2,7 @@
 id: L4-A
 title: Wire pipeline executor to agent runner + live model adapter
 layer: L4
-status: in_progress
+status: blocked
 branch: feature/agent-invocation-wiring
 target_phase: Phase 1
 codebase: server
@@ -10,6 +10,18 @@ depends_on: []
 blocks: [L4-B, L4-D]
 agent: Umut Tuncer
 started: 2026-06-05
+blocked_by: >-
+  Two missing prerequisites the task framing assumed were present. (1) There is no
+  partyclip agent-config persistence/loading model: the `AgentConfig` type
+  (persona_ref/tools/model/role-enum) is never produced or loaded by any production
+  server code (only shared types + tests); the DB `agents` table is paperclip's
+  general agent table (role default "general", adapterConfig jsonb) and does not map
+  to partyclip's pipeline-role AgentConfig, and nothing seeds pipeline agents. (2)
+  Personas + constitution content + the agent roster come from the content pack
+  (X-3, blocked, cross-repo in partyclip-content). So loadAgent/loadPersona/
+  resolveToolset and the end-to-end stage invocation cannot be built yet. Only the
+  model adapter (ADR-005) + loadPatch/loadInputArtifacts (and the loadConstitution
+  query, against an empty table) are unblocked. See Resolution.
 ---
 
 # L4-A — Wire pipeline executor to agent runner + live model adapter
@@ -77,4 +89,44 @@ the runner builds the envelope via `buildAgentEnvelope`).
 
 - Which model adapter? Reusing an existing `packages/adapters/*` adapter vs. a direct
   Anthropic SDK call is a non-obvious architectural call — record it as `ADR-005` in
-  `docs/adr/` before merging.
+  `docs/adr/` before merging. **Resolved (pending implementation): provider-agnostic
+  adapter factory** — Anthropic SDK when `ANTHROPIC_API_KEY` is present, else a fake/no-op
+  fallback; `resolveToolset` builds a minimal registry from `agent.tools`.
+
+## Resolution — BLOCKED (Phase 1 critical-path prerequisite surfaced)
+
+Investigated the seams (Plan + Explore agents) and found L4-A cannot reach its acceptance at
+the current state. The pipeline machinery is built (executor, dispatcher, runner, envelope,
+role-parsers), but two prerequisites the task assumed are absent:
+
+1. **No partyclip agent-config persistence/loading model.** `git grep` confirms `AgentConfig`
+   (persona_ref / tools / model / Architect–Critic role enum) is produced/loaded by **zero**
+   production server code — only `packages/shared` types + tests. There is no roster loader,
+   no `regular.yaml` reader. The DB `agents` table is paperclip's general agent table (role
+   default `"general"`, `adapterConfig` jsonb, reportsTo) and does not map to partyclip's
+   pipeline roles; nothing seeds partyclip pipeline agents. So `loadAgent` has no real source.
+2. **Persona / constitution content + roster come from the content pack** — task **X-3**
+   (`reference content pack: constitution, ministries, regular.yaml`), which is **blocked**
+   (cross-repo, `partyclip-content`). `loadPersona` has no resolution mechanism, and
+   `constitution_articles` is empty without the pack.
+
+`createAgentRunner` has no production consumer (the orchestrator loop that calls
+`dispatch` → `executeStage` does not exist either).
+
+**Unblocked slice (could land independently):** ADR-005's provider-agnostic model adapter;
+`loadPatch` + `loadInputArtifacts` (real tables: `patches`, `artifacts`+`patch_stage_runs`);
+the `loadConstitution` query (table exists, rows come from X-3).
+
+**Blocked slice:** `loadAgent`, `loadPersona`, `resolveToolset`, the orchestrator, and the
+end-to-end stage invocation (the acceptance criteria) — all gated on prerequisite (1) the
+agent-config model and (2) the X-3 content pack.
+
+**Implication (Phase 1):** L4-A blocks L4-B and L4-D, so the whole "issue → PUBLISHED with
+real agent runs" chain is gated on the agent-config persistence model + the content pack.
+Phase-1 completion needs both designed/unblocked first. The full implementation map (DB
+backing per loader, ADR-005 evidence, the orchestrator seam) was produced during this task
+and is available in the session record for whoever resumes it.
+
+**Unblock condition:** (a) design + build a partyclip agent-config persistence/loading model
+(a new architectural task + ADR — DB table vs content-pack `regular.yaml` loader vs hybrid),
+and (b) land the X-3 content pack. Then L4-A's blocked slice + L4-B/L4-D become actionable.
