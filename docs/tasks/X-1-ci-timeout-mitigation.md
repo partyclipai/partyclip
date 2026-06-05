@@ -51,6 +51,12 @@ mark them opt-in with a documented reason.
 
 - Prefer the lowest-friction option that keeps the tests *runnable* on demand — silently
   deleting coverage is not the goal.
+- **Upstream prior art (surfaced by the X-6 triage, cluster (b)).** Upstream paperclip already
+  improved the shared `scripts/run-vitest-stable.mjs` runner that partyclip also ships — pull or
+  port these before reinventing a mitigation: `47920f9c` (#5147 "Speed up PR CI critical path")
+  and `81d18f2d` (#6137 "speed up PR verify workflow"). Cherry-pick per `docs/upstream-sync.md`
+  (record the SHAs without advancing the survey baseline, as X-4/X-5 did). The CI fix is absorbed
+  here in X-1 rather than as a separate task.
 
 ## Open questions
 

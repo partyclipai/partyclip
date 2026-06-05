@@ -84,15 +84,15 @@ permissions, blocked inbox.
 
 ## Acceptance criteria
 
-- [ ] A documented pull / defer / skip decision, with a policy-grounded one-line rationale,
+- [x] A documented pull / defer / skip decision, with a policy-grounded one-line rationale,
       exists for each of clusters (a), (b), (c), (d), and (e).
-- [ ] A follow-up task file exists for every cluster decided "pull" (or a noted next-free
+- [x] A follow-up task file exists for every cluster decided "pull" (or a noted next-free
       `X-<n>` ID for every "defer").
-- [ ] X-1 is updated to point at the upstream `run-vitest-stable.mjs` improvements
+- [x] X-1 is updated to point at the upstream `run-vitest-stable.mjs` improvements
       (`47920f9c`, `81d18f2d`).
-- [ ] If skills-catalog (e) is accepted, an `ADR-NNN` recording the adoption decision is added
-      to `docs/adr/`.
-- [ ] Any other non-obvious adoption decision is captured as an ADR or written down in the
+- [x] Skills-catalog (e) adoption decision recorded — **deferred** (not accepted), so no ADR is
+      required now; `ADR-005` is to be written if/when it is pursued (see Resolution + Open questions).
+- [x] Any other non-obvious adoption decision is captured as an ADR or written down in the
       relevant follow-up task.
 
 ## Implementation notes
@@ -117,3 +117,31 @@ permissions, blocked inbox.
 - (c)/(d): does partyclip actually want the `grok-local` / `cursor-cloud` backends or the new
   sandbox providers (Modal, Cloudflare, Daytona, exe.dev, Novita) for Phase 1, or are they
   Phase 2 "defer"? Decide per backend, not as one block.
+
+## Resolution
+
+Survey re-run on 2026-06-05: `685ee84e..upstream/master` is now **247 commits** (upstream/master
+`3657854e`; +20 since the 2026-06-04 snapshot — the delta is dependency bumps + Paperclip-product
+work, all skip). Decisions per cluster, grounded in `docs/upstream-sync.md`:
+
+| Cluster | Decision | Rationale | Follow-up |
+|---|---|---|---|
+| **(a)** Plugin SDK / host surface (`3c73ed26`, `b947a7d7`, `a1835cfa`) | **DEFER → Phase 2** | The security hardening `a1835cfa` sits on top of `3c73ed26`'s host-surface expansion (~27.5k LOC / 89 files, incl. `create-paperclip-plugin`→`create-partyclip-plugin` rename conflicts) — it edits `protocol.ts`/`host-client-factory.ts` that `3c73ed26` heavily changed, so it cannot be cleanly pulled in isolation. The stack is a Phase-2-sized SDK upgrade; partyclip's only Phase-1 plugin (news-ingest) is first-party, so invocation-scope hardening is not load-bearing yet. | noted **X-8** |
+| **(b)** CI `run-vitest-stable.mjs` (`47920f9c`, `81d18f2d`) | **FOLD into X-1** | Overlaps the existing X-1 CI-timeout task; partyclip ships the same runner. Pointer added to X-1 Implementation notes — no duplicate task. | X-1 updated |
+| **(c)** New model adapters `grok-local` (`ab8b4716`), `cursor-cloud` (`534aee66`) | **DEFER → Phase 2** | partyclip lacks both (~2k LOC each); backend-dependent. Phase 1's lane is `claude-local` / the live adapter (L4-A) — neither backend is on the critical path. | noted **X-9** |
+| **(d)** New sandbox-provider plugins (Modal, Cloudflare, Daytona, exe.dev, Novita) | **DEFER → Phase 2** | partyclip ships only the `e2b` provider; the five are additive, standalone plugin packages (excluded from the workspace). Sandbox execution is not on the Phase-1 pipeline path. | noted **X-10** |
+| **(e)** Skills CLI + `packages/skills-catalog` (`9eac727c`) | **DEFER — pending design call** | A whole new agent-"skills" subsystem (77 files, +9.7k). The load-bearing question — does it map onto partyclip's leader/ministry/policy-patch model or conflict with it? — is unresolved. Not adopting in Phase 1; record as **ADR-005** if/when pursued. (partyclip already has partial per-adapter `skills.ts`; the catalog/CLI layer is the new part.) | noted **X-11** + ADR-005 |
+| **(f)** Adapter / remote-sandbox hardening (`12cb7b40` #5444, `b24c6909` #5685, `d1a8c873` #5922) — *surfaced by the survey scan, beyond the original cluster list* | **PULL** | Tier-1 security/stability in `packages/adapter-utils` (the same plumbing partyclip ships), not covered by X-4's env-leak scope. Policy: pull security + shared-infra stability. Excludes `1bd44c8a` (#5967, Cloudflare-sandbox-specific — partyclip lacks it) and `68f69975` (#5292, control-plane/issue — Paperclip-product). | **X-7** (task file created) |
+
+**Skip** (per policy — Paperclip-product primitives partyclip replaces): issue document locking,
+document annotations/comments, resource membership, recovery handoff, routine revision history,
+company search, planning mode, agent permissions, blocked inbox — plus the +20 recent delta
+(dependency bumps, comment redaction, routines, operator QoL, document comments).
+
+**Net:** Phase 1 takes only **X-7** (further adapter-utils hardening) now; everything else is
+Phase-2 deferred (X-8–X-11) or folded (X-1). This matches the Phase-1 goal — the pipeline
+(L4-A–D) plus the Tier-1 security/model pulls (X-4/X-5, done); none of the deferred clusters
+serve it. The deferred X-IDs are noted, not yet authored, to keep the Phase-1 board uncluttered.
+
+**Reusable next-cycle survey:**
+`git fetch upstream && git log $(grep -E '^[a-f0-9]{40}$' UPSTREAM_VERSION)..upstream/master --oneline`.
