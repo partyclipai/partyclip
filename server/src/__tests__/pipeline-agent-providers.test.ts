@@ -102,24 +102,46 @@ describeEmbeddedPostgres("pipeline agent DB providers (L4-E)", () => {
 
   it("loadConstitution returns only the latest (non-superseded) articles, ordered", async () => {
     const companyId = await makeCompany();
-    // two live articles + one superseded
+    // Fixtures use real shared-enum mutability + CONST-K<n>-A<n> stable ids (the validated
+    // ingest path can only ever produce these). Two live articles + one superseded.
     const live = await db
       .insert(constitutionArticles)
-      .values({ companyId, stableId: "ART-1", version: 2, mutability: "amendable", title: "First", body: "b1" })
+      .values({ companyId, stableId: "CONST-K1-A1", version: 2, mutability: "AMENDABLE_SIMPLE", title: "First", body: "b1" })
       .returning()
       .then((r) => r[0]!);
     await db
       .insert(constitutionArticles)
-      .values({ companyId, stableId: "ART-2", version: 1, mutability: "amendable", title: "Second", body: "b2" });
-    // a superseded older version of ART-1 (must be filtered out)
+      .values({ companyId, stableId: "CONST-K1-A2", version: 1, mutability: "AMENDABLE_SIMPLE", title: "Second", body: "b2" });
+    // a superseded older version of CONST-K1-A1 (must be filtered out)
     await db
       .insert(constitutionArticles)
-      .values({ companyId, stableId: "ART-1", version: 1, mutability: "amendable", title: "First old", body: "old", supersededBy: live.id });
+      .values({ companyId, stableId: "CONST-K1-A1", version: 1, mutability: "AMENDABLE_SIMPLE", title: "First old", body: "old", supersededBy: live.id });
 
     const providers = createDbRosterProviders(db, companyId);
     const articles = await providers.loadConstitution(companyId);
-    expect(articles.map((a) => `${a.stableId}@${a.version}`)).toEqual(["ART-1@2", "ART-2@1"]);
+    expect(articles.map((a) => `${a.stableId}@${a.version}`)).toEqual(["CONST-K1-A1@2", "CONST-K1-A2@1"]);
     expect(articles.find((a) => a.body === "old")).toBeUndefined();
+  });
+
+  it("loadConstitution collapses to the latest version per stableId on a re-ingested bump", async () => {
+    const companyId = await makeCompany();
+    // Simulate a content-load re-sync that bumped CONST-K1-A1 from v1 to v2 WITHOUT superseding
+    // v1 (both rows live) — loadConstitution must return only v2.
+    await db.insert(constitutionArticles).values([
+      { companyId, stableId: "CONST-K1-A1", version: 1, mutability: "AMENDABLE_SIMPLE", title: "Old", body: "v1" },
+      { companyId, stableId: "CONST-K1-A1", version: 2, mutability: "AMENDABLE_SIMPLE", title: "New", body: "v2" },
+    ]);
+    const articles = await createDbRosterProviders(db, companyId).loadConstitution(companyId);
+    expect(articles).toHaveLength(1);
+    expect(articles[0]).toMatchObject({ stableId: "CONST-K1-A1", version: 2, body: "v2" });
+  });
+
+  it("loadAgent rejects a company mismatch against the provider's bound company", async () => {
+    const companyId = await makeCompany();
+    const other = await makeCompany();
+    await ingestRoster(db, companyId, [{ config: architectConfig(), persona: "p" }]);
+    const providers = createDbRosterProviders(db, companyId);
+    await expect(providers.loadAgent("Architect", other)).rejects.toThrow(/company mismatch/i);
   });
 
   it("isolates roster rows by company", async () => {

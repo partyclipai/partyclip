@@ -15,9 +15,12 @@ import type { LoadedRosterAgent } from "./roster-loader.js";
  * resolveToolset + a model adapter to build the full AgentRunnerProviders.
  */
 
+/** A `Db` or a transaction handle from `db.transaction(...)` — both accept the write builder. */
+type DbWriter = Db | Parameters<Parameters<Db["transaction"]>[0]>[0];
+
 /** Upsert a loaded roster into `pipeline_agents` (one row per company + role). */
 export async function ingestRoster(
-  db: Db,
+  db: DbWriter,
   companyId: string,
   roster: ReadonlyArray<LoadedRosterAgent>,
 ): Promise<void> {
@@ -34,7 +37,7 @@ export async function ingestRoster(
 
 /** Upsert constitution articles into `constitution_articles` (keyed company+stableId+version). */
 export async function ingestConstitution(
-  db: Db,
+  db: DbWriter,
   companyId: string,
   articles: ReadonlyArray<ConstitutionArticleInput>,
 ): Promise<void> {
@@ -64,24 +67,34 @@ export interface DbRosterProviders {
 }
 
 /**
- * Build the DB-backed roster providers for one company. `companyId` is closed over so
- * `loadPersona(agent)` — whose signature carries no company — resolves the persona for the
- * right company (roles are unique per company). `loadAgent`/`loadConstitution` also receive
- * the company via their own params (the runner passes the same value).
+ * Build the DB-backed roster providers for one company. `companyId` is the single source of
+ * truth — it is closed over so `loadPersona(agent)` (whose signature carries no company) stays
+ * consistent with `loadAgent`/`loadConstitution`. The latter two still accept a company param to
+ * satisfy the AgentRunnerProviders interface; if a caller passes a *different* company than the
+ * one the provider was built for, that is a wiring bug and we fail loudly rather than silently
+ * pairing an agent from one company with a persona from another.
  */
 export function createDbRosterProviders(db: Db, companyId: string): DbRosterProviders {
+  const assertSameCompany = (caller: string | undefined): void => {
+    if (caller && caller !== companyId) {
+      throw new TerminalPipelineError(
+        `Provider company mismatch: built for ${companyId} but called with ${caller}`,
+        "COMPANY_MISMATCH",
+      );
+    }
+  };
   return {
     async loadAgent(role, callerCompanyId) {
-      const cid = callerCompanyId ?? companyId;
+      assertSameCompany(callerCompanyId);
       const rows = await db
         .select({ config: pipelineAgents.config })
         .from(pipelineAgents)
-        .where(and(eq(pipelineAgents.companyId, cid), eq(pipelineAgents.role, role)))
+        .where(and(eq(pipelineAgents.companyId, companyId), eq(pipelineAgents.role, role)))
         .limit(1);
       const row = rows[0];
       if (!row) {
         throw new TerminalPipelineError(
-          `No pipeline agent configured for role '${role}' (company ${cid}); run the content-load step`,
+          `No pipeline agent configured for role '${role}' (company ${companyId}); run the content-load step`,
           "AGENT_NOT_CONFIGURED",
         );
       }
@@ -112,7 +125,7 @@ export function createDbRosterProviders(db: Db, companyId: string): DbRosterProv
     },
 
     async loadConstitution(callerCompanyId) {
-      const cid = callerCompanyId ?? companyId;
+      assertSameCompany(callerCompanyId);
       const rows = await db
         .select({
           stableId: constitutionArticles.stableId,
@@ -121,14 +134,18 @@ export function createDbRosterProviders(db: Db, companyId: string): DbRosterProv
           body: constitutionArticles.body,
         })
         .from(constitutionArticles)
-        .where(and(eq(constitutionArticles.companyId, cid), isNull(constitutionArticles.supersededBy)))
+        .where(and(eq(constitutionArticles.companyId, companyId), isNull(constitutionArticles.supersededBy)))
         .orderBy(asc(constitutionArticles.stableId), asc(constitutionArticles.version));
-      return rows.map((r): ConstitutionArticleRef => ({
-        stableId: r.stableId,
-        version: r.version,
-        title: r.title,
-        body: r.body,
-      }));
+      // Collapse to the latest version per stableId. A content-load re-sync that bumps an
+      // article's version inserts a new row without superseding the old one, so multiple
+      // non-superseded versions of the same stableId can coexist; the envelope must see only
+      // the latest. Rows are ordered by (stableId, version asc), so the last write per
+      // stableId wins, and the Map preserves first-seen stableId order.
+      const latest = new Map<string, ConstitutionArticleRef>();
+      for (const r of rows) {
+        latest.set(r.stableId, { stableId: r.stableId, version: r.version, title: r.title, body: r.body });
+      }
+      return [...latest.values()];
     },
   };
 }

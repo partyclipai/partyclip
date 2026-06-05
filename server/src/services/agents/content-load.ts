@@ -25,8 +25,11 @@ export async function loadDeploymentContent(
   const roster = await loadRosterFromDirectory(contentDir);
   const articles = await loadConstitutionFromDirectory(contentDir);
 
-  await ingestRoster(db, companyId, roster);
-  await ingestConstitution(db, companyId, articles);
+  // Ingest atomically: either the whole pack lands or none of it does.
+  await db.transaction(async (tx) => {
+    await ingestRoster(tx, companyId, roster);
+    await ingestConstitution(tx, companyId, articles);
+  });
 
   return { agents: roster.length, constitutionArticles: articles.length };
 }
