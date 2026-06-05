@@ -61,12 +61,12 @@ Implementation notes.
 
 ## Acceptance criteria
 
-- [ ] `claude-local`'s model list matches upstream's set modulo intentional differences.
-- [ ] `claude-opus-4-8` is present and selectable as a model id.
-- [ ] Default-model selection and the `cheap` profile remain valid (unchanged unless
+- [x] `claude-local`'s model list matches upstream's set modulo intentional differences.
+- [x] `claude-opus-4-8` is present and selectable as a model id.
+- [x] Default-model selection and the `cheap` profile remain valid (unchanged unless
       intentionally updated).
-- [ ] `pnpm -r typecheck` passes.
-- [ ] `pnpm test` is green for the `claude-local` package.
+- [x] `pnpm -r typecheck` passes.
+- [x] `pnpm test` is green for the `claude-local` package.
 
 ## Implementation notes
 
@@ -83,3 +83,19 @@ Implementation notes.
 ## Open questions
 
 - None blocking.
+
+## Resolution
+
+- Ported **only the one-line model delta** from upstream `5153b01a` — added
+  `{ id: "claude-opus-4-8", label: "Claude Opus 4.8" }` to the `models` array in
+  `packages/adapters/claude-local/src/index.ts`. After the add, partyclip's set matches
+  upstream's modulo ordering; the `cheap` profile / default stay `claude-sonnet-4-6`.
+- **Did not cherry-pick the full commit.** `5153b01a` is actually a feature (Anthropic live
+  model discovery via `GET /v1/models`, cache + API-key fingerprint, server registry wiring,
+  and a UI refresh button — ~228 lines across `server/` and `ui/`). That is out of X-5 scope
+  ("changing the adapter framework") and belongs to the `X-6` triage as a candidate.
+- **`UPSTREAM_VERSION` intentionally not bumped.** Bumping to `5153b01a` would falsely mark
+  the 200+ unabsorbed commits between the fork point and it as absorbed and would hide the
+  live-discovery feature from `X-6`. The single-line port does not absorb the commit.
+- Verified: `pnpm --filter @partyclipai/adapter-claude-local typecheck` (exit 0),
+  `pnpm exec vitest run packages/adapters/claude-local` (14/14), `pnpm -r typecheck` (exit 0).
