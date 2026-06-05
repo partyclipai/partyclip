@@ -47,3 +47,19 @@ export {
 } from "./db-providers.js";
 
 export { loadDeploymentContent, type ContentLoadResult } from "./content-load.js";
+
+export { createDbPatchProviders, type DbPatchProviders } from "./patch-providers.js";
+
+export {
+  resolveModelAdapter,
+  createAnthropicModelAdapter,
+  disabledModelAdapter,
+  type AnthropicAdapterOptions,
+  type ResolveModelAdapterOptions,
+} from "./live-model-adapter.js";
+
+export {
+  createLiveAgentRunner,
+  createLiveAgentRunnerProviders,
+  type LiveAgentRunnerDeps,
+} from "./live-runner.js";
