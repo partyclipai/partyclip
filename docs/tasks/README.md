@@ -59,7 +59,7 @@ Phase 1 is governance-layer work, so every task sits in **L4 — Governance & Au
 | [X-3](./X-3-reference-content-pack.md) | Reference content pack (constitution, ministries, `regular.yaml`) | blocked | — | Phase 1 | — |
 | [X-4](./X-4-upstream-ssh-env-sanitization.md) | Cherry-pick upstream SSH/remote-exec env-leak security fixes | done | `feature/upstream-ssh-env-sanitization` | Phase 1 | — |
 | [X-5](./X-5-claude-model-refresh.md) | Claude model refresh — sync claude-local model list with upstream | done | `feature/claude-model-refresh` | Phase 1 | — |
-| [X-6](./X-6-upstream-sync-triage.md) | Upstream-sync triage — evaluate Tier 2/3 candidates for cherry-pick | review | `feature/upstream-sync-triage` | Phase 1 | — |
+| [X-6](./X-6-upstream-sync-triage.md) | Upstream-sync triage — evaluate Tier 2/3 candidates for cherry-pick | done | `feature/upstream-sync-triage` | Phase 1 | — |
 | [X-7](./X-7-adapter-sandbox-hardening.md) | Cherry-pick upstream adapter/remote-sandbox hardening fixes | todo | `feature/adapter-sandbox-hardening` | Phase 1 | — |
 
 ## Decisions referenced as `ADR-NNN`
