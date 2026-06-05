@@ -75,13 +75,13 @@ Per `docs/upstream-sync.md`, expect rename conflicts during cherry-pick — they
 
 ## Acceptance criteria
 
-- [ ] `packages/adapter-utils/src/remote-execution-env.ts` exists and is wired into
+- [x] `packages/adapter-utils/src/remote-execution-env.ts` exists and is wired into
       `server-utils.ts` / `execution-target.ts`.
-- [ ] Host `process.env` no longer leaks into the Pi and OpenCode remote SSH probes, covered
+- [x] Host `process.env` no longer leaks into the Pi and OpenCode remote SSH probes, covered
       by the ported tests.
-- [ ] The affected `adapter-utils` and adapter tests pass under `pnpm test`.
-- [ ] `UPSTREAM_VERSION` is updated to the absorbed upstream SHA.
-- [ ] No renamed paperclip identifiers reintroduced — no `@paperclipai`, `PAPERCLIP_`, or
+- [x] The affected `adapter-utils` and adapter tests pass under `pnpm test`.
+- [x] `UPSTREAM_VERSION` is updated to the absorbed upstream SHA.
+- [x] No renamed paperclip identifiers reintroduced — no `@paperclipai`, `PAPERCLIP_`, or
       `Paperclip` strings added by this change (the deliberately-preserved exceptions in
       `docs/upstream-sync.md` excepted).
 
@@ -105,3 +105,32 @@ Per `docs/upstream-sync.md`, expect rename conflicts during cherry-pick — they
 - None blocking. If the cherry-pick of `f6bad8f6` diverges materially from upstream (because
   partyclip's `server-utils.ts` has drifted), record the porting decision as an `ADR-NNN` in
   `docs/adr/` rather than burying it in the commit message.
+
+## Resolution
+
+Cherry-picked the four commits oldest-first onto `feature/upstream-ssh-env-sanitization`:
+`6c090f84` → `028c5aa0` → `44c365de` → `f6bad8f6` (upstream author preserved, committed here;
+clean conventional messages carrying provenance). Outcome:
+
+- `packages/adapter-utils/src/remote-execution-env.ts` added — the boundary sanitizer
+  `sanitizeRemoteExecutionEnv`. `server-utils.ts`'s `sanitizeSshRemoteEnv` is now a thin wrapper
+  over it; `execution-target.ts` applies it for SSH **and** sandbox transports; the pi-local and
+  opencode-local probes send only the user-configured env across SSH instead of host `process.env`.
+- **No blanket rename.** partyclip's rename is selective — SCREAMING_SNAKE `PARTYCLIP_*` constants
+  and the `@partyclipai` npm scope are renamed, but internal camelCase identifiers keep `Paperclip`
+  (`sanitizeSshRemoteEnv`, `stringifyPaperclipWakePayload`, …). No `PAPERCLIP_` / `@paperclipai`
+  was added.
+- **Real merge decisions (not find-and-replace).** The 3-way merge bundled upstream-only code into
+  the conflict regions that `f6bad8f6` did not add and partyclip does not support: the
+  `preferredShellForSandbox` import (`sandbox-shell.ts` absent), the
+  `ensureAdapterExecutionTargetRuntimeCommandInstalled` test describe (function absent), and two
+  sandbox it-blocks using `adapterExecutionTargetUsesPaperclipBridge` / a `shellCommand` target
+  field partyclip lacks. All dropped; only what `f6bad8f6` actually introduced was kept. The
+  divergence was self-contained and mechanical to identify, so no ADR was needed.
+- **`UPSTREAM_VERSION`:** recorded the four absorbed SHAs but did **not** advance the survey
+  baseline past the fork point. As a soft fork doing selective picks, advancing to `f6bad8f6`
+  would hide the still-unreviewed commits between the fork and it from the routine survey and the
+  `X-6` triage. (Same principle as `X-5`.)
+- Verified: `pnpm -r typecheck` (exit 0); `adapter-utils` 37/37 incl. the new sanitizer tests;
+  `pi-local` + `opencode-local` 28/28. No SSH-server-dependent test was exercised (those remain the
+  `X-1` concern).

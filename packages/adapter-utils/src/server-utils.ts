@@ -2,6 +2,7 @@ import { spawn, type ChildProcess } from "node:child_process";
 import { createHash, randomUUID } from "node:crypto";
 import { constants as fsConstants, promises as fs, type Dirent } from "node:fs";
 import path from "node:path";
+import { sanitizeRemoteExecutionEnv } from "./remote-execution-env.js";
 import { buildSshSpawnTarget, type SshRemoteExecutionSpec } from "./ssh.js";
 import { redactCommandText } from "./command-redaction.js";
 import type {
@@ -964,6 +965,13 @@ function quoteForCmd(arg: string) {
   if (!arg.length) return '""';
   const escaped = arg.replace(/"/g, '""');
   return /[\s"&<>|^()]/.test(escaped) ? `"${escaped}"` : escaped;
+}
+
+export function sanitizeSshRemoteEnv(
+  env: Record<string, string>,
+  inheritedEnv: NodeJS.ProcessEnv = process.env,
+): Record<string, string> {
+  return sanitizeRemoteExecutionEnv(env, inheritedEnv);
 }
 
 function resolveWindowsCmdShell(env: NodeJS.ProcessEnv): string {
