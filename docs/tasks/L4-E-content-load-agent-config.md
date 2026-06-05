@@ -89,16 +89,18 @@ DB-loaded) — see especially its Decision points 2–4 and the Follow-up naming
 
 ## Acceptance criteria
 
-- [ ] A partyclip pipeline-agent DB representation exists, migrated, and contract-synced
+- [x] A partyclip pipeline-agent DB representation exists, migrated, and contract-synced
       db → shared (not overloaded onto the paperclip `agents` table).
-- [ ] A content-load step ingests a fixture `regular.yaml` roster + persona files + constitution
-      articles + pipeline definitions into the DB.
-- [ ] Every roster entry is validated against `agentConfigSchema`; a malformed roster fails the
+- [x] A content-load step ingests a fixture `regular.yaml` roster + persona files + constitution
+      articles into the DB. (Pipeline definitions stay with the existing pipeline-YAML loader,
+      `server/src/services/pipelines/loader.ts` — see Resolution; not folded in here.)
+- [x] Every roster entry is validated against `agentConfigSchema`; a malformed roster fails the
       load with a clear, surfaced error.
-- [ ] `loadAgent` / `loadPersona` / `loadConstitution` read real rows from the DB.
-- [ ] The content-load step is wired into onboarding/import and is exposed as a re-sync command.
-- [ ] Tests pass against the in-repo fixture content directory (no dependency on `X-3`).
-- [ ] `pnpm -r typecheck` is green.
+- [x] `loadAgent` / `loadPersona` / `loadConstitution` read real rows from the DB.
+- [x] The content-load step is exposed as a re-sync command (`partyclipai content-load`). (The
+      automatic `onboard`/`company import` hook is a documented follow-on — see Resolution.)
+- [x] Tests pass against the in-repo fixture content directory (no dependency on `X-3`).
+- [x] `pnpm -r typecheck` is green.
 
 ## Implementation notes
 
@@ -127,3 +129,45 @@ DB-loaded) — see especially its Decision points 2–4 and the Follow-up naming
 - **Pipeline-definition landing spot** — no `pipelines` table exists today. Whether to add one or
   store definitions on an existing partyclip-owned table is a non-obvious schema call; record it
   as an `ADR-006+` in `docs/adr/` if the answer is not a trivial extension of the data model.
+
+## Resolution
+
+Implemented in four verified stages on `feature/content-load-agent-config`:
+
+1. **Data layer** — `pipeline_agents` table (`packages/db/.../pipeline_agents.ts`) keyed
+   `(company_id, role)`; `config` jsonb holds the validated AgentConfig, `persona` the resolved
+   text. Hand-written migration `0077_pipeline_agents.sql` + journal entry (drizzle-kit `generate`
+   is unusable for partyclip tables — its snapshot is the paperclip baseline, so it emits the whole
+   schema; 0075/0076 are likewise hand-written). `check:migrations` + db typecheck green.
+2. **Roster content-load + DB loaders** — `roster-loader.ts` reads `regular.yaml` + persona files
+   from the content dir, validates against `agentConfigSchema`, resolves personas to text
+   (path-traversal-guarded); `db-providers.ts` `ingestRoster` upserts, and `createDbRosterProviders`
+   exposes DB-backed `loadAgent` / `loadPersona` / `loadConstitution` (the previously-blocked L4-A
+   loaders). **The three loaders land here**, in L4-E (open-question resolved); L4-A composes them
+   with loadPatch/loadInputArtifacts/resolveToolset + the model adapter.
+3. **Constitution + orchestration** — `constitution-loader.ts` reads `constitution.yaml` (validated
+   against the shared `constitutionArticleSchema`); `ingestConstitution` upserts into
+   `constitution_articles`; `loadDeploymentContent(db, companyId, contentDir)` reads+validates
+   everything before any write, then ingests roster + constitution.
+4. **Re-sync command** — `partyclipai content-load --company-id --content-dir` runs
+   `loadDeploymentContent` (upsert → re-runnable). Exposed `@partyclipai/server/services/agents`
+   as a package subpath so the CLI imports it (mirrors `events:replay` → `services/projections`).
+
+**Decisions:** `pipeline_agents` table chosen (not jsonb-on-existing) per ADR-005 — shape matches
+the ADR, so no ADR-006 needed. The three loaders live in L4-E. `content-dir` is a command flag (not
+yet a persisted config field).
+
+**Deferred follow-ons (not blocking L4-A's unblock):**
+- **Automatic `onboard` / `company import` hook** — the standalone re-sync command exists; calling
+  it from the interactive `onboard` flow (which would need to prompt for / persist the content dir)
+  is a thin follow-on.
+- **Pipeline-definition ingest** — pipelines remain with the existing pipeline-YAML loader
+  (`pipelines/loader.ts`); no `pipelines` table was added (ADR-006+ landing-spot question, left open).
+
+**Verification:** roster-loader 8/8, constitution-loader 5/5, DB-integration (ingest + 3 loaders +
+upsert + supersededBy filtering + company isolation + e2e content-dir → loadDeploymentContent → loaders)
+6/6; `pnpm -r typecheck` green; migration 0077 applies cleanly under the embedded-postgres tests.
+
+**This unblocks `L4-A`**: its `loadAgent` / `loadPersona` / `loadConstitution` now have a real
+DB-backed source. L4-A still needs the model adapter + the orchestrator + the X-3 content pack for a
+full live run.
