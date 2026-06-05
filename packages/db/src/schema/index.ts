@@ -84,6 +84,7 @@ export { operatorActions } from "./operator_actions.js";
 export { biasReports } from "./bias_reports.js";
 export { biasFindings } from "./bias_findings.js";
 export { pressReleases } from "./press_releases.js";
+export { pipelineAgents } from "./pipeline_agents.js";
 
 // partyclip v1 schema (dormant — fields exist, code paths inactive in Phase 1)
 export { citizens } from "./citizens.js";
