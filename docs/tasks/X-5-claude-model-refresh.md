@@ -2,7 +2,7 @@
 id: X-5
 title: Claude model refresh — sync claude-local model list with upstream
 layer: cross-cutting
-status: in_progress
+status: review
 branch: feature/claude-model-refresh
 target_phase: Phase 1
 codebase: packages
