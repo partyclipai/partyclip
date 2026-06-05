@@ -2,12 +2,14 @@
 id: X-6
 title: Upstream-sync triage — evaluate Tier 2/3 candidates for cherry-pick
 layer: cross-cutting
-status: todo
+status: in_progress
 branch: feature/upstream-sync-triage
 target_phase: Phase 1
 codebase: multiple
 depends_on: []
 blocks: []
+agent: Umut Tuncer
+started: 2026-06-05
 ---
 
 # X-6 — Upstream-sync triage — evaluate Tier 2/3 candidates for cherry-pick
