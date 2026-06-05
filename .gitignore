@@ -11,7 +11,7 @@ drizzle/meta/
 coverage/
 .DS_Store
 data/
-.paperclip/
+.partyclip/
 .pnpm-store/
 tmp-*
 cli/tmp/
@@ -42,12 +42,17 @@ diagnostics/
 *.tmp
 .vscode/
 .claude/settings.local.json
-.paperclip-local/
+.partyclip-local/
 /.idea/
 /.agents/
 
 # Doc maintenance cursor
 .doc-review-cursor
+
+# Development artifacts (notes, plans, scratchpads, internal docs)
+# Visible to local tools (Claude, editors) but never committed.
+.dev/
+_private/
 
 # Playwright
 tests/e2e/test-results/
