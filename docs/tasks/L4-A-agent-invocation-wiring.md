@@ -59,11 +59,13 @@ the runner builds the envelope via `buildAgentEnvelope`).
 
 ## Acceptance criteria
 
-- [ ] A stage dispatched by `dispatcher.ts` invokes a real model via the live `ModelAdapter`.
-- [ ] `AgentRunnerProviders` are implemented against `packages/db` and load real rows.
-- [ ] The agent envelope is built per `ADR-003`; `assertValidResponse` passes on the response.
-- [ ] Role output is parsed via `parseRoleOutput` into a typed stage outcome.
-- [ ] Tests still inject fake runner/adapter — the production wiring does not break them.
+- [x] A stage dispatched by `dispatcher.ts` invokes a real model via the live `ModelAdapter`.
+      (Verified at the `executeStage` boundary — the dispatch→executeStage→persist *loop* is the
+      orchestrator owned by `L4-D` + a runtime scheduler; see Resolution.)
+- [x] `AgentRunnerProviders` are implemented against `packages/db` and load real rows.
+- [x] The agent envelope is built per `ADR-003`; `assertValidResponse` passes on the response.
+- [x] Role output is parsed via `parseRoleOutput` into a typed stage outcome.
+- [x] Tests still inject fake runner/adapter — the production wiring does not break them.
 
 ## Implementation notes
 
@@ -130,3 +132,39 @@ repo, loaded into the DB, read from the DB at runtime); and (b) the **`X-3`** co
 supplying the real `regular.yaml` roster + personas + constitution. `depends_on` is now
 `[L4-E, X-3]`. Once both land, L4-A's blocked slice + L4-B/L4-D become actionable. The model
 adapter (ADR-005's provider-agnostic factory) remains an independently-landable slice.
+
+## Resolution — implemented (L4-E merged; X-3 dropped from deps)
+
+Built in three verified stages on `feature/agent-invocation-wiring` after `L4-E` (#6) merged.
+`X-3` was dropped from `depends_on` (now `[L4-E]`): L4-A's acceptance is reachable with a fixture
+roster + the model adapter's injectable/disabled fallback; X-3 supplies a *real deployment's*
+content, not a wiring dependency.
+
+1. **Patch / artifact / toolset providers** (`patch-providers.ts`) — `loadPatch` (company-scoped,
+   PATCH_NOT_FOUND otherwise), `loadInputArtifacts` (accumulated output artifacts of the patch's
+   prior finished stage runs, excluding the current stage), `resolveToolset` (Phase-1 minimal
+   registry from `agent.tools` with not-implemented invoke stubs). With L4-E's roster providers
+   these complete all six `AgentRunnerProviders` loaders against `packages/db`.
+2. **Provider-agnostic model adapter** (`live-model-adapter.ts`, **ADR-006**) — `resolveModelAdapter(env)`
+   picks Anthropic (REST Messages API via native `fetch`, no SDK) when `ANTHROPIC_API_KEY` is set,
+   else a disabled adapter that throws at invoke. Cost is a best-effort static per-model estimate
+   (authoritative cost is L4-B). `fetch` is injectable for offline tests.
+3. **Live runner + executor wiring** (`live-runner.ts`) — `createLiveAgentRunner({ db, companyId,
+   modelAdapter? })` composes the six providers + adapter via `createAgentRunner`. The model
+   adapter is injectable so tests pass a fake; production uses `resolveModelAdapter(env)`.
+
+**Verification:** `executeStage` on a dispatched pipeline stage drives the live runner end to end
+(embedded-postgres integration test): real DB rows (agent/persona/constitution/patch) → envelope
+(ADR-003) → Anthropic adapter (stub fetch) → `assertValidResponse` → `parseRoleOutput` → `pass`
+outcome with cost + tokens; plus the terminal-failure path when the role is absent from the roster.
+Tests: patch-providers 6/6, live-model-adapter 6/6, live-runner 2/2; `pnpm -r typecheck` green.
+`executor.test.ts` still injects a fake runner (unchanged).
+
+**Boundary / follow-ons (not L4-A):**
+- The **dispatch → executeStage → persist → repeat orchestrator loop** (a runtime scheduler that
+  walks a patch through the pipeline, writing `patch_stage_runs` + artifacts + state transitions)
+  is **not** built here — it never existed, and it belongs to `L4-D`'s e2e harness + a scheduler.
+  L4-A delivers and proves the per-stage live invocation that loop will call.
+- **Cost persistence + per-patch roll-up** → `L4-B` (this only returns the adapter's cost estimate).
+- **Real content** (`regular.yaml` roster, personas, constitution) → `X-3` (cross-repo); L4-A + its
+  tests run against fixtures.
